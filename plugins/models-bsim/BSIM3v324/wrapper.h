@@ -22,7 +22,7 @@ static std::string state_names[] = {"vbd",  "vbs",   "vgs",   "vds",    "qb",  "
 
 #define IS_VALID {itested();							\
     assert(d);									\
-    const COMMON_SUBCKT* c = dynamic_cast<const COMMON_SUBCKT*>(d->common());	\
+    const COMMON_PARAMLIST* c = dynamic_cast<const COMMON_PARAMLIST*>(d->common());	\
     assert(c);									\
     double l_in = c->_params["l"].e_val(OPT::defl, d->scope());			\
     double w_in = c->_params["w"].e_val(OPT::defw, d->scope());			\
