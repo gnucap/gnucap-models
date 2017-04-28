@@ -3,7 +3,7 @@
 PREFIX = /usr/local/gnucap
 INSTALL_DIR = $(PREFIX)/lib/models/bsim
 SPICE_INCLUDE = ../Include
-GNUCAP_INCLUDE = ../Gnucap
+GNUCAP_INCLUDE = $(shell gnucap-conf --includedir )
 VPATH = .:$(SPICE_INCLUDE):$(GNUCAP_INCLUDE)
 
 C_SRCS = $(CFILES) devsup.c
