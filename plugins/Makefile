@@ -1,7 +1,6 @@
 
 SUBDIRS = \
-bjt bsim1 bsim2 cap dio disto ind jfet jj \
-ltra mes mos res src sw tra urc
+models-bsim models-jspice3-2.5 models-ngspice17 models-spice3f5
 
 all:
 	for dir in $(SUBDIRS); do \
