@@ -1,7 +1,6 @@
 
 SUBDIRS = \
-bjt bsim1 bsim2 cap dio disto ind jfet jj \
-ltra mes mos res src sw tra urc
+plugins
 
 all:
 	for dir in $(SUBDIRS); do \
