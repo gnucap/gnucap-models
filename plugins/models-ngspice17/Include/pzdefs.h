@@ -4,7 +4,7 @@
     /* structure used to describe an PZ analysis to be performed */
 
 #include "jobdefs.h"
-#include <math.h>
+//#include <math.h>
 #include "complex.h"
 
 typedef struct strial {

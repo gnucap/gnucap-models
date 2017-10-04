@@ -1,9 +1,9 @@
 # $Id$ -*- Makefile -*-
 
-PREFIX = /usr/local/gnucap
-INSTALL_DIR = $(PREFIX)/lib/models/ngspice17
+PREFIX = $(shell gnucap-conf --exec_prefix )
+INSTALL_DIR = $(shell gnucap-conf --pkglibdir )/models/ngspice17
 SPICE_INCLUDE = ../Include
-GNUCAP_INCLUDE = ../Gnucap
+GNUCAP_INCLUDE = $(shell gnucap-conf --includedir )
 VPATH = .:$(SPICE_INCLUDE):$(GNUCAP_INCLUDE)
 
 C_SRCS = $(CFILES) devsup.c
@@ -14,10 +14,12 @@ OBJS = ${CC_SRCS:.cc=.o} ${C_SRCS:.c=.o}
 CC = gcc
 CCC = g++
 
-CFLAGS = -O2 -g -I. -I$(SPICE_INCLUDE) -DTRACE_UNTESTED -D$(SPICE_VERSION) \
+C_CC_FLAGS = -O2 -g -I. -I$(SPICE_INCLUDE) -DTRACE_UNTESTED -D$(SPICE_VERSION) \
  -DPREDICTOR -DHAS_STDLIB -fPIC
 
-CCFLAGS = $(CFLAGS) -I$(GNUCAP_INCLUDE) -Wall -Wextra 
+CFLAGS = $(C_CC_FLAGS) -std=gnu90
+
+CCFLAGS = $(C_CC_FLAGS) -I$(GNUCAP_INCLUDE) -Wall -Wextra
 
 LDFLAGS = -shared
 

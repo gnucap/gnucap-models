@@ -1,9 +1,9 @@
 # $Id$ -*- Makefile -*-
 
-PREFIX = /usr/local/gnucap
-INSTALL_DIR = $(PREFIX)/lib/models/spice3f5
+PREFIX = $(shell gnucap-conf --exec_prefix )
+INSTALL_DIR = $(shell gnucap-conf --pkglibdir )/models/spice3f5
 SPICE_INCLUDE = ../Include
-GNUCAP_INCLUDE = ../Gnucap
+GNUCAP_INCLUDE = $(shell gnucap-conf --includedir )
 VPATH = .:$(SPICE_INCLUDE):$(GNUCAP_INCLUDE)
 
 C_SRCS = $(CFILES) devsup.c
@@ -14,11 +14,13 @@ OBJS = ${CC_SRCS:.cc=.o} ${C_SRCS:.c=.o}
 CC = gcc
 CCC = g++
 
-CFLAGS = -O2 -g -I. -I$(SPICE_INCLUDE) -DTRACE_UNTESTED -D$(SPICE_VERSION) \
+C_CC_FLAGS = -O2 -g -I. -I$(SPICE_INCLUDE) -DTRACE_UNTESTED -D$(SPICE_VERSION) \
  -DPREDICTOR -DAN_pz -DAN_disto -DAN_noise \
  -DHAS_STDLIB -fPIC
 
-CCFLAGS = $(CFLAGS) -I$(GNUCAP_INCLUDE) -Wall -Wextra 
+CFLAGS = $(C_CC_FLAGS) -std=c90
+
+CCFLAGS = $(C_CC_FLAGS) -I$(GNUCAP_INCLUDE) -Wall -Wextra 
 
 LDFLAGS = -shared
 
