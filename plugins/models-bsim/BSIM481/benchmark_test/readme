@@ -1,0 +1,5 @@
+Type 'csh run' to run all netlists (*.b4).
+
+The output results (*.out) are simulated using spice3f5 at UC Berkeley for benchmark purpose.
+
+Type 'csh clean' to remove all outputs (*.out).

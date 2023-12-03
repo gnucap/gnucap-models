@@ -19,7 +19,7 @@ C_CC_FLAGS = -O2 -g -I. -I$(SPICE_INCLUDE) -DTRACE_UNTESTED -D$(SPICE_VERSION) \
 
 CFLAGS = $(C_CC_FLAGS) -std=gnu90
 
-CCFLAGS = $(C_CC_FLAGS) -I$(GNUCAP_INCLUDE) -Wall -Wextra
+CCFLAGS = $(C_CC_FLAGS) -std=c++11 -I$(GNUCAP_INCLUDE) -Wall -Wextra
 
 LDFLAGS = -shared
 

@@ -1,0 +1,39 @@
+10-23-2013 -- Analog Devices, Inc.
+BSIM480beta2.zip package was downloaded on 10/23/2013 from
+http://www-device.eecs.berkeley.edu/bsim/?page=BSIM4_Beta
+
+Changes made to correct BSIM4toxp, BSIM4coxp: these values may be
+instance-specific (here->BSIM4toxp instead of model->BSIM4toxp);
+in b4temp.c, line 2233-2353,
+
+                if(model->BSIM4mtrlMod != 0 && model->BSIM4mtrlCompatMod == 0)
+
+the computations involve here->BSIM4vfb and here->BSIM4vth0,
+and thus it is an error to assign values to model->BSIM4toxp
+and model->BSIM4coxp
+
+1) bsim4def.h
+   add BSIM4toxp and BSIM4coxp to the structure sBSIM4instance
+
+2) b4check.c
+   change references of "model->BSIM4toxp" to "here->BSIM4toxp"
+   on lines 74-77 and 455-458
+
+3) b4ld.c
+   change references of "model->BSIM4toxp" to "here->BSIM4toxp"
+   and "model->BSIM4coxp" to "here->BSIM4coxp"
+   on lines 1772, 1782-83, 3583-84, 3605
+
+4) b4temp.c
+  a) if mtrlMod != 0 or mtrlCompatMod == 0, make assignments
+     to "here->BSIM4toxp" and "here->BSIM4coxp";
+     else copy the model values to the instance (lines 2351-56)
+
+  b) delete computations of here->BSIM4nstar (2 locations);
+     it is properly computed in b4ld.c and is not used in
+     b4temp.c
+
+  c) move the calculations of pParam->BSIM4VgsteffVth and
+     pParam->BSIM4dvtp2factor inside the "Size_Not_Found" block;
+     don't recompute for every instance
+

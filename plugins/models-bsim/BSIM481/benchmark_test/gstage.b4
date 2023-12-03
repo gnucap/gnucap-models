@@ -1,0 +1,17 @@
+* MOS gain stage (ac)
+
+.include modelcard.nmos
+
+Vdd vdd 0 1.8
+Vin 1 0 1.2 ac 0.1
+
+Rsource 1 2 100k
+Rload 3 vdd 25k
+
+M1 3 2 0 0 N1 W=4u L=0.09u
+
+.ac dec 10 100 1000Meg
+.print ac vdb(3)
+
+.end
+
