@@ -20,7 +20,7 @@ C_CC_FLAGS = -O2 -g -I. -I$(SPICE_INCLUDE) -DTRACE_UNTESTED -D$(SPICE_VERSION) \
 
 CFLAGS = $(C_CC_FLAGS) -std=c90
 
-CCFLAGS = $(C_CC_FLAGS) -I$(GNUCAP_INCLUDE) -Wall -Wextra 
+CCFLAGS = $(C_CC_FLAGS) -std=c++11 -I$(GNUCAP_INCLUDE) -Wall -Wextra
 
 LDFLAGS = -shared
 
@@ -46,6 +46,6 @@ spice-wrapper.o: spice-wrapper.cc wrapper.h
 
 $(OBJS) : $(HDRS)
 
-install:
-	mkdir --parents $(INSTALL_DIR)
-	cp $(TARGET)$(SO_EXTENSION) $(INSTALL_DIR)
+install: $(TARGET)$(SO_EXTENSION)
+	mkdir --parents $(DESTDIR)$(INSTALL_DIR)
+	cp $(TARGET)$(SO_EXTENSION) $(DESTDIR)$(INSTALL_DIR)

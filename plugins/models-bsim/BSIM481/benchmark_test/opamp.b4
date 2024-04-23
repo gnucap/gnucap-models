@@ -1,0 +1,30 @@
+* Operational amplifier (ac)
+
+.include modelcard.nmos
+.include modelcard.pmos
+
+vid 1 c 0 ac 0.1
+eid in2 c 1 c -1
+vic c 0 dc 0
+vss vss 0 -1.8
+vdd vdd 0 1.8
+
+m1 bias1 1 cm cm N1 W=10u L=0.09u
+m2 bias2 in2 cm cm N1 W=10u L=0.09u
+m3 vdd bias1 bias1 vdd P1 W=2u L=0.09u
+m4 bias2 bias1 vdd vdd P1 W=2u L=0.09u
+
+m5 cm bias vss vss N1 W=2u L=0.09u
+mbias bias bias vss vss N1 W=2u L=0.09u
+rbias 0 bias 195k
+
+m6 8 bias vss vss N1 W=2u L=0.09u
+m7 8 bias2 vdd out N1 W=2u L=0.09u
+
+cfb bias2 8 2p
+
+.ac dec 10 100 100meg
+.print ac vdb(8)
+
+.end
+
