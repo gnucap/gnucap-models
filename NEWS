@@ -1,0 +1,7 @@
+20240430-dev
+============
+* revival
+* automate testing
+* include spice-wrapper from main package
+* fix mfactor bugs
+* fix namespace bug

@@ -8,7 +8,7 @@
 
 == Installation:
 
-- requires gnucap
+- requires gnucap >= 20240430-dev
 - type make
 - make install
 
