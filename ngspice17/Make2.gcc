@@ -1,8 +1,7 @@
-# $Id$ -*- Makefile -*-
+# Make2.gcc for ngspice17. need a version that works with all subdirs.
 
 PREFIX = $(shell gnucap-conf --exec_prefix )
-INSTALL_DIR = $(shell gnucap-conf --pkglibdir )/models/ngspice17
-SPICE_INCLUDE = ../Include
+INSTALL_DIR = $(shell gnucap-conf --pkglibdir )/models/${SECTION}
 GNUCAP_INCLUDE = $(shell gnucap-conf --includedir )
 VPATH = ../../include:.:$(SPICE_INCLUDE):$(GNUCAP_INCLUDE)
 
@@ -12,14 +11,18 @@ CC_SRCS = spice-wrapper.cc
 OBJS = ${CC_SRCS:.cc=.o} ${C_SRCS:.c=.o}
 
 CC = gcc
-CCC = g++
+CXX = g++
 
-C_CC_FLAGS = -O2 -g -I. -I$(SPICE_INCLUDE) -DTRACE_UNTESTED -D$(SPICE_VERSION) \
- -DPREDICTOR -DHAS_STDLIB -fPIC
+C_CC_FLAGS = -O2 -g -fPIC
 
-CFLAGS = $(C_CC_FLAGS) -std=gnu90
+MAKE_CPPFLAGS = -I. -I$(SPICE_INCLUDE) -D$(SPICE_VERSION) \
+ -DPREDICTOR -DHAS_STDLIB
 
-CCFLAGS = $(C_CC_FLAGS) -std=c++11 -I$(GNUCAP_INCLUDE) -Wall -Wextra
+CPPFLAGS = -DTRACE_UNTESTED
+
+ALL_CFLAGS = $(C_CC_FLAGS) -std=gnu90 ${MAKE_CFLAGS} ${CFLAGS}
+
+ALL_CXXFLAGS = $(C_CC_FLAGS) -std=c++11 -I$(GNUCAP_INCLUDE) -Wall -Wextra ${CXXFLAGS}
 
 LDFLAGS = -shared
 
@@ -29,14 +32,14 @@ SO_EXTENSION = .so
 
 .SUFFIXES:
 .SUFFIXES: .o .cc .c
-.cc.o:; $(CCC) $(CCFLAGS) -c $<
-.c.o:; $(CC) $(CFLAGS) -c $<
+.cc.o:; $(CXX) $(ALL_CXXFLAGS) ${MAKE_CPPFLAGS} ${CPPFLAGS} -c $<
+.c.o:; $(CC) $(ALL_CFLAGS) ${MAKE_CPPFLAGS} ${CPPFLAGS} -c $<
 
 $(TARGET) : $(TARGET)$(SO_EXTENSION)
 	echo $(TARGET) done
 
 $(TARGET)$(SO_EXTENSION) : $(OBJS) Makefile
-	$(CCC) $(LDFLAGS) $(OBJS) $(LIBS) -o $(TARGET)$(SO_EXTENSION)
+	$(CXX) $(LDFLAGS) $(OBJS) $(LIBS) -o $(TARGET)$(SO_EXTENSION)
 
 clean: $(HDRS)
 	-rm *.o $(TARGET)$(SO_EXTENSION) $(TARGET)

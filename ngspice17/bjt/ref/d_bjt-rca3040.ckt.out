@@ -1,9 +1,5 @@
-@@#
-@@@:../Gnucap/u_parameter.h:202:PARAM_LIST
 Q: already installed, replacing
 stashing as Q:0
-@@#
-@@@:../Gnucap/u_parameter.h:202:PARAM_LIST
 npn: already installed, replacing
 stashing as npn:0
 pnp: already installed, replacing
@@ -13,24 +9,6 @@ stashing as npn1:0
 pnp1: already installed, replacing
 stashing as pnp1:0
 rca3040 ckt - rca 3040 wideband amplifier 
-@@#
-@@@:../Gnucap/u_parameter.h:204:PARAM_LIST
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
 #           v(1)       v(2)       v(3)       v(5)       v(6)       v(7)      
 + v(8)       v(9)       v(10)      v(11)      v(12)      v(13)      v(14)     
 + v(15)      v(16)      v(17)      v(30)      v(31)     
@@ -119,7 +97,3 @@ v(16)  2.                4.               6.                8.              10.
  48.n   |                 .        +       .              *  .                |
  50.n   |                 .              + .        *        .                |
         +-----------------+----------------+-----------------+----------------+
-@@#
-@@@:../Gnucap/u_parameter.h:206:~PARAM_LIST
-@@#
-@@@:../Gnucap/u_parameter.h:206:~PARAM_LIST

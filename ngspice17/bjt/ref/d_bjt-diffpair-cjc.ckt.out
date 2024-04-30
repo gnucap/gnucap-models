@@ -1,9 +1,5 @@
-@@#
-@@@:../Gnucap/u_parameter.h:202:PARAM_LIST
 Q: already installed, replacing
 stashing as Q:0
-@@#
-@@@:../Gnucap/u_parameter.h:202:PARAM_LIST
 npn: already installed, replacing
 stashing as npn:0
 pnp: already installed, replacing
@@ -13,16 +9,6 @@ stashing as npn1:0
 pnp1: already installed, replacing
 stashing as pnp1:0
 difpair ckt - simple differential pair 
-@@#
-@@@:../Gnucap/u_parameter.h:204:PARAM_LIST
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
 #           v(1)       v(2)       v(3)       v(4)       v(5)       v(6)      
 + v(7)       v(8)       v(9)      
  27.       -76.611p   -0.0076611 -0.0076611  5.2291     5.2291    -0.76997   
@@ -116,7 +102,3 @@ vp(5)-180.              -90.              0.                90.            180.
  4.6416G*                 .        +       .                 .                |
  10.G   *                 .            +   .                 .                |
         +-----------------+----------------+-----------------+----------------+
-@@#
-@@@:../Gnucap/u_parameter.h:206:~PARAM_LIST
-@@#
-@@@:../Gnucap/u_parameter.h:206:~PARAM_LIST

@@ -266,7 +266,7 @@ next1:      if (vd >= -3*vte) {  /* forward */
                     if (ckt->CKTmode & MODEINITSMSIG){
                         *(ckt->CKTstate0 + here->DIOcapCurrent) = capd;
 
-                        if(1){
+                        if(1){ // Gnucap fix.
                             *(ckt->CKTstate0 + here->DIOcurrent) = cd;
                             *(ckt->CKTstate0 + here->DIOconduct) = gd;
 #ifdef SENSDEBUG

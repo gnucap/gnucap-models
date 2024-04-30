@@ -1,9 +1,5 @@
-@@#
-@@@:../Gnucap/u_parameter.h:202:PARAM_LIST
 Q: already installed, replacing
 stashing as Q:0
-@@#
-@@@:../Gnucap/u_parameter.h:202:PARAM_LIST
 npn: already installed, replacing
 stashing as npn:0
 pnp: already installed, replacing
@@ -14,5 +10,3 @@ pnp1: already installed, replacing
 stashing as pnp1:0
  
 q1: model foo is not a ngspice_bjt
-@@#
-@@@:../Gnucap/u_parameter.h:206:~PARAM_LIST

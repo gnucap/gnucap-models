@@ -604,7 +604,7 @@ next1:      vtn=vt*model->BJTemissionCoeffF;
                         *(ckt->CKTstate0 + here->BJTcqcs) = capcs;
                         *(ckt->CKTstate0 + here->BJTcqbx) = capbx;
                         *(ckt->CKTstate0 + here->BJTcexbc) = geqcb;
-                        if(1){
+                        if(1 || SenCond){ // gnucap
                             *(ckt->CKTstate0 + here->BJTcc) = cc;
                             *(ckt->CKTstate0 + here->BJTcb) = cb;
                             *(ckt->CKTstate0 + here->BJTgpi) = gpi;

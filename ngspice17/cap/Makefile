@@ -33,6 +33,6 @@ HDRS = \
 	capitf.h	\
 	wrapper.h
 
-SPICE_VERSION = NGSPICE_17
+SPICE_VERSION = NGSPICE=17
 
 include ../Make2

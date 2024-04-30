@@ -1,9 +1,5 @@
-@@#
-@@@:../Gnucap/u_parameter.h:202:PARAM_LIST
 Q: already installed, replacing
 stashing as Q:0
-@@#
-@@@:../Gnucap/u_parameter.h:202:PARAM_LIST
 npn: already installed, replacing
 stashing as npn:0
 pnp: already installed, replacing
@@ -13,28 +9,6 @@ stashing as npn1:0
 pnp1: already installed, replacing
 stashing as pnp1:0
 rtlinv ckt - cascaded rtl inverters 
-@@#
-@@@:../Gnucap/u_parameter.h:204:PARAM_LIST
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
-@@#
-@@@:../Gnucap/u_parameter.h:219:operator[]
 #           v(1)       v(2)       v(3)       v(4)       v(5)       v(6)      
  27.        0.         46.223n    4.6222     0.84403    0.26651    5.        
 v(3)  -2.                0.               2.                4.               6.
@@ -137,7 +111,3 @@ v(5)  -2.                0.               2.                4.               6.
  195.n  |                 . +              .                 .    *           |
  200.n  |                 . +              .                 .    *           |
         +-----------------+----------------+-----------------+----------------+
-@@#
-@@@:../Gnucap/u_parameter.h:206:~PARAM_LIST
-@@#
-@@@:../Gnucap/u_parameter.h:206:~PARAM_LIST

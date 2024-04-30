@@ -38,6 +38,4 @@ HDRS = \
 	bjtitf.h	\
 	wrapper.h
 
-SPICE_VERSION = NGSPICE_17
-
 include ../Make2

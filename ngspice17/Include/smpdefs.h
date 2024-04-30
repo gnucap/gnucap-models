@@ -11,7 +11,7 @@ Modified: 2000  AlansFixes
 **********/
 
 #include <stdio.h>
-//#include <math.h>
+// gnucap #include <math.h>
 #include "complex.h"
 
 int SMPaddElt( SMPmatrix *, int , int , double );
