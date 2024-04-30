@@ -12,7 +12,7 @@ CC_SRCS = spice-wrapper.cc
 OBJS = ${CC_SRCS:.cc=.o} ${C_SRCS:.c=.o}
 
 CC = gcc
-CCC = g++
+CXX = g++
 
 C_CC_FLAGS = -O2 -g -I. -I$(SPICE_INCLUDE) -DTRACE_UNTESTED -D$(SPICE_VERSION) \
  -DPREDICTOR -DAN_pz -DAN_disto -DAN_noise \
@@ -20,7 +20,7 @@ C_CC_FLAGS = -O2 -g -I. -I$(SPICE_INCLUDE) -DTRACE_UNTESTED -D$(SPICE_VERSION) \
 
 CFLAGS = $(C_CC_FLAGS) -std=c90
 
-CCFLAGS = $(C_CC_FLAGS) -std=c++11 -I$(GNUCAP_INCLUDE) -Wall -Wextra -Wno-parentheses
+CCFLAGS = $(C_CC_FLAGS) -std=c++11 -I$(GNUCAP_INCLUDE) -Wall -Wextra -Wno-parentheses -Wsuggest-override
 
 LDFLAGS = -shared
 
@@ -30,14 +30,14 @@ SO_EXTENSION = .so
 
 .SUFFIXES:
 .SUFFIXES: .o .cc .c
-.cc.o:; $(CCC) $(CCFLAGS) -c $<
+.cc.o:; $(CXX) $(CCFLAGS) ${CPPFLAGS} -c $<
 .c.o:; $(CC) $(CFLAGS) -c $<
 
 $(TARGET) : $(TARGET)$(SO_EXTENSION)
 	echo $(TARGET) done
 
 $(TARGET)$(SO_EXTENSION) : $(OBJS) Makefile
-	$(CCC) $(LDFLAGS) $(OBJS) $(LIBS) -o $(TARGET)$(SO_EXTENSION)
+	$(CXX) $(LDFLAGS) $(OBJS) $(LIBS) -o $(TARGET)$(SO_EXTENSION)
 
 clean: $(HDRS)
 	-rm *.o $(TARGET)$(SO_EXTENSION) $(TARGET)

@@ -1,5 +1,5 @@
 * Mesfet Ring Oscillator with ungated load
-* Taken form macspice3f4
+* Taken from macspice3f4
 *
 
 .subckt mesinv 10 20 3
@@ -34,6 +34,9 @@ xinv10 1 11 12 mesinv
 xinv11 1 12 2000 mesinv
 
 vnoise 2000 2 dc 0 pwl(0 0 0.2n 0 0.3n 0.1 0.4n 0)
+.list
+* fails, see README
+.end
 
 .tran 1p 5n 1n 20p
 

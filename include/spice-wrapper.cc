@@ -103,8 +103,6 @@ const int SPICE_UNCONNECTED_NODE = -1;
 const int OFFSET = 1;
 enum {uGROUND=1, uFLOAT=2, uDISALLOW=3};
 const int MATRIX_NODES = (MAX_NET_NODES + INTERNAL_NODES);
-class DEV_SPICE;
-class MODEL_SPICE;
 #if NGSPICE>=42
 bool ft_ngdebug = 0; // /winmain.c
 struct compat newcompat; // inpcompat.c
@@ -156,6 +154,10 @@ union SPICE_MODEL_DATA {
   }
 };
 /*--------------------------------------------------------------------------*/
+namespace {
+class DEV_SPICE;
+class MODEL_SPICE;
+/*--------------------------------------------------------------------------*/
 class MODEL_SPICE : public MODEL_CARD{
 private:
   static int _count;
@@ -171,24 +173,24 @@ public:
   explicit MODEL_SPICE(const DEV_SPICE* p);	// for dispatcher
   ~MODEL_SPICE();
 public: // override virtual
-  MODEL_CARD* clone()const {return new MODEL_SPICE(*this);}
-  bool is_valid(const COMPONENT* d)const IS_VALID
+  MODEL_CARD* clone()const override {return new MODEL_SPICE(*this);}
+  bool is_valid(const COMPONENT* d)const override IS_VALID
   //void expand();
-  void precalc_first();
+  void precalc_first()override;
 
 public:	// type
-  void set_dev_type(const std::string& nt);
-  std::string dev_type()const	{ return _key;}
+  void set_dev_type(const std::string& nt)override;
+  std::string dev_type()const override{ return _key;}
 
 public: // parameters
-  bool param_is_printable(int)const;
-  std::string param_name(int)const;
-  std::string param_name(int i, int j)const;
-  std::string param_value(int)const; 
-  int  set_param_by_name(std::string Name, std::string Value);
-  void set_param_by_index(int, std::string&, int);
-  int param_count_dont_print()const {return MODEL_CARD::param_count();}
-  int param_count()const { return (static_cast<int>(_params.size()) + MODEL_CARD::param_count());}
+  bool param_is_printable(int)const override;
+  std::string param_name(int)const override;
+  std::string param_name(int i, int j)const override;
+  std::string param_value(int)const override;
+  int  set_param_by_name(std::string Name, std::string Value)override;
+  void set_param_by_index(int, std::string&, int)override;
+  int param_count_dont_print()const override {return MODEL_CARD::param_count();}
+  int param_count()const override { return (static_cast<int>(_params.size()) + MODEL_CARD::param_count());}
 
   int Set_param_by_name(std::string Name, std::string Value);
 
@@ -196,7 +198,7 @@ public: // not virtual
   static int count()		{untested(); return _count;}
   static CKTcircuit* ckt()	{return &_ckt;}
   static void init_ckt();
-};
+}; // MODEL_SPICE
 /*--------------------------------------------------------------------------*/
 class DEV_SPICE : public STORAGE {
 private:
@@ -228,55 +230,54 @@ public:
   explicit DEV_SPICE(COMMON_COMPONENT* c=NULL);
   ~DEV_SPICE();
 protected: // override virtual
-  char	  id_letter()const	{untested();return SPICE_LETTER[0];}
-  bool	  print_type_in_spice()const {return true;}
-  std::string value_name()const {return VALUE_NAME;}
-  int	  max_nodes()const	{return MAX_NET_NODES;}
-  int	  min_nodes()const	{return MIN_NET_NODES;}
-  int	  matrix_nodes()const	{return MATRIX_NODES;}
-  int	  net_nodes()const	{return _net_nodes;}
-  int	  int_nodes()const	{return INTERNAL_NODES;}
-  CARD*	  clone()const		{return new DEV_SPICE(*this);}
+  char	  id_letter()const override	{untested();return SPICE_LETTER[0];}
+  bool	  print_type_in_spice()const override {return true;}
+  std::string value_name()const override {return VALUE_NAME;}
+  int	  max_nodes()const override	{return MAX_NET_NODES;}
+  int	  min_nodes()const override	{return MIN_NET_NODES;}
+  int	  matrix_nodes()const override	{return MATRIX_NODES;}
+  int	  net_nodes()const override	{return _net_nodes;}
+  int	  int_nodes()const override	{return INTERNAL_NODES;}
+  CARD*	  clone()const override		{return new DEV_SPICE(*this);}
   //void  precalc_first();	//ELEMENT
-  void	  expand();
-  void	  precalc_last();
+  void	  expand()override;
+  void	  precalc_last()override;
   //void  map_nodes();		//ELEMENT
-  void	  internal_precalc();
 
-  void	  tr_iwant_matrix()	{tr_iwant_matrix_extended();}
-  void	  tr_begin()		{STORAGE::tr_begin();   internal_precalc();}
-  void	  tr_restore()		{STORAGE::tr_restore(); internal_precalc();}
-  void	  dc_advance()		{STORAGE::dc_advance(); internal_precalc();}
-  void	  tr_advance();
-  void	  tr_regress();
-  bool	  tr_needs_eval()const;
+  void	  tr_iwant_matrix()override	{tr_iwant_matrix_extended();}
+  void	  tr_begin()override		{STORAGE::tr_begin();   internal_precalc();}
+  void	  tr_restore()override		{STORAGE::tr_restore(); internal_precalc();}
+  void	  dc_advance()override		{STORAGE::dc_advance(); internal_precalc();}
+  void	  tr_advance()override;
+  void	  tr_regress()override;
+  bool	  tr_needs_eval()const override;
   //void  tr_queue_eval();	//ELEMENT
-  bool	  do_tr();
-  void	  tr_load();
-  TIME_PAIR tr_review();
-  void    tr_accept();
-  void	  tr_unload();
-  double  tr_involts()const	{unreachable();return NOT_VALID;}
-  //double tr_input()const	//ELEMENT
-  double  tr_involts_limited()const {unreachable();return NOT_VALID;}
+  bool	  do_tr()override;
+  void	  tr_load()override;
+  TIME_PAIR tr_review()override;
+  void    tr_accept()override;
+  void	  tr_unload()override;
+  double  tr_involts()const override	{unreachable();return NOT_VALID;}
+  //double tr_input()const override	//ELEMENT
+  double  tr_involts_limited()const override {unreachable();return NOT_VALID;}
   //double tr_input_limited()const //ELEMENT
-  double  tr_amps()const	{itested();return NOT_VALID;}
-  double  tr_probe_num(const std::string&)const;
+  double  tr_amps()const override	{itested();return NOT_VALID;}
+  double  tr_probe_num(const std::string&)const override;
 
-  void	  ac_iwant_matrix()	{ac_iwant_matrix_extended();}
-  void    ac_begin();
-  void	  do_ac();
-  void	  ac_load();
-  COMPLEX ac_involts()const	{unreachable();return NOT_VALID;}
-  COMPLEX ac_amps()const	{unreachable();return NOT_VALID;}
-  XPROBE  ac_probe_ext(const std::string&)const {itested(); return XPROBE(NOT_VALID, mtNONE);}
-  int	  tail_size()const	{return TAIL_SIZE;}
+  void	  ac_iwant_matrix()override {ac_iwant_matrix_extended();}
+  void    ac_begin()override;
+  void	  do_ac()override;
+  void	  ac_load()override;
+  COMPLEX ac_involts()const override	{unreachable();return NOT_VALID;}
+  COMPLEX ac_amps()const override	{unreachable();return NOT_VALID;}
+  XPROBE  ac_probe_ext(const std::string&)const override {itested(); return XPROBE(NOT_VALID, mtNONE);}
+  int	  tail_size()const override	{return TAIL_SIZE;}
 public:	// type
-  void set_dev_type(const std::string& nt);
-  std::string dev_type()const	{return _modelname;}
+  void set_dev_type(const std::string& nt)override;
+  std::string dev_type()const override {return _modelname;}
 public:	// ports
   // bool port_exists(int i)const //COMPONENT
-  std::string port_name(int i)const {itested();
+  std::string port_name(int i)const override {itested();
     assert(i >= 0);
     assert(i < MAX_NET_NODES);
     return port_names[i];
@@ -290,13 +291,14 @@ private: // parameters
   //std::string Param_name(int)const;
   //std::string Param_name(int i, int j)const {return STORAGE::Param_name(i, j);}
   //std::string Param_value(int)const; 
-  int  set_param_by_name(std::string Name, std::string Value);
+  int  set_param_by_name(std::string Name, std::string Value)override;
   int  Set_param_by_name(std::string Name, std::string Value);
   void Set_param_by_index(int, std::string&, int);
-  int param_count_dont_print()const {return common()->COMMON_COMPONENT::param_count();}
+  int param_count_dont_print()const override {return common()->COMMON_COMPONENT::param_count();}
 private:
   CKTcircuit* ckt()const	{return MODEL_SPICE::ckt();}
   void init_ckt()		{MODEL_SPICE::init_ckt();}
+  void internal_precalc();
   void update_ckt()const;
   void localize_ckt()const;
 #if NGSPICE>=28
@@ -2053,7 +2055,7 @@ public:
   explicit COMMON_SW(int x) : COMMON_PARAMLIST(x){}
 private:
   explicit COMMON_SW(COMMON_SW const& x) : COMMON_PARAMLIST(x){}
-  COMMON_COMPONENT* clone()const {
+  COMMON_COMPONENT* clone()const override {
     return new COMMON_SW(*this);
   }
 
@@ -2074,6 +2076,8 @@ static DISPATCHER<CARD>::INSTALL
 static MODEL_SPICE p1(&p0);
 static DISPATCHER<MODEL_CARD>::INSTALL
   d1(&model_dispatcher, MODEL_TYPE, &p1);
+/*--------------------------------------------------------------------------*/
+}
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/
 // vim:ts=8:sw=2:noet:
