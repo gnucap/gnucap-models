@@ -1,0 +1,3 @@
+RAW_HDRS = spice-wrapper.cc
+INSTALL_FILES = $(RAW_HDRS)
+INSTALL_DIR = $(PREFIX)/include/gnucap

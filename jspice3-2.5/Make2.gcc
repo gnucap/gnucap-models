@@ -4,7 +4,7 @@ PREFIX = $(shell gnucap-conf --exec_prefix )
 INSTALL_DIR = $(shell gnucap-conf --pkglibdir )/models/jspice3-2.5
 SPICE_INCLUDE = ../Include
 GNUCAP_INCLUDE = $(shell gnucap-conf --includedir )
-VPATH = .:$(SPICE_INCLUDE):$(GNUCAP_INCLUDE)
+VPATH = .:../../include:$(SPICE_INCLUDE):$(GNUCAP_INCLUDE)
 
 C_SRCS = $(CFILES) devsup.c gendest.c genmdel.c gendel.c genmosp.c
 CC_SRCS = spice-wrapper.cc
@@ -19,7 +19,7 @@ C_CC_FLAGS = -O2 -g -I. -I$(SPICE_INCLUDE) -DTRACE_UNTESTED -D$(SPICE_VERSION) \
 
 CFLAGS = $(C_CC_FLAGS) -std=gnu90
 
-CCFLAGS = $(C_CC_FLAGS) -std=c++11 -I$(GNUCAP_INCLUDE) -Wall -Wextra
+CCFLAGS = $(C_CC_FLAGS) -std=c++11 -I$(GNUCAP_INCLUDE) -Wall -Wextra -Wno-parentheses
 
 LDFLAGS = -shared
 

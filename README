@@ -1,0 +1,35 @@
+== Free models for Gnucap from various sources.
+
+- spice3f5: Models from the legacy (legendary?) SPICE3.
+- ngspice*: Models from the ngspice project
+- jspice*: Models from another SPICE3 variant
+- bsim*: Models from UC Berkeley written in C
+- ..
+
+== Installation:
+
+- requires gnucap
+- type make
+- make install
+
+== Use (under construction)
+
+Gnucap loads plugins with either the "-a" command line flag
+
+$ gnucap -a plugin_filename
+gnucap> _
+
+or with the attach (aka load) command
+$ gnucap
+gnucap> load plugin_filename
+
+Both methods use the same path resolution method.
+
+- plugin_filename starts with a dot, '.':
+  find relative to current working directory of the process.
+- plugin filename starts with slash, '/':
+  absolute path
+- next, environment variables are considered
+  GNUCAP_PLUGPATH is a colon separated list of directories
+- finally, the default plugpath, usually $pkglibdir = $libdir/gnucap
+  aka $prefix/lib/gnucap, default: /usr/local/lib/gnucap is considered.

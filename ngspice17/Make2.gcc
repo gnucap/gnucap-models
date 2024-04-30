@@ -4,7 +4,7 @@ PREFIX = $(shell gnucap-conf --exec_prefix )
 INSTALL_DIR = $(shell gnucap-conf --pkglibdir )/models/ngspice17
 SPICE_INCLUDE = ../Include
 GNUCAP_INCLUDE = $(shell gnucap-conf --includedir )
-VPATH = .:$(SPICE_INCLUDE):$(GNUCAP_INCLUDE)
+VPATH = ../../include:.:$(SPICE_INCLUDE):$(GNUCAP_INCLUDE)
 
 C_SRCS = $(CFILES) devsup.c
 CC_SRCS = spice-wrapper.cc
