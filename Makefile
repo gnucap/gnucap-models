@@ -1,6 +1,9 @@
 
 SUBDIRS = \
-plugins
+	bsim \
+	jspice3-2.5 \
+	ngspice17 \
+	spice3f5
 
 all:
 	for dir in $(SUBDIRS); do \
