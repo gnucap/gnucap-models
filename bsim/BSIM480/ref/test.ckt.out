@@ -1,0 +1,5 @@
+' 
+m2 (d g 0 0) nn m=9 
+                ^ ? m2: bad parameter m ignored
+#           v(d)       v(g)       i(vd)      i(vg)      vds(m1)    vds(m2)    id(m1)     id(m2)    
+ 27.        5.         3.        -0.0022821  0.         5.         5.         0.0011411  0.0011411 
