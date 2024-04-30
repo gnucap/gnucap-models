@@ -23,6 +23,4 @@ install:
 	done
 
 check:
-	for dir in $(SUBDIRS); do \
-	$(MAKE) -C $$dir check; \
-	done
+	$(MAKE) -C tests check

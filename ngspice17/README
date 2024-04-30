@@ -170,6 +170,9 @@ Good correlation with Spice, even when incorrect.
 The NGspice model has significant changes compared to the Spice3f5
 model, but the same issues remain.
 
+vbic:
+does not seem to work in vbic_diffamp.cir
+
 
 MODIFICATIONS:
 

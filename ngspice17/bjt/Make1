@@ -37,5 +37,3 @@ HDRS = \
 	bjtinit.h	\
 	bjtitf.h	\
 	wrapper.h
-
-include ../Make2

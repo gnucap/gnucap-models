@@ -22,7 +22,7 @@ CPPFLAGS = -DTRACE_UNTESTED
 
 ALL_CFLAGS = $(C_CC_FLAGS) -std=gnu90 ${MAKE_CFLAGS} ${CFLAGS}
 
-ALL_CXXFLAGS = $(C_CC_FLAGS) -std=c++11 -I$(GNUCAP_INCLUDE) -Wall -Wextra ${CXXFLAGS}
+ALL_CXXFLAGS = $(C_CC_FLAGS) -std=c++11 -I$(GNUCAP_INCLUDE) -Wall -Wextra -Wno-parentheses ${CXXFLAGS}
 
 LDFLAGS = -shared
 
