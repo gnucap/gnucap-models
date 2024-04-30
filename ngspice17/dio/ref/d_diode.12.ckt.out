@@ -192,7 +192,7 @@ v(2)  -10.                   -5.                    0.                     5.   
  100.K      0.0032893 -1.0472u   
  1.Meg      0.0032893 -10.472u   
  10.Meg     0.003286  -104.61u   
- 100.Meg    0.0029866 -950.82u   
+ 100.Meg    0.0029866 -950.81u   
  1.G        295.39u   -940.41u   
 v(1)  -10.                   -5.                    0.                     5.                   10.
 v(2)  -10.                   -5.                    0.                     5.                   10.
@@ -235,7 +235,7 @@ v(2)  -10.                   -5.                    0.                     5.   
  100.Meg    247.18u   -0.01572   
  1.G        2.4724u   -0.0015724 
 Gnucap   System status
-iterations: op=14, dc=35, tran=182, fourier=0, total=1129
-transient timesteps: accepted=152, rejected=0, total=152
+iterations: op=14, dc=35, tran=179, fourier=0, total=1113
+transient timesteps: accepted=148, rejected=0, total=148
 nodes: user=2, subckt=0, model=0, total=2
 dctran density=100.0%, ac density=100.0%

@@ -18,7 +18,6 @@
  * redistribute this file, for any purpose, both within the user's
  * organization and externally.
  */
-//testing=script 2008.11.28
 // code style comment:  Use of "reinterpret_cast" is always bad style.
 /*--------------------------------------------------------------------------*/
 // tmp hack
@@ -29,10 +28,10 @@
 extern "C" {
   #define _complex CompleX
   #define NODE NodE
-  #if NGSPICE<28
+  #if NGSPICE<25
     #define public PubliC
   #endif
-  #if NGSPICE<28
+  #if NGSPICE<22
     #define bool BooL
   #endif
   #define main MaiN
@@ -442,7 +441,7 @@ void DEV_SPICE::update_ckt()const
     assert(d);							\
     assert(dynamic_cast<DEV_SPICE*>(d));			\
     assert((ckt)->CKTdelta == d->_dt);				\
-    if (d->_dt == 0) {untested();				\
+    if (d->_dt == 0) {						\
       assert((ckt)->CKTag[0] == 0);				\
       assert((ckt)->CKTorder == 1);				\
     }else if (d->_time[1] != 0 && d->_method_a == mTRAP) {	\
@@ -476,7 +475,7 @@ void DEV_SPICE::localize_ckt()const
 
   //ckt()->CKTag[0] = tr_c_to_g(1, ckt()->CKTag[0]);
   // defer fixing this -- GEAR not here
-  if (_dt == 0) {untested();
+  if (_dt == 0) {
     ckt()->CKTag[1] = ckt()->CKTag[0] = 0;
     ckt()->CKTorder = 1;
   }else if (_time[1] != 0 && _method_a == mTRAP) {
@@ -612,7 +611,7 @@ int MODEL_SPICE::Set_param_by_name(std::string Name, std::string new_value)
   }
   if (Name != "level") {
     throw Exception_No_Match(Name);
-  }else{ untested();
+  }else{
   }
   return 0; //BUG// ??
 }
@@ -648,6 +647,7 @@ void MODEL_SPICE::precalc_first()
   init_ckt();
   if (info.DEVsetup) {
     assert_model_raw();
+    // DEVsetup 0
     int ok = info.DEVsetup(NULL, &_spice_model._gen, ckt(), NULL);
     assert(ok == OK);
   }else{untested();
@@ -858,6 +858,26 @@ int DEV_SPICE::Set_param_by_name(std::string Name, std::string new_value)
     }else{
     }
   }
+
+  // TODO: remove this ..
+  if(Name == "m"){
+    // don't propate m. it will be renamed anyway.
+    throw Exception_No_Match("m"); // consistent with future behavior.
+  }else if(Name == "$mfactor"){
+    // incomplete
+    try{
+      mutable_common()->COMMON_COMPONENT::Set_param_by_name("m", new_value);
+    }catch(Exception_No_Match const&){
+    }
+    try{
+      return mutable_common()->COMMON_COMPONENT::Set_param_by_name(Name, new_value);
+    }catch(Exception_No_Match const&){
+    }
+    return 0;
+  }else{
+  }
+  // .. until here
+
   return mutable_common()->COMMON_COMPONENT::Set_param_by_name(Name, new_value);
 }
 /*--------------------------------------------------------------------------*/
@@ -870,7 +890,13 @@ int DEV_SPICE::set_param_by_name(std::string Name, std::string Value)
   COMPONENT::set_param_by_name(Name, Value);
   COMMON_PARAMLIST* c = dynamic_cast<COMMON_PARAMLIST*>(mutable_common());
   assert(c);
-  return Set_param_by_name(Name, to_string(c->_params[Name].e_val(1,scope())));
+  auto iter = c->_params.find(Name);
+  if(iter != c->_params.end()){
+    return Set_param_by_name(Name, to_string(iter->second.e_val(1,scope())));
+  }else{ untested();
+    incomplete();
+    return 0;
+  }
 }
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::Set_param_by_index(int i, std::string& new_value, int offset)
@@ -893,6 +919,7 @@ void DEV_SPICE::Set_param_by_index(int i, std::string& new_value, int offset)
 #endif
     assert(ok == OK);
   }else{untested();
+    trace2("here?", i, new_value);
     STORAGE::set_param_by_index(i-num_params, new_value, offset+num_params);
   }
   assert_instance();
@@ -900,6 +927,8 @@ void DEV_SPICE::Set_param_by_index(int i, std::string& new_value, int offset)
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::expand()
 {
+  trace2("expand", common()->mfactor(), common()->mfactor().string());
+  trace2("expand", _mfactor.string(), _mfactor);
   assert_instance();
   assert(info.DEVsetup);
 
@@ -912,11 +941,11 @@ void DEV_SPICE::expand()
     for (int ii = 0; ii < net_nodes(); ++ii) {
       node[ii] = ii+OFFSET;
     }
-    if (UNCONNECTED_NODES == uGROUND) { untested();
+    if (UNCONNECTED_NODES == uGROUND) {
       for (int ii = net_nodes(); ii < max_nodes(); ++ii) {itested();
 	node[ii] = ii+OFFSET;
       }
-    }else if (UNCONNECTED_NODES == uFLOAT) { untested();
+    }else if (UNCONNECTED_NODES == uFLOAT) {
       for (int ii = net_nodes(); ii < max_nodes(); ++ii) {untested();
 	node[ii] = SPICE_UNCONNECTED_NODE;
       }
@@ -945,7 +974,9 @@ void DEV_SPICE::expand()
       SPICE_MODEL_DATA spice_model_copy(*_spice_model);
       spice_model_copy._gen.GENinstances = &_spice_instance;
       //-------------
+      trace1("DEVsetup 1, expand", ckt()->CKTmaxEqNum);
       int ok = info.DEVsetup(matrix, &(spice_model_copy._gen), ckt(), &_num_states);
+      trace1("DEVsetup 1, expand done", ckt()->CKTmaxEqNum);
       // memory pointer setup, and sets _num_states
       // undesired side effects: sets values, messes up model
       //-------------
@@ -978,7 +1009,7 @@ void DEV_SPICE::expand()
   //-------- fix up internal nodes
   if (_sim->is_first_expand()) {
     int start_internal = 0;
-    if (UNCONNECTED_NODES == uGROUND) { untested();
+    if (UNCONNECTED_NODES == uGROUND) {
       for (int ii = net_nodes(); ii < max_nodes(); ++ii) {itested();
 	_n[ii].set_to_ground(this);
       }
@@ -991,7 +1022,11 @@ void DEV_SPICE::expand()
 
     int* node = spice_nodes(); // treat as array
     char fake_name[] = "a";
+    for (int ii = 0; ii < start_internal; ++ii) {
+      trace2("map", ii, node[ii]);
+    }
     for (int ii = start_internal; ii < matrix_nodes(); ++ii) {
+      trace2("map i", ii, node[ii]);
       if (node[ii] >= start_internal+OFFSET) {
 	// real internal node
 	_n[ii].new_model_node('.' + long_label() + '.' + fake_name, this);
@@ -1002,9 +1037,9 @@ void DEV_SPICE::expand()
 	_n[ii] = _n[node[ii]-OFFSET];
 	trace1("collapse", node[ii]);
 	assert(_n[ii].n_());
-      }else{ untested();
+      }else{
 	// not assigned
-	trace1("not used", node[ii]);
+	trace2("not used", ii, node[ii]);
 	assert(!_n[ii].n_());
       }
       ++(*fake_name);
@@ -1018,7 +1053,7 @@ void DEV_SPICE::expand()
     for (int ii = 0; ii < min_nodes(); ++ii) {
       assert(_n[ii].n_());
     }
-    for (int ii = min_nodes(); ii < net_nodes(); ++ii) { untested();
+    for (int ii = min_nodes(); ii < net_nodes(); ++ii) {
       assert(_n[ii].n_());
     }
     for (int ii = net_nodes(); ii < max_nodes(); ++ii) {itested();
@@ -1035,12 +1070,16 @@ void DEV_SPICE::expand()
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::precalc_last()
 {
+  trace3("DS::pl", _mfactor.string(), common()->mfactor(), _mfactor);
+//   assert(_maxEqNum == ckt()->CKTmaxEqNum); not in 3f5 dio
   assert(_model);
   assert_instance();
   assert(info.DEVsetup);
 
   STORAGE::precalc_last();
   init_ckt();
+
+  trace3("DS::pl", _mfactor.string(), common()->mfactor(), _mfactor);
 
   // push down parameters into spice data
   COMMON_PARAMLIST* c = dynamic_cast<COMMON_PARAMLIST*>(mutable_common());
@@ -1049,7 +1088,7 @@ void DEV_SPICE::precalc_last()
     if (i->second.has_hard_value()) {
       try {
 	Set_param_by_name(i->first, to_string(i->second.e_val(1,scope())));
-      }catch (Exception_No_Match&) { untested();
+      }catch (Exception_No_Match&) {
 	error(bTRACE, long_label() + ": bad parameter: " + i->first + ", ignoring\n");
       }
     }else{ untested();
@@ -1066,7 +1105,7 @@ void DEV_SPICE::precalc_last()
     for (int ii = 0; ii < net_nodes(); ++ii) {
       node[ii] = ii+OFFSET;
     }
-    if (UNCONNECTED_NODES == uGROUND) { untested();
+    if (UNCONNECTED_NODES == uGROUND) {
       for (int ii = net_nodes(); ii < max_nodes(); ++ii) {itested();
 	node[ii] = ii+OFFSET;
       }
@@ -1079,7 +1118,9 @@ void DEV_SPICE::precalc_last()
       assert(min_nodes() == max_nodes());
       assert(net_nodes() == max_nodes());
     }
+    // assert(_maxEqNum == ckt()->CKTmaxEqNum); // not in 3f5 dio
     ckt()->CKTmaxEqNum = max_nodes();
+    // assert(_maxEqNum == ckt()->CKTmaxEqNum);
 
     for (int ii = max_nodes(); ii < matrix_nodes(); ++ii) {
       node[ii] = 0;
@@ -1091,21 +1132,47 @@ void DEV_SPICE::precalc_last()
     int num_states_garbage = 0;
 
     assert(_spice_model == &(_model->_spice_model));
+    // assert(_maxEqNum == ckt()->CKTmaxEqNum);
     SPICE_MODEL_DATA spice_model_copy(*_spice_model);
     spice_model_copy._gen.GENinstances = &_spice_instance;
-
+    // DEVsetup 2
+    trace1("DEVsetup 2, pl", ckt()->CKTmaxEqNum);
     int ok = info.DEVsetup(matrix, &(spice_model_copy._gen), ckt(), &num_states_garbage);
+    trace1("DEVsetup 2, pl done", ckt()->CKTmaxEqNum);
 
     assert(ok == OK);
     assert(num_states_garbage == _num_states);
-    trace3("precalc", _maxEqNum, ckt()->CKTmaxEqNum, (_maxEqNum == ckt()->CKTmaxEqNum));
+    trace4("precalc", _maxEqNum, ckt()->CKTmaxEqNum, (_maxEqNum == ckt()->CKTmaxEqNum), matrix_nodes());
+#if NGSPICE>=42
+    assert(_maxEqNum >= ckt()->CKTmaxEqNum);
+    int gap = _maxEqNum - ckt()->CKTmaxEqNum;
+    for(int ii=0; ii<matrix_nodes(); ++ii){
+      trace2("pl", ii, node_stash[ii]);
+      trace2("pl", ii, node[ii]);
+    }
+    notstd::copy_n(node_stash, matrix_nodes()-gap, node); // put back real nodes
+    notstd::copy_n(node_stash+gap, gap, node+gap); // put back real nodes
+    if(!gap){
+    }else if(gap==1){
+      node[0]=node[0];
+      node[2]=node[2];
+      node[1]=SPICE_INVALID_NODE;
+      assert(0);
+      //seen in dio, when rs=0.
+    }else{
+      incomplete();
+    }
+    // hopefully, the matrix pointers are the same as last time!
+#else
     assert(_maxEqNum == ckt()->CKTmaxEqNum);
     notstd::copy_n(node_stash, matrix_nodes(), node); // put back real nodes
     // hopefully, the matrix pointers are the same as last time!
+#endif
   }
   assert(!is_constant());
   assert_model_unlocalized();
   assert_instance();
+  trace3("DS::pl2", _mfactor.string(), common()->mfactor(), _mfactor);
 }
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::internal_precalc()
@@ -1148,7 +1215,7 @@ void DEV_SPICE::tr_advance()
 }
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::tr_regress()
-{ untested();
+{
   ELEMENT::tr_regress();
   update_ckt();
 }
@@ -1169,7 +1236,7 @@ bool DEV_SPICE::tr_needs_eval()const
     // check the node voltages, reference to ground
     for (int ii=0; ii<matrix_nodes(); ++ii) {
       if ((node[ii] != SPICE_INVALID_NODE) 
-	  && !conchk(_v1[node[ii]], _n[ii].v0(), 0, OPT::reltol*OPT::bypasstol)) { untested();
+	  && !conchk(_v1[node[ii]], _n[ii].v0(), 0, OPT::reltol*OPT::bypasstol)) {
 	return true;
       }else{
       }
@@ -1180,7 +1247,7 @@ bool DEV_SPICE::tr_needs_eval()const
 	if ((node[ii] != SPICE_INVALID_NODE) && (node[jj] != SPICE_INVALID_NODE) 
 	    && !conchk((_v1[node[ii]] - _v1[node[jj]]),
 		       (_n[ii].v0() - _n[jj].v0()),
-		       0, OPT::reltol*OPT::bypasstol)) { untested();
+		       0, OPT::reltol*OPT::bypasstol)) {
 	  return true;
 	}else{
 	}
@@ -1244,7 +1311,7 @@ bool DEV_SPICE::do_tr()
     for (int ii = 0; ii < matrix_nodes(); ++ii) {
       if (node[ii] != SPICE_INVALID_NODE) {
 	_v1[node[ii]] = _n[ii].v0();
-      }else{ untested();
+      }else{
       }
     }
   }
@@ -1431,10 +1498,10 @@ double DEV_SPICE::tr_probe_num(const std::string& x)const
 
   // all of the "states" in state array
   int num_probe_states = std::min(_num_states, int(sizeof(state_names)/sizeof(std::string)));
-  for (int ii=0; ii<num_probe_states && state_names[ii]!=""; ++ii) { untested();
-    if (Umatch(x, state_names[ii] + ' ')) { untested();
+  for (int ii=0; ii<num_probe_states && state_names[ii]!=""; ++ii) {
+    if (Umatch(x, state_names[ii] + ' ')) {
       return _states[0][ii];
-    }else{ untested();
+    }else{
     }
   }
 
@@ -1445,6 +1512,7 @@ double DEV_SPICE::tr_probe_num(const std::string& x)const
 
     for (int ii=0; ii<(*(info.DEVpublic.numInstanceParms)); ++ii) {
       IFparm Parms = info.DEVpublic.instanceParms[ii];
+      trace1("tr_probe_num try", Parms.keyword);
       int datatype = Parms.dataType;
       if (datatype & IF_ASK && Umatch(x, std::string(Parms.keyword) + ' ')) {
 	IFvalue v;
@@ -1452,12 +1520,15 @@ double DEV_SPICE::tr_probe_num(const std::string& x)const
 	if (ok == OK) {
 	  switch (datatype & 0xff) {
 	  case IF_FLAG:untested();
+	    // fallthrough
 	  case IF_INTEGER:untested();
 	    return v.iValue;
 	  case IF_REAL:
 	    return v.rValue;
 	  case IF_COMPLEX:untested();
+	    // fallthrough
 	  case IF_STRING:untested();
+	    // fallthrough
 	  default:untested();
 	    // make believe it is not a match
 	    incomplete();
@@ -1577,7 +1648,16 @@ extern "C" {
   char *errMsg = NULL;
   char *errRtn = NULL;
 #if NGSPICE>=42
-  bool cp_getvar(char *, enum cp_types, void *, size_t){unreachable(); return false;}
+  // what? used to get "scale" in diosetup.c
+  bool cp_getvar(char *, enum cp_types, void *, size_t){return false;} // from 42
+#elif NGSPICE>=35
+  bool cp_getvar(char *, enum cp_types, void *, size_t){return false;} // from 35
+#elif NGSPICE>=31
+  bool cp_getvar(char *, enum cp_types, void *, size_t){return false;} // from 31
+#elif NGSPICE>=22
+  bool cp_getvar(char *name, enum cp_types type, void *){return false;}
+#else
+  // nspice17 doesn't have it.
 #endif
 #if NGSPICE>=28
   void *tmalloc(size_t){unreachable();return NULL;}
@@ -1608,7 +1688,7 @@ extern "C" {
   public:
     FT_CURCKT() {
       junk.jobs = NULL;
-#if NGSPICE>=28
+#if NGSPICE>=25
       ci_curTask = reinterpret_cast<TSKtask*>(&junk);
 #else
       ci_curTask = reinterpret_cast<char*>(&junk);
@@ -1672,7 +1752,7 @@ extern "C" {
   double Nintegrate(double, double, double, Ndata*) {incomplete(); return NOT_VALID;} //DEVnoise
 #endif
   void NevalSrc(double*, double*, CKTcircuit*, int, int, int, double) {incomplete();} //DEVnoise
-#if NGSPICE>=28
+#if NGSPICE>=25
   void NevalSrc2 (double *, double *, CKTcircuit *, int, int, int, double, int, int, double, double);
 #elif NGSPICE>=17
   void NevalSrc2(double*, double*, CKTcircuit*, int, int, int, double, double) {incomplete();}
@@ -1752,6 +1832,8 @@ extern "C" {
     
 #if NGSPICE>=28
   int CKTinst2Node(CKTcircuit *, void *, int , CKTnode **, IFuid *){unreachable(); return 0;}
+#elif NGSPICE>=22
+  int CKTinst2Node(CKTcircuit *, void *, int , CKTnode **, IFuid *){unreachable(); return 0;}
 #elif NGSPICE>=17
   int CKTinst2Node(void*, void*, int, CKTnode**, IFuid*)
   {untested();incomplete();
@@ -1784,6 +1866,8 @@ extern "C" {
     NULL, // void (*IFerrorf) (int, const char *fmt, ...);
 #elif NGSPICE>=17
     IFerror, //int ((*IFerror)());	/* output an error or warning message */ temp, setup
+#else
+    NULL, // void (*IFerrorf) (int, const char *fmt, ...);
 #endif
     NULL, //int ((*OUTpBeginPlot)());	/* start pointwise output plot */ noisean.c only
     NULL, //int ((*OUTpData)());	/* data for pointwise plot */ noisean.c only
@@ -1878,8 +1962,9 @@ extern "C" {
   }
   //------------------------------------------------
   //------------------------------------------------
-  int CKTmkVolt(CKTcircuit* ckt, CKTnode** n, IFuid, char*)
-  { // get a new node number. -- used by DEVsetup
+  // get a new node number. -- used by DEVsetup
+  int CKTmkVolt(CKTcircuit* ckt, CKTnode** n, IFuid, char* what) {
+    trace1("cktmkvolt", what);
     assert_ckt_initialized(ckt);
     assert(n);
     static CKTnode n_static;	// always used only on next line
@@ -1889,12 +1974,11 @@ extern "C" {
     // local number (- == internal)   only number is used
     return OK;
   }
-  int CKTmkCur(CKTcircuit* ckt, CKTnode** n, IFuid i, char* c)
-  {untested();
+  int CKTmkCur(CKTcircuit* ckt, CKTnode** n, IFuid i, char* c) {untested();
     return CKTmkVolt(ckt, n, i, c);
   }
   //------------------------------------------------  
-#if NGSPICE>=28
+#if NGSPICE>=22
   int CKTdltNNum(CKTcircuit *, int)
 #else
   int CKTdltNNum(void*,int)
@@ -1910,7 +1994,7 @@ extern "C" {
   { // returns a pointer m[r][c] -- used by DEVsetup
     //trace2("", r, c);
     assert(mm);
-    if (r == 0 || c == 0) { untested();
+    if (r == 0 || c == 0) {
       static double trash;
       trash = 0;
       return &trash;
@@ -1964,10 +2048,25 @@ static struct COMPLEX_TEST {
 } complex_test;
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/
+class COMMON_SW : public COMMON_PARAMLIST {
+public:
+  explicit COMMON_SW(int x) : COMMON_PARAMLIST(x){}
+private:
+  explicit COMMON_SW(COMMON_SW const& x) : COMMON_PARAMLIST(x){}
+  COMMON_COMPONENT* clone()const {
+    return new COMMON_SW(*this);
+  }
+
+  void precalc_first(CARD_LIST const* scope)override {
+    COMMON_COMPONENT::precalc_first(scope);
+  }
+};
+/*--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*/
 int MODEL_SPICE::_count = -1;
 int DEV_SPICE::_count = -1;
 
-static COMMON_PARAMLIST Default_Params(CC_STATIC);
+static COMMON_SW Default_Params(CC_STATIC);
 static DEV_SPICE p0(&Default_Params);
 static DISPATCHER<CARD>::INSTALL
   d0(&device_dispatcher, std::string(SPICE_LETTER) + "|" + DEVICE_TYPE, &p0);
