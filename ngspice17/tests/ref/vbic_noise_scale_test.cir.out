@@ -1,0 +1,5 @@
+VBIC Noise Scale Test 
+#          
+ 27.       
+.print noise sqrt(onoise_spectrum) 
+       ^ ? what's this?

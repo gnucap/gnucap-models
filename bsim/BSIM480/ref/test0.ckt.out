@@ -1,0 +1,10 @@
+' 
+m2 (d g 0 0) nn m=9 
+                ^ ? m2: bad parameter m ignored
+.model nn nmos ( level=14)
+m1 ( d g 0 0 )  nn 
+m2 ( d g 0 0 )  nn  m=9
+vd ( d 0 )  DC  5.
+vg ( g 0 )  DC  3.
+#           v(d)       v(g)       i(vd)      i(vg)      vds(m1)    vds(m2)    id(m1)     id(m2)    
+ 27.        5.         3.        -0.0022821  0.         5.         5.         0.0011411  0.0011411 

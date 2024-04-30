@@ -1,0 +1,13 @@
+' 
+.model nn nmos ( level=14)
+m1 ( d g 0 0 )  nn 
+m2 ( d g 0 0 )  nn  $mfactor=9
+vd ( d 0 )  DC  5.
+vg ( g 0 )  DC  3.
+#           v(d)       v(g)       i(vd)      i(vg)      vds(m1)    vds(m2)    id(m1)     id(m2)    
+ 27.        5.         3.        -0.011411   0.         5.         5.         0.0011411  0.0011411 
+Gnucap   System status
+iterations: op=5, dc=0, tran=0, fourier=0, total=5
+transient timesteps: accepted=0, rejected=0, total=0
+nodes: user=2, subckt=0, model=0, total=2
+dctran density=100.0%, ac density=100.0%

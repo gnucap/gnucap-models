@@ -1,0 +1,12 @@
+'
+.load ./bsim480.so
+.model nn nmos level=14
+m1 (d g 0 0) nn
+m2 (d g 0 0) nn $mfactor=9
+vd (d 0) 5
+vg (g 0) 3
+.list
+.probe op v(nodes) i(v*) vds(m*) id(m*)
+.op
+.status notime
+.end

@@ -1,0 +1,14 @@
+
+all:
+
+install : $(INSTALL_FILES)  $(INSTALL_FILES_1)  $(INSTALL_FILES_2)
+	[ -z "$(INSTALL_DIR)" ]   || mkdir -p $(DESTDIR)$(INSTALL_DIR)
+	[ -z "$(INSTALL_DIR_1)" ] || mkdir -p $(DESTDIR)$(INSTALL_DIR_1)
+	[ -z "$(INSTALL_DIR_2)" ] || mkdir -p $(DESTDIR)$(INSTALL_DIR_2)
+	[ -z "$(INSTALL_FILES)" ]   || cp $(INSTALL_FILES) $(DESTDIR)$(INSTALL_DIR)
+	[ -z "$(INSTALL_FILES_1)" ] || cp $(INSTALL_FILES_1) $(DESTDIR)$(INSTALL_DIR_1)
+	[ -z "$(INSTALL_FILES_2)" ] || cp $(INSTALL_FILES_2) $(DESTDIR)$(INSTALL_DIR_2)
+#------------------------------------------------------------------------
+clean:
+
+check:
