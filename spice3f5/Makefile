@@ -18,3 +18,6 @@ install:
 	for dir in $(SUBDIRS); do \
 	$(MAKE) -C $$dir install; \
 	done
+
+check:
+	${MAKE} -C tests check

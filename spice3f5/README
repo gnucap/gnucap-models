@@ -38,19 +38,10 @@ better performance.
 
 BUILD INSTRUCTIONS
 
-This applies to this snapshot.  It will change.
+This applies to this snapshot. It will change. See also ../README.
 
-If you unpacked in the same directory as the gnucap source, a new
-directory will appear there.  If so, the links should be set to build.
-Just cd to models-bsim and type "make".
-
-If you unpacked anywhere else, you need to configure it manually.
-The only configuration needed is to make a symbolic link to the 
-gnucap sources as "Gnucap".
-
-The command will be something like:
-   ln -s ../gnucap-xxxx/src Gnucap
-but substitute the real name for xxxx.
+Install Gnucap
+Type "make" here.
 
 If you are building with a compiler other than gcc and g++, you will
 need to change the "Make2" file.  If you are cross-compiling with
@@ -58,14 +49,10 @@ mingw, update the "Make2" symlink to point to "Make2.mingw".  For
 anything else, delete the symlink and make a new "Make2" as a copy of
 "Make2.gcc", and edit the copy to your needs.
 
-The Makefile supports only "make all" and "make clean".  It doesn't
-yet install.  It has not yet been determined how the final install
-should be arranged.  Your feedback will be appreciated.
-
 When you run "make", it builds a ".so" file in each directory.  These
 can be placed anywhere that is convenient.  You can use them in gnucap
 with the "attach" command.  If there are no slashes in the name, it
-uses the environment variable LD_LIBRARY_PATH to locate them.  If the
+uses the environment variable GNUCAP_PLUGPATH to locate them.  If the
 name has a slash, the usual rules for finding files apply.
 
 To install, you can copy the ".so" files to where you want them.
@@ -83,7 +70,7 @@ csw:	-	undefined symbol: CKTfndBranch
 dio:	+++++	supported (minor mods)
 ind:	-	undefined symbol: CKTtypelook
 isrc:	+-	loads, probably parse problem, not tested
-jfet:	+++++	supported
+jfet:	+++++	supported, BUG, see below
 ltra:	+	loads, not tested
 mes:	+++
 mos1:	+++++	supported
@@ -132,6 +119,8 @@ sw:
 It has the same problems in gnucap as it has in spice.
 No time step control, bad results and convergence failures.
 Good correlation with Spice, even when incorrect.
+
+jfet: possible mfactor bug in test{4,5}
 
 
 MODIFICATIONS:
