@@ -1,0 +1,13 @@
+attach mgsim
+* simple diode test
+spice
+V1   1  0  10.
+R1   1  2  50.K
+D1   2  0  ddd  area=1.
+.model  ddd  d  ( is= 10.f  rs= 10k  n= 1.  tt= 0.  cjo= 0.  vj= 1.  m= 0.5 
++ eg= 1.11  xti= 3.  kf= 1.  af= 1.  fc= 0.5  )
+.verilog
+
+print op v(1 2) i(V1)
+op
+end

@@ -1,0 +1,41 @@
+attach mgsim
+* simple diode test
+spice
+V1   1  0  10.
+R1   1  2  50.K
+D1   2  0  ddd  area=1. m=2
+.model  ddd  d  ( is= 10.f  rs= 10k  n= 1.  tt= 0.  cjo= 0.  vj= 1.  m= 0.5 
++ eg= 1.11  xti= 3.  kf= 0.  af= 1.  fc= 0.5  )
+.verilog
+
+noise_probe #() n2(2,0);
+print dc v(1 2) i(V1)
+dc
+print ac npwr(n2) nv(n2)
+ac 1e3 1e8 * 10
+
+delete D1
+spice
+D1   2  0  ddd  area=1. $mfactor=2
+.verilog
+dc
+print ac npwr(n2) nv(n2)
+ac 1e3 1e8 * 10
+
+delete D1
+spice
+D1   2  0  ddd  area=2.
+.verilog
+dc
+ac 1e3 1e8 * 10
+
+delete D1
+spice
+D1   2  0  ddd  area=1.
+D2   2  0  ddd  area=1.
+.verilog
+dc
+ac 1e3 1e8 * 10
+
+status notime
+end

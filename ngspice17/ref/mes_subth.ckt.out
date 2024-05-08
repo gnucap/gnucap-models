@@ -9,3 +9,8 @@ Mesfet level 1 subthreshold characteristics
 -1.         42.498u   
 -0.5        232.48u   
  0.         457.54u   
+Gnucap   System status
+iterations: op=0, dc=32, tran=0, fourier=0, total=32
+transient timesteps: accepted=0, rejected=0, total=0
+nodes: user=3, subckt=0, model=2, total=5
+dctran density=76.0%, ac density=76.0%

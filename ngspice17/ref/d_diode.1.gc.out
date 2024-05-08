@@ -1,4 +1,3 @@
-simple diode test 
 V1 ( 1 0 )  DC  10.  AC  1.
 R1 ( 1 2 )  100.K
 D1 ( 2 0 )  ddd 1

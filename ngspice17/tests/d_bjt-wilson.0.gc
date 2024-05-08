@@ -1,0 +1,13 @@
+spice
+
+.model foo npn(tf=0.1ns ptf=120)
+q1 c b 0 0 foo
+v1 b 0 sin ampl=.2 offset=.6
+r1 vv c 1000k
+vsup vv 0 10
+
+.print tran v(nodes) iter(0)
+.tran 1
+.tran 2
+.tran 2
+.end

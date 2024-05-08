@@ -1,5 +1,5 @@
 
-d1 1 0 foo bar=1
+.ngspice_dio d1 1 0 foo bar=1
 .model foo sw
 .op
 .end
