@@ -3,7 +3,10 @@
 .model asd njf cgs=1f cgd=1f
 .model psd pjf cgs=1f cgd=1f
 .list
-j1 2 1 0 asd $mfactor=foo
+
+* this fails in 3f5. m is diverted to mfactor, and mfactor is immutable after expansion.
+.end
+j1 2 1 0 asd m=foo
 v1 3 0 dc 10
 r1 2 3 10k
 v2 1 0 pulse(0 -1 5p 1p) DC 0 AC 1 

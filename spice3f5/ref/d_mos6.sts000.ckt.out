@@ -1,0 +1,18 @@
+nmos n gate, sub-threshold 
+.model cmosn  n ... nss= 1.E+12  tpg=1  xj= 400.n  ld= 265.073n  uo= 503.521
+                                        ^ ? cmosn: bad parameter xj ignored
+.model cmosn  n ... .073n  uo= 503.521  kf= 0.  af= 1.  fc= 0.5 ) 
+                                        ^ ? cmosn: bad parameter kf ignored
+.model cmosn  n ... o= 503.521  kf= 0.  af= 1.  fc= 0.5 ) 
+                                        ^ ? cmosn: bad parameter af ignored
+>>>>>.print op v(nodes) iter(0) 
+cmosn: bad parameter: af, ignoring
+cmosn: bad parameter: kf, ignoring
+cmosn: bad parameter: xj, ignoring
+>>>>>.op 
+cmosn: bad parameter: af, ignoring
+cmosn: bad parameter: kf, ignoring
+cmosn: bad parameter: xj, ignoring
+#           v(1)       v(2)       v(3)       v(4)       iter(0)   
+new max = 5, new limit = 5.5
+ 27.        0.23673    5.         5.        -1.2349     5.        

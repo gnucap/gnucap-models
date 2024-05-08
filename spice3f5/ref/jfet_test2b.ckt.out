@@ -7,7 +7,7 @@ j1 2 1 0 asd zap=22 area=2 bob=33
                            ^ ? j1: bad parameter bob ignored
 .model asd njf ( cgd=1f cgs=1f)
 .model psd pjf ( cgd=1f cgs=1f)
-j1 ( 2 1 0 )  asd  area=2 bob=33 zap=22
+j1 ( 2 1 0 )  asd  area=2
 v1 ( 3 0 )  DC  10.
 r1 ( 2 3 )  10.K
 v2 ( 1 0 ) pulse iv= 0. pv=-1. delay= 5.p rise= 1.p fall=NA( 0.) width=NA( Inf) period=NA( Inf)  DC  0.  AC  1.

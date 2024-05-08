@@ -1,7 +1,7 @@
 simple diode test 
 V1 ( 1 0 ) sin offset=NA( 0.) amplitude= 10. frequency= 10.Meg delay=NA( 0.) damping=NA( 0.)  DC -10.  AC  1.
 R1 ( 1 2 )  100.K
-D1 ( 2 0 )  ddd 1.
+D1 ( 2 0 )  ddd  area=1.
 .model ddd d ( af=1. bv=50 cjo=1.p eg=1.11 fc=0.5 ibv=0.001 is=10.f kf=0. m=0.5 n=1. rs=0. tt=0. vj=1. xti=3.)
 #           v(1)       v(2)       i(V1)      i(R1)      id(D1)     vd(D1)     req(D1)    cd(D1)     z(D1)      zraw(D1)   gd(D1)     z(2)      
  0.         0.         0.         0.         0.         0.         0.         ??         0.         1.E+12     1.E+12     0.         1.E+12    

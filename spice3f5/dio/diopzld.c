@@ -34,6 +34,8 @@ DIOpzLoad(inModel,ckt,s)
                 here=here->DIOnextInstance) {
 
             gspr=model->DIOresist*here->DIOarea;
+            /* should have been 1./model->DIOresist*here->DIOarea;
+				 * (but isn't) */
             geq= *(ckt->CKTstate0 + here->DIOconduct);
             xceq= *(ckt->CKTstate0 + here->DIOcapCurrent);
             *(here->DIOposPosPtr ) += gspr;
