@@ -14,5 +14,5 @@ Vgs 3 0 dc 0
 *>.print DC i(vids)
 .dc vgs -3 0 0.5
 
-
+.status notime
 .end

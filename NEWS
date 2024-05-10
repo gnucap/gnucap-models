@@ -1,3 +1,11 @@
+202405**
+========
+* add ngspice42 devices, reuse -17 tests
+* collapse internal nodes (e.g. ngspice42/bjt)
+* support "wilson trick", e.g. bjt tf, ptf
+* noise in dio, document bugs
+* reject inherited device parameters
+
 20240430-dev
 ============
 * revival

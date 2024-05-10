@@ -1,0 +1,58 @@
+
+srcdir = .
+ref = ${srcdir}/ref
+testdir = ${srcdir}/${TESTDIR}
+TARGETDIR = check
+GNUCAP = gnucap
+# GNUCAP_ARGS = -a ./bsim480.so
+DIFF = diff
+
+glob_ckt = $(shell cd ${testdir}; ls *.ckt)
+glob_gc = $(shell cd ${testdir}; ls *.gc)
+
+filt_ckt = $(filter ${TESTCASES}%, ${glob_ckt})
+filt_gc = $(filter ${TESTCASES}%, ${glob_gc})
+
+out_ckt = ${filt_ckt:%=${TARGETDIR}/%.out}
+out_gc = ${filt_gc:%=${TARGETDIR}/%.out}
+
+diff_ckt = ${filt_ckt:%=${TARGETDIR}/%.diff}
+diff_gc = ${filt_gc:%=${TARGETDIR}/%.diff}
+
+diff = ${diff_ckt} ${diff_gc}
+
+prep: ${SYMLINKS}
+	# @[ ! -s "${TARGETDIR}" ]
+	-mkdir -p ${TARGETDIR}
+
+${out_ckt}: ${TARGETDIR}/%.ckt.out: prep
+	-@${ENV} ${GNUCAP} ${GNUCAP_ARGS} -b ${testdir}/$*.ckt |tail -n +12 | \
+		grep -v '^stashing\ as' | grep -v 'already\ installed' | grep -v ^make > $@
+
+${out_gc}: ${TARGETDIR}/%.gc.out: prep
+	-@${ENV} ${GNUCAP} ${GNUCAP_ARGS} ${testdir}/$*.gc |tail -n +12 | \
+		grep -v '^stashing\ as' | grep -v 'already\ installed' | grep -v ^make > $@
+
+# TODO: maybe cat the diff, so it can be logged?
+check: ${TARGETDIR}/${TESTCASES}.diff
+	@find ${TARGETDIR} -size 0 -delete;
+	@echo ==
+	@if [ -s ${TARGETDIR}/${TESTCASES}.diff ]; then \
+		echo test failures:; \
+		ls -larS ${TARGETDIR}/${TESTCASES}*.diff; \
+	else \
+		echo all ${TESTCASES} passed; \
+	fi
+
+${diff}: ${TARGETDIR}/%.diff: ${TARGETDIR}/%.out
+	@if [ ! -f ${ref}/$*.out ]; then \
+	  echo MISS: $*; \
+	  echo "missing: $*.out" > $@; \
+	elif ${DIFF} ${ref}/$*.out ${TARGETDIR}/$*.out > $@; then \
+	  echo pass: $*; \
+	else \
+	  echo FAIL: $*; \
+	fi
+
+${TARGETDIR}/${TESTCASES}.diff : ${diff}
+	@for i in $+; do echo $$i; cat $$i; done > $@

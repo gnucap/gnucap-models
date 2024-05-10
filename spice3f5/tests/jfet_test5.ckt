@@ -32,6 +32,8 @@ v2 1 0 pulse(0 -1 5p 1p) DC 0 AC 1
 *>.print dc + iter(0)
 .dc v2 -2 2 .2
 
+.end
+* does not work. mfactor cant be changed after expansion.
 .param foo=2
 .option method=trap
 .print tran v(1) v(2)

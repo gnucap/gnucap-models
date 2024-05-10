@@ -43,12 +43,6 @@ This applies to this snapshot. It will change. See also ../README.
 Install Gnucap
 Type "make" here.
 
-If you are building with a compiler other than gcc and g++, you will
-need to change the "Make2" file.  If you are cross-compiling with
-mingw, update the "Make2" symlink to point to "Make2.mingw".  For
-anything else, delete the symlink and make a new "Make2" as a copy of
-"Make2.gcc", and edit the copy to your needs.
-
 When you run "make", it builds a ".so" file in each directory.  These
 can be placed anywhere that is convenient.  You can use them in gnucap
 with the "attach" command.  If there are no slashes in the name, it
@@ -67,7 +61,7 @@ cap:	+++-	works with model, parse problem without
 cccs:	-	undefined symbol: CKTfndBranch
 ccvs:	-	undefined symbol: CKTfndBranch
 csw:	-	undefined symbol: CKTfndBranch
-dio:	+++++	supported (minor mods)
+dio:	++++- bug in pzld, gspr
 ind:	-	undefined symbol: CKTtypelook
 isrc:	+-	loads, probably parse problem, not tested
 jfet:	+++++	supported, BUG, see below
@@ -102,6 +96,8 @@ included in multiple regressions.
 
 More detailed status:
 
+bjt: possibly differs from gnucap model around ft. c.f. bjt_fts.gc.
+
 bsim1:
 Small differences between this bsim1.so vs. d_mos4.model.
 d_mos4.model matches NG-spice, the program.
@@ -114,6 +110,8 @@ In Spice-2, setting bv=0 is equivalent to not setting it.
 In Spice-3, setting bv=0 really sets bv to zero, leading to
 convergence problems in the breakdown region.  These problems show in
 NG-spice, too, so it isn't the plugin mechanism.
+spice3f5 dio apears to be less noisy than ngspice17 dio. reason is buggy
+pzload, gspr, fixed by Dietmar in ngspice, 2003.
 
 sw:
 It has the same problems in gnucap as it has in spice.

@@ -1,0 +1,3 @@
+#jfet test circuit 
+.model asd njf ( cgd=1f cgs=1f)
+.model psd pjf ( cgd=1f cgs=1f)

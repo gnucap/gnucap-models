@@ -1,16 +1,9 @@
+include Make1
 
-SUBDIRS = \
-asrc bjt bjt2 bsim1 bsim2 bsim3 bsim3soi bsim3soi_dd \
-bsim3soi_fd bsim3soi_pd bsim3v0 bsim3v1 bsim3v1a \
-bsim3v1s bsim4 bsim4.6.0ng cap cccs ccvs cpl csw \
-dio hfet1 hfet2 hisim ind isrc jfet jfet2 ltra mes \
-mesa mos1 mos2 mos3 mos6 mos9 res soi3 sw tra txl \
-urc vbic vccs vcvs vsrc
+all: ${SUBDIRS:%=%-all}
 
-all:
-	for dir in $(SUBDIRS); do \
-	$(MAKE) -C $$dir; \
-	done
+${SUBDIRS:%=%-all}: %-all:
+	$(MAKE) -C $*
 
 clean:
 	for dir in $(SUBDIRS); do \
@@ -22,5 +15,13 @@ install:
 	$(MAKE) -C $$dir install; \
 	done
 
-check:
-	$(MAKE) -C tests check
+TESTDIR = tests
+GNUCAP = gnucap
+# TODO: load with wildcard.
+# BUG: depends on attach order.
+GNUCAP_ARGS = -a ./dio -a ./vbic -a ./bjt -a ./jfet -a ./bsim2 -a ./bsim1 -a ./mes \
+              -a ./mesa -a ./hfet1 -a ./hfet2 -a ./mos1 -a ./mos6 \
+              -a ./bsim3
+include ../Make.test
+
+.PHONY: all ${SUBDIRS:%=%-all}

@@ -11,6 +11,7 @@ extern "C" {
 #define MIN_NET_NODES 2
 #define MAX_NET_NODES 2
 #define INTERNAL_NODES 1
+#define NOISE_SRCS 4 // DIONSRCS
 #define MODEL_TYPE "d"
 #define VALUE_NAME "area"
 

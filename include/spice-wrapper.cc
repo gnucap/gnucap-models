@@ -107,7 +107,7 @@ const int MATRIX_NODES = (MAX_NET_NODES + INTERNAL_NODES);
 bool ft_ngdebug = 0; // /winmain.c
 struct compat newcompat; // inpcompat.c
 #endif
-#if NGSPICE>=28
+#if NGSPICE>=26
 FILE *slogp = NULL; // main.c
 #endif
 /*--------------------------------------------------------------------------*/
@@ -138,7 +138,7 @@ FILE *slogp = NULL; // main.c
  * DEVsenPrint 	not used -- sensitivity
  * DEVsenTrunc 	not used -- sensitivity
  * DEVdisto    	not used -- distortion
- * DEVnoise   	not used -- noise
+ * DEVnoise   	DEV_SPICE::noise_num
 */
 /*--------------------------------------------------------------------------*/
 union SPICE_MODEL_DATA {
@@ -173,7 +173,7 @@ public:
   explicit MODEL_SPICE(const DEV_SPICE* p);	// for dispatcher
   ~MODEL_SPICE();
 public: // override virtual
-  MODEL_CARD* clone()const override {return new MODEL_SPICE(*this);}
+  MODEL_CARD* clone()const override { return new MODEL_SPICE(*this);}
   bool is_valid(const COMPONENT* d)const override IS_VALID
   //void expand();
   void precalc_first()override;
@@ -230,6 +230,7 @@ public:
   explicit DEV_SPICE(COMMON_COMPONENT* c=NULL);
   ~DEV_SPICE();
 protected: // override virtual
+  bool	  is_device()const override {return true;}
   char	  id_letter()const override	{untested();return SPICE_LETTER[0];}
   bool	  print_type_in_spice()const override {return true;}
   std::string value_name()const override {return VALUE_NAME;}
@@ -263,6 +264,7 @@ protected: // override virtual
   //double tr_input_limited()const //ELEMENT
   double  tr_amps()const override	{itested();return NOT_VALID;}
   double  tr_probe_num(const std::string&)const override;
+  double  noise_num(const std::string&)const override;
 
   void	  ac_iwant_matrix()override {ac_iwant_matrix_extended();}
   void    ac_begin()override;
@@ -383,6 +385,7 @@ void MODEL_SPICE::init_ckt()
   ckt()->CKTtemp    = _sim->_temp_c + CONSTCtoK; //manage by update
   ckt()->CKTnomTemp = OPT::tnom_c + CONSTCtoK;
   ckt()->CKTintegrateMethod = 0; // disable
+  trace2("init_ckt", ckt()->CKTcurrentAnalysis, _sim->command_is_op());
   if (_sim->command_is_op()) {
     ckt()->CKTcurrentAnalysis = DOING_DCOP;
   }else if (_sim->command_is_dc()) {
@@ -407,12 +410,16 @@ void MODEL_SPICE::init_ckt()
   ckt()->CKTdefaultMosAS = OPT::defas;
   ckt()->CKTfixLimit = false; // limiting kluge 1 == spice2
 #ifndef JSPICE3
-  ckt()->CKTbadMos3 = false; // 1 = spice2 compat
-  ckt()->CKTsenInfo = NULL; // used as flag to print sens info
+  {
+    ckt()->CKTbadMos3 = false; // 1 = spice2 compat
+    ckt()->CKTsenInfo = NULL; // used as flag to print sens info
+  }
 #endif
 #if NGSPICE>=17
-  ckt()->CKTdefaultMosM = 1.;
-  ckt()->CKTcopyNodesets = false;
+  {
+    ckt()->CKTdefaultMosM = 1.;
+    ckt()->CKTcopyNodesets = false;
+  }
 #endif
   assert_ckt_initialized(ckt());
 }
@@ -724,7 +731,7 @@ void MODEL_SPICE::set_param_by_index(int, std::string&, int)
 /*--------------------------------------------------------------------------*/
 DEV_SPICE::DEV_SPICE(COMMON_COMPONENT* c)
   :STORAGE(c),
-#if NGSPICE>=28
+#if NGSPICE>=27
 	// _inst doesn't have a valid constructor anymore.
 	// (doesnt need one in c99)
 #else
@@ -861,25 +868,6 @@ int DEV_SPICE::Set_param_by_name(std::string Name, std::string new_value)
     }
   }
 
-  // TODO: remove this ..
-  if(Name == "m"){
-    // don't propate m. it will be renamed anyway.
-    throw Exception_No_Match("m"); // consistent with future behavior.
-  }else if(Name == "$mfactor"){
-    // incomplete
-    try{
-      mutable_common()->COMMON_COMPONENT::Set_param_by_name("m", new_value);
-    }catch(Exception_No_Match const&){
-    }
-    try{
-      return mutable_common()->COMMON_COMPONENT::Set_param_by_name(Name, new_value);
-    }catch(Exception_No_Match const&){
-    }
-    return 0;
-  }else{
-  }
-  // .. until here
-
   return mutable_common()->COMMON_COMPONENT::Set_param_by_name(Name, new_value);
 }
 /*--------------------------------------------------------------------------*/
@@ -889,15 +877,14 @@ int DEV_SPICE::set_param_by_name(std::string Name, std::string Value)
     notstd::to_lower(&Name);
   }else{ untested();
   }
-  COMPONENT::set_param_by_name(Name, Value);
-  COMMON_PARAMLIST* c = dynamic_cast<COMMON_PARAMLIST*>(mutable_common());
-  assert(c);
-  auto iter = c->_params.find(Name);
-  if(iter != c->_params.end()){
-    return Set_param_by_name(Name, to_string(iter->second.e_val(1,scope())));
-  }else{ untested();
-    incomplete();
-    return 0;
+  try{
+    COMPONENT::set_param_by_name(Name, Value);
+    COMMON_PARAMLIST* c = dynamic_cast<COMMON_PARAMLIST*>(mutable_common());
+    assert(c);
+    return Set_param_by_name(Name, to_string(c->_params[Name].e_val(1,scope())));
+  }catch(Exception_No_Match const& e){ untested();
+    COMPONENT::set_param_by_name(Name, "");
+    throw e;
   }
 }
 /*--------------------------------------------------------------------------*/
@@ -929,8 +916,6 @@ void DEV_SPICE::Set_param_by_index(int i, std::string& new_value, int offset)
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::expand()
 {
-  trace2("expand", common()->mfactor(), common()->mfactor().string());
-  trace2("expand", _mfactor.string(), _mfactor);
   assert_instance();
   assert(info.DEVsetup);
 
@@ -1027,15 +1012,22 @@ void DEV_SPICE::expand()
     for (int ii = 0; ii < start_internal; ++ii) {
       trace2("map", ii, node[ii]);
     }
+
+    int ihit[MATRIX_NODES+OFFSET];
+    std::fill_n(ihit, matrix_nodes()+OFFSET, 0);
+
     for (int ii = start_internal; ii < matrix_nodes(); ++ii) {
       trace2("map i", ii, node[ii]);
-      if (node[ii] >= start_internal+OFFSET) {
-	// real internal node
+      if(ihit[node[ii]]) {
+	_n[ii] = _n[ihit[node[ii]]-OFFSET];
+      }else if (node[ii] >= start_internal+OFFSET) {
+	// real internal node not previously allocated.
 	_n[ii].new_model_node('.' + long_label() + '.' + fake_name, this);
-	trace1("new int", node[ii]);
+	ihit[node[ii]] = ii+OFFSET;
+	trace2("new int", ii, node[ii]);
 	assert(_n[ii].n_());
       }else if (node[ii] >= 0+OFFSET) {
-	// collapsed to an external node
+	// collapsed to an external node or previously allocated
 	_n[ii] = _n[node[ii]-OFFSET];
 	trace1("collapse", node[ii]);
 	assert(_n[ii].n_());
@@ -1072,7 +1064,6 @@ void DEV_SPICE::expand()
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::precalc_last()
 {
-  trace3("DS::pl", _mfactor.string(), common()->mfactor(), _mfactor);
 //   assert(_maxEqNum == ckt()->CKTmaxEqNum); not in 3f5 dio
   assert(_model);
   assert_instance();
@@ -1080,8 +1071,6 @@ void DEV_SPICE::precalc_last()
 
   STORAGE::precalc_last();
   init_ckt();
-
-  trace3("DS::pl", _mfactor.string(), common()->mfactor(), _mfactor);
 
   // push down parameters into spice data
   COMMON_PARAMLIST* c = dynamic_cast<COMMON_PARAMLIST*>(mutable_common());
@@ -1138,43 +1127,19 @@ void DEV_SPICE::precalc_last()
     SPICE_MODEL_DATA spice_model_copy(*_spice_model);
     spice_model_copy._gen.GENinstances = &_spice_instance;
     // DEVsetup 2
-    trace1("DEVsetup 2, pl", ckt()->CKTmaxEqNum);
+
     int ok = info.DEVsetup(matrix, &(spice_model_copy._gen), ckt(), &num_states_garbage);
-    trace1("DEVsetup 2, pl done", ckt()->CKTmaxEqNum);
 
     assert(ok == OK);
     assert(num_states_garbage == _num_states);
     trace4("precalc", _maxEqNum, ckt()->CKTmaxEqNum, (_maxEqNum == ckt()->CKTmaxEqNum), matrix_nodes());
-#if NGSPICE>=42
-    assert(_maxEqNum >= ckt()->CKTmaxEqNum);
-    int gap = _maxEqNum - ckt()->CKTmaxEqNum;
-    for(int ii=0; ii<matrix_nodes(); ++ii){
-      trace2("pl", ii, node_stash[ii]);
-      trace2("pl", ii, node[ii]);
-    }
-    notstd::copy_n(node_stash, matrix_nodes()-gap, node); // put back real nodes
-    notstd::copy_n(node_stash+gap, gap, node+gap); // put back real nodes
-    if(!gap){
-    }else if(gap==1){
-      node[0]=node[0];
-      node[2]=node[2];
-      node[1]=SPICE_INVALID_NODE;
-      assert(0);
-      //seen in dio, when rs=0.
-    }else{
-      incomplete();
-    }
-    // hopefully, the matrix pointers are the same as last time!
-#else
     assert(_maxEqNum == ckt()->CKTmaxEqNum);
     notstd::copy_n(node_stash, matrix_nodes(), node); // put back real nodes
     // hopefully, the matrix pointers are the same as last time!
-#endif
   }
   assert(!is_constant());
   assert_model_unlocalized();
   assert_instance();
-  trace3("DS::pl2", _mfactor.string(), common()->mfactor(), _mfactor);
 }
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::internal_precalc()
@@ -1279,15 +1244,37 @@ bool DEV_SPICE::do_tr()
   assert_model_localized();
 
   if (_sim->analysis_is_tran_dynamic()) {
-    if ((_time[1] == 0) && _sim->is_first_iteration()) {
-      ckt()->CKTmode = MODETRAN | MODEINITTRAN;
+    ckt()->CKTmode = MODETRAN;
+    if (_time[1] == 0) {
+      // handled below.
+      assert(_time[1] == _time[2]);
     }else{
-      ckt()->CKTmode = MODETRAN | MODEINITFLOAT;
     }
+
+    if (_time[1] == _time[2]){
+      // this is a first time step in a transient, not counting op.
+
+      if(_sim->is_first_iteration()) {
+	ckt()->CKTmode |= MODEINITTRAN;
+      }else{
+	ckt()->CKTmode |= MODEINITFLOAT;
+      }
+
+      // the wilson trick. ngspice17/[..]/analysis/traninit.c +25 ff.
+      // bjtmodel divides by ckt()->CKTdeltaOld[1], which would be zero
+      // c.f. bjtload.c +467
+      assert(ckt()->CKTdeltaOld[0]);
+      ckt()->CKTdeltaOld[1] = ckt()->CKTdeltaOld[0];
+
+    }else{
+      // any subsequent timestep
+      ckt()->CKTmode |= MODEINITFLOAT;
+    }
+
   }else{
     if (_sim->analysis_is_tran_static()) {
       ckt()->CKTmode = MODETRANOP;
-    }else if (_sim->analysis_is_tran_restore()) { untested();
+    }else if (_sim->analysis_is_tran_restore()) {
       ckt()->CKTmode = MODETRAN;
     }else if (_sim->command_is_dc()) {
       ckt()->CKTmode = MODEDCTRANCURVE;
@@ -1558,8 +1545,16 @@ double DEV_SPICE::tr_probe_num(const std::string& x)const
 void DEV_SPICE::ac_begin()
 {
   STORAGE::ac_begin();
+  for (int ii = 0; ii < _num_states; ++ii) {
+    trace3("ACB1", ii, _states_1[ii], _states[0][ii]);
+    // _states_1[ii] = _states[0][ii];
+  }
   internal_precalc();
   tr_accept();
+  for (int ii = 0; ii < _num_states; ++ii) {
+    trace3("ACB2", ii, _states_1[ii], _states[0][ii]);
+    // _states_1[ii] = _states[0][ii];
+  }
 }
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::do_ac()
@@ -1571,8 +1566,16 @@ void DEV_SPICE::do_ac()
     assert_model_unlocalized();
     _spice_model->_gen.GENinstances = &_spice_instance;
     assert_model_localized();
+  for (int ii = 0; ii < _num_states; ++ii) {
+    trace3("DO_AC", ii, _states_1[ii], _states[0][ii]);
+    // _states_1[ii] = _states[0][ii];
+  }
 
     localize_ckt();
+  for (int ii = 0; ii < _num_states; ++ii) {
+    trace3("DO_AC2", ii, _states_1[ii], _states[0][ii]);
+    // _states_1[ii] = _states[0][ii];
+  }
     ckt()->CKTmode = MODEAC;
     ckt()->CKTomega = _sim->_jomega.imag();
 
@@ -1597,7 +1600,7 @@ void DEV_SPICE::do_ac()
     assert_model_localized();
     _spice_model->_gen.GENinstances = NULL;
     assert_model_unlocalized();
-  }else{untested();
+  }else{
     // there is no acLoad function
   }
 }
@@ -1626,8 +1629,8 @@ void DEV_SPICE::ac_load()
 	  if (nj && jhit[nj] != ni) {
 	    jhit[nj] = ni;
 	    int njj = nj-OFFSET;
-	    trace3("", jj, nj, njj);
-	    trace2("", _matrix[nii][njj].first, _matrix[nii][njj].second);
+	    trace3("ac_load", jj, nj, njj);
+	    trace2("ac_load", _matrix[nii][njj].first, _matrix[nii][njj].second);
 	    //ac_load_point(_n[ii], _n[jj], _matrix[nii][njj]);
 	    DPAIR& dp = _matrix[nii][njj];
 	    ac_load_point(_n[ii], _n[jj], COMPLEX(dp.first, dp.second));
@@ -1639,11 +1642,67 @@ void DEV_SPICE::ac_load()
 	trace2("=========skip", ii, ni);
       }
     }
-  }else{ untested();
+  }else{
     // there is no acLoad function
   }
 }
 /*--------------------------------------------------------------------------*/
+double DEV_SPICE::noise_num(const std::string& x)const
+{
+  if(x!=""){ untested();
+    // does spice have named noise sources?
+    return 0;
+#ifdef NOISE_SRCS
+  }else{
+    double pwr = 0.;
+    Ndata ndata;
+    ndata.namelist = NULL;
+    ndata.prtSummary = 1;
+
+    double out[NOISE_SRCS];
+
+    ndata.outpVector = out;
+    NOISEAN noisejob;
+    noisejob.NStpsSm = 0.;
+    ndata.outNumber = 0;
+    ndata.freq = _sim->_freq;
+    ckt()->CKTcurJob = (JOB*)&noisejob;
+
+    assert_model_unlocalized();
+    _spice_model->_gen.GENinstances = &_spice_instance;
+    assert_model_localized();
+    localize_ckt();
+
+    // mutable local copy
+    double i0[MATRIX_NODES+OFFSET];	// right side - current offsets or ac real part
+    double i1[MATRIX_NODES+OFFSET];	// right side - saved ......... or ac imag part
+    ckt()->CKTrhs = i0;
+    ckt()->CKTirhs = i1;
+
+    int* node = spice_nodes();
+    for (int ii = 0; ii < matrix_nodes(); ++ii) {
+      int idx = _n[ii].m_();
+      COMPLEX cn = _sim->_noise[idx];
+      int ni = node[ii];
+      trace3("noise", ii, node[ii], cn);
+      /*_i0*/ ckt()->CKTrhs[ni] = cn.real();
+      /*_i1*/ ckt()->CKTirhs[ni] = cn.imag();
+    }
+
+//     ckt()->CKTmode = MODEINITSMSIG;
+//     info.DEVload(&(_spice_model->_gen), ckt());
+    info.DEVnoise(N_DENS, N_CALC, &(_spice_model->_gen), ckt(), &ndata, &pwr);
+
+    _spice_model->_gen.GENinstances = NULL;
+    ckt()->CKTcurJob = NULL;
+    trace2("DEV_SPICE::noise_num", mfactor(), pwr);
+    return mfactor()*pwr;
+#else
+  }else{
+    return 0.;
+#endif
+  }
+}
 /*--------------------------------------------------------------------------*/
 extern "C" {
   // needed to satisfy references.  Supposedly unreachable.  Stubs.
@@ -1652,18 +1711,29 @@ extern "C" {
 #if NGSPICE>=42
   // what? used to get "scale" in diosetup.c
   bool cp_getvar(char *, enum cp_types, void *, size_t){return false;} // from 42
+  int CKTfndBranch(CKTcircuit *, IFuid){incomplete(); unreachable(); return 0;}
+  void controlled_exit(int){unreachable();}
+  void INPfreeTree(IFparseTree *){unreachable();}
+  void wl_free(wordlist *){unreachable();}
+  void wl_append_word(wordlist **first, wordlist **last, char *word){unreachable();}
+  char *dup_string(const char *str, size_t n_char){return strdup(str);}
 #elif NGSPICE>=35
   bool cp_getvar(char *, enum cp_types, void *, size_t){return false;} // from 35
 #elif NGSPICE>=31
   bool cp_getvar(char *, enum cp_types, void *, size_t){return false;} // from 31
 #elif NGSPICE>=22
-  bool cp_getvar(char *name, enum cp_types type, void *){return false;}
+  bool cp_getvar(char *, enum cp_types, void *){return false;}
 #else
   // nspice17 doesn't have it.
 #endif
-#if NGSPICE>=28
-  void *tmalloc(size_t){unreachable();return NULL;}
-  void txfree(const void *){unreachable();}
+#if NGSPICE>=27
+  void *tmalloc(size_t size){return calloc(size,1); } // bsim2
+  void txfree(const void *ptr) {
+    if (ptr) {
+      free(const_cast<void*>(ptr));
+    }else{untested();
+    }
+  }
   void *trealloc(const void *, size_t){unreachable();return NULL;}
 	  // string .c reachable?
   char *tvprintf(const char *, va_list){
@@ -1677,7 +1747,7 @@ extern "C" {
 #else
   char* tmalloc(int size) {itested(); return static_cast<char*>(calloc(size,1));}
   char* trealloc(char*, int) {untested();incomplete(); return NULL;} //DEVnoise
-  void txfree(char *ptr) { untested();
+  void txfree(char *ptr) {
     if (ptr) {itested();
       free(ptr);
     }else{untested();
@@ -1690,7 +1760,7 @@ extern "C" {
   public:
     FT_CURCKT() {
       junk.jobs = NULL;
-#if NGSPICE>=25
+#if NGSPICE>=23
       ci_curTask = reinterpret_cast<TSKtask*>(&junk);
 #else
       ci_curTask = reinterpret_cast<char*>(&junk);
@@ -1750,14 +1820,9 @@ extern "C" {
   void TimesDeriv(Dderivs*, Dderivs*, double) {incomplete();} //DEVdisto
 #ifdef JSPICE3
   double Nintegrate(double, double, double, GENERIC*) {incomplete(); return NOT_VALID;} //DEVnoise
-#else
-  double Nintegrate(double, double, double, Ndata*) {incomplete(); return NOT_VALID;} //DEVnoise
-#endif
   void NevalSrc(double*, double*, CKTcircuit*, int, int, int, double) {incomplete();} //DEVnoise
-#if NGSPICE>=25
-  void NevalSrc2 (double *, double *, CKTcircuit *, int, int, int, double, int, int, double, double);
-#elif NGSPICE>=17
-  void NevalSrc2(double*, double*, CKTcircuit*, int, int, int, double, double) {incomplete();}
+#else
+  double Nintegrate(double, double, double, Ndata*) { /*incomplete();*/ return NOT_VALID;} //DEVnoise
 #endif
   //------------------------------------------------
   // should be constants, but spice wants them to be variables.
@@ -1772,7 +1837,7 @@ extern "C" {
   IFsimulator *ft_sim;
   //------------------------------------------------
   //------------------------------------------------
-#if NGSPICE>=28
+#if NGSPICE>=27
   void
 #else
   int
@@ -1823,7 +1888,7 @@ extern "C" {
     case ERR_INFO:   error(bTRACE,  buf); break;
     default:         error(bDANGER, buf); break;
     }
-#if NGSPICE<28
+#if NGSPICE<27
     return 0;
 #endif
   }
@@ -1832,9 +1897,7 @@ extern "C" {
     error(bDANGER, "internal error: %s\n", message);
   }
     
-#if NGSPICE>=28
-  int CKTinst2Node(CKTcircuit *, void *, int , CKTnode **, IFuid *){unreachable(); return 0;}
-#elif NGSPICE>=22
+#if NGSPICE>=22
   int CKTinst2Node(CKTcircuit *, void *, int , CKTnode **, IFuid *){unreachable(); return 0;}
 #elif NGSPICE>=17
   int CKTinst2Node(void*, void*, int, CKTnode**, IFuid*)
@@ -1860,10 +1923,7 @@ extern "C" {
     NULL, //int ((*IFdelUid)());	/* create a new UID in the circuit */ not used
     NULL, //int ((*IFpauseTest)());	/* should we stop now? */ noisean.c only
     NULL, //double ((*IFseconds)());	/* what time is it? */ bjtdisto unused ifdef only (unused)
-#if NGSPICE>=42
-    IFerror, //int ((*IFerror)());	/* output an error or warning message */ temp, setup
-    NULL, // void (*IFerrorf) (int, const char *fmt, ...);
-#elif NGSPICE>=28
+#if NGSPICE>=27
     IFerror, //int ((*IFerror)());	/* output an error or warning message */ temp, setup
     NULL, // void (*IFerrorf) (int, const char *fmt, ...);
 #elif NGSPICE>=17

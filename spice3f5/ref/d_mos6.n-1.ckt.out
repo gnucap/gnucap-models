@@ -1,0 +1,9 @@
+nmos opp gate 
+.model nnn nmos ... E+18 nss=0. tpg=-1. xj=1.E-15 ld=0. uo=600.  kf=0. af=1.
+                                        ^ ? nnn: bad parameter xj ignored
+.model nnn nmos ... E-15 ld=0. uo=600.  kf=0. af=1. fc=0.5) 
+                                        ^ ? nnn: bad parameter kf ignored
+.model nnn nmos ... d=0. uo=600.  kf=0. af=1. fc=0.5) 
+                                        ^ ? nnn: bad parameter af ignored
+#          
+ 27.       

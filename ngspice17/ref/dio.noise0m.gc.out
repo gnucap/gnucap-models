@@ -1,0 +1,41 @@
+#           v(1)       v(2)       i(V1)     
+ 0.         10.        1.4468    -171.06u   
+#Freq       npwr(n2)   nv(n2)    
+ 1.K        69.15E-18  8.3156n   
+ 10.K       69.15E-18  8.3156n   
+ 100.K      69.15E-18  8.3156n   
+ 1.Meg      69.15E-18  8.3156n   
+ 10.Meg     69.15E-18  8.3156n   
+ 100.Meg    69.15E-18  8.3156n   
+#           v(1)       v(2)       i(V1)     
+ 0.         10.        1.4468    -171.06u   
+#Freq       npwr(n2)   nv(n2)    
+ 1.K        69.15E-18  8.3156n   
+ 10.K       69.15E-18  8.3156n   
+ 100.K      69.15E-18  8.3156n   
+ 1.Meg      69.15E-18  8.3156n   
+ 10.Meg     69.15E-18  8.3156n   
+ 100.Meg    69.15E-18  8.3156n   
+#           v(1)       v(2)       i(V1)     
+ 0.         10.        1.4468    -171.06u   
+#Freq       npwr(n2)   nv(n2)    
+ 1.K        69.15E-18  8.3156n   
+ 10.K       69.15E-18  8.3156n   
+ 100.K      69.15E-18  8.3156n   
+ 1.Meg      69.15E-18  8.3156n   
+ 10.Meg     69.15E-18  8.3156n   
+ 100.Meg    69.15E-18  8.3156n   
+#           v(1)       v(2)       i(V1)     
+ 0.         10.        1.4468    -171.06u   
+#Freq       npwr(n2)   nv(n2)    
+ 1.K        69.15E-18  8.3156n   
+ 10.K       69.15E-18  8.3156n   
+ 100.K      69.15E-18  8.3156n   
+ 1.Meg      69.15E-18  8.3156n   
+ 10.Meg     69.15E-18  8.3156n   
+ 100.Meg    69.15E-18  8.3156n   
+Gnucap   System status
+iterations: op=0, dc=11, tran=0, fourier=0, total=68
+transient timesteps: accepted=0, rejected=0, total=0
+nodes: user=3, subckt=0, model=2, total=5
+dctran density=52.0%, ac density=52.0%
