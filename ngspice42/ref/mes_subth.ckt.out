@@ -1,0 +1,16 @@
+Mesfet level 1 subthreshold characteristics 
+.print DC vids#branch 
+                      ^ ? need device or node
+#           i(vids)   
+-3.         0.        
+-2.5        0.        
+-2.         0.        
+-1.5        0.        
+-1.         42.498u   
+-0.5        232.48u   
+ 0.         457.54u   
+Gnucap   System status
+iterations: op=0, dc=32, tran=0, fourier=0, total=32
+transient timesteps: accepted=0, rejected=0, total=0
+nodes: user=3, subckt=0, model=2, total=5
+dctran density=76.0%, ac density=76.0%
