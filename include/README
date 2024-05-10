@@ -1,0 +1,39 @@
+README for spice-wrapper.cc
+
+... used to wrap spice devices into Gnucap. Currently works for spice3f5,
+bsim, jspice and ngspice devices. Generally, no modifications in the devices
+are needed. Exceptions are compilation fixes and functionality tweaks.
+
+== compilation fixes
+
+We need to compile the spice wrapper with spice headers included. This
+involves a mix of C++ and C code of various standards in a single compilation
+unit. Some of this can be resolved with preprocessor hacks, sometimes a clean
+solution is not known.
+
+The typical clashes originate from different meanings of "auto" and "bool"
+across C standards. Another one is the return type of malloc. Code changes in
+spice code are tagged with "gnucap" for discoverability.
+
+Improvements are welcome.
+
+== functional fixes and bugs
+
+Sometimes a little tweak is needed to unlock use cases not considered in the
+original code.  The main one is the SenCond fix. It enables small signal
+analysis during transient simulations in Gnucap. Described in more detail
+where used.
+
+Some devices have real bugs that go beyond convergence issues. Generally, we
+aim for bug-2-bug compatibilty, and no attempt is made at fixing, rather than
+documenting the issue.
+
+== device parameter mapping
+
+Device parameters are those from the spice device. The simulator currently
+supports a couple more temperature related parameters and, since recently,
+hierarhical system parameters from Verilog-AMS. Such parameters are rejected
+by the spice wrapper, but can be set directly by the parser, if desired.
+
+Current lang_spice adds $mfactor, and diverts m to $mfactor if it does not
+exist in the device. This is meant to aid bug discovery and test completeness.
