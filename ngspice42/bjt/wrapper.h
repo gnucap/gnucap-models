@@ -11,6 +11,7 @@ extern "C" {
 #define MIN_NET_NODES 3
 #define MAX_NET_NODES 4
 #define INTERNAL_NODES 5
+#define NOISE_SRCS 7 // BJTNSRCS
 #define MODEL_TYPE "npn|pnp|npn1|pnp1"
 #define UNCONNECTED_NODES uGROUND
 #define VALUE_NAME "area"
