@@ -882,7 +882,7 @@ int DEV_SPICE::set_param_by_name(std::string Name, std::string Value)
     COMMON_PARAMLIST* c = dynamic_cast<COMMON_PARAMLIST*>(mutable_common());
     assert(c);
     return Set_param_by_name(Name, to_string(c->_params[Name].e_val(1,scope())));
-  }catch(Exception_No_Match const& e){ untested();
+  }catch(Exception_No_Match const& e){
     COMPONENT::set_param_by_name(Name, "");
     throw e;
   }
@@ -1082,7 +1082,7 @@ void DEV_SPICE::precalc_last()
       }catch (Exception_No_Match&) {
 	error(bTRACE, long_label() + ": bad parameter: " + i->first + ", ignoring\n");
       }
-    }else{ untested();
+    }else{
     }
   }
 
