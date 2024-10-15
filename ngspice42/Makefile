@@ -16,7 +16,6 @@ install:
 	$(MAKE) -C $$dir install; \
 	done
 
-TESTDIR = ../ngspice17/tests
 GNUCAP = gnucap
 # TODO: load with wildcard.
 # BUG: depends on attach order.

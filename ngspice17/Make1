@@ -7,5 +7,6 @@ dio hfet1 hfet2 hisim ind isrc jfet jfet2 ltra mes \
 mesa mos1 mos2 mos3 mos6 mos9 res soi3 sw tra txl \
 urc vbic vccs vcvs vsrc
 
-
 SECTION = ngspice17
+
+TESTDIR = tests
