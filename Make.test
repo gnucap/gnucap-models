@@ -6,6 +6,7 @@ TARGETDIR = check
 GNUCAP = gnucap
 # GNUCAP_ARGS = -a ./bsim480.so
 DIFF = diff
+DIFF_FLAGS = -rup
 
 glob_ckt = $(shell cd ${testdir}; ls *.ckt)
 glob_gc = $(shell cd ${testdir}; ls *.gc)
@@ -48,7 +49,7 @@ ${diff}: ${TARGETDIR}/%.diff: ${TARGETDIR}/%.out
 	@if [ ! -f ${ref}/$*.out ]; then \
 	  echo MISS: $*; \
 	  echo "missing: $*.out" > $@; \
-	elif ${DIFF} ${ref}/$*.out ${TARGETDIR}/$*.out > $@; then \
+	elif ${DIFF} ${DIFF_FLAGS} ${ref}/$*.out ${TARGETDIR}/$*.out > $@; then \
 	  echo pass: $*; \
 	else \
 	  echo FAIL: $*; \
