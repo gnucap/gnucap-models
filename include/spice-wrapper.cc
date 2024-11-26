@@ -213,7 +213,8 @@ private:
   std::string _modelname;
   const MODEL_SPICE* _model;
   const SPICE_MODEL_DATA* _spice_model;
-  node_t _nodes[MATRIX_NODES];
+  mutable node_t _nodes[MATRIX_NODES];
+  node_t* _n;
   DPAIR* _matrix[MATRIX_NODES+OFFSET];	// For tran, real is now, imag is saved.
   DPAIR _matrix_core[MATRIX_NODES+OFFSET][MATRIX_NODES+OFFSET];
 public:
@@ -279,6 +280,9 @@ public:	// type
   std::string dev_type()const override {return _modelname;}
 public:	// ports
   // bool port_exists(int i)const //COMPONENT
+  node_t& n_(int i)const override{
+    assert(_nodes); assert(i>=0); assert(i<NODES_PER_BRANCH); return _nodes[i];
+  }
   std::string port_name(int i)const override {itested();
     assert(i >= 0);
     assert(i < MAX_NET_NODES);
@@ -741,6 +745,7 @@ DEV_SPICE::DEV_SPICE(COMMON_COMPONENT* c)
    _model(NULL),
    _spice_model(NULL),
    _nodes(),
+   _n(_nodes),
    _matrix(),
    _matrix_core(),
    _i0(),
@@ -785,6 +790,7 @@ DEV_SPICE::DEV_SPICE(const DEV_SPICE& p)
    _model(p._model),
    _spice_model(p._spice_model),
    _nodes(),
+   _n(_nodes),
    _matrix(),
    _matrix_core(),
    _i0(),
