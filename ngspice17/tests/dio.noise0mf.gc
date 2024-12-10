@@ -8,7 +8,7 @@ D1   2  0  ddd  area=1. m=2
 + eg= 1.11  xti= 3.  kf= 1e-9.  af= 1.  fc= 0.5  )
 .verilog
 
-noise_probe #() n2(2,0);
+noise_probe #() n2(\2 , \0 );
 print op v(1 2) i(V1)
 op
 print ac npwr(n2)
