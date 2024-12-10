@@ -281,7 +281,7 @@ public:	// type
 public:	// ports
   // bool port_exists(int i)const //COMPONENT
   node_t& n_(int i)const override{
-    assert(_nodes); assert(i>=0); assert(i<NODES_PER_BRANCH); return _nodes[i];
+    assert(_nodes); assert(i>=0); assert(i<MATRIX_NODES); return _nodes[i];
   }
   std::string port_name(int i)const override {itested();
     assert(i >= 0);
