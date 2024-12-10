@@ -12,8 +12,8 @@ load mgsim
 load vams/resistor.so
 
 verilog
-resistor #(.noisy(1), .r(5k) R1(2 3);
-meas_noise #() n1(3,2)
+resistor #(.noisy(1), .r(5k) R1(\2 , \3 );
+meas_noise #() n1(\3 , \2 );
 
 spice
 
