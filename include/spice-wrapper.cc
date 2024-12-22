@@ -1379,13 +1379,6 @@ bool DEV_SPICE::do_tr()
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::tr_load()
 {
-#ifndef NDEBUG
-  if (_loaditer == _sim->iteration_tag()) {untested();
-    error(bDANGER, long_label() + " internal error: double load\n");
-  }
-  _loaditer = _sim->iteration_tag();
-#endif
-
   int ihit[MATRIX_NODES+OFFSET];
   int jhit[MATRIX_NODES+OFFSET];
 
