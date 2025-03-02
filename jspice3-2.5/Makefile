@@ -17,3 +17,6 @@ install:
 	for dir in $(SUBDIRS); do \
 	$(MAKE) -C $$dir install; \
 	done
+
+check:
+	make -C tests check
