@@ -1,9 +1,0 @@
-
-SPICE_INCLUDE = ../Include
-SPICE_VERSION = NGSPICE=42
-SECTION = ngspice42
-
-PRESET = gcc
-MAKE_CFLAGS = -std=c99
-# TODO: fix relative path in Make2 include
-include ../../ngspice17/Make2.${PRESET}

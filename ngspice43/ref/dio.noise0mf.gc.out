@@ -1,0 +1,32 @@
+#           v(1)       v(2)       i(V1)     
+ 27.        10.        1.4468    -171.06u   
+#Freq       npwr(n2)  
+ 1.K        3.2145p   
+ 10.K       321.69f   
+ 100.K      32.415f   
+ 1.Meg      3.4877f   
+ 10.Meg     594.9E-18 
+ 100.Meg    305.7E-18 
+#           v(1)       v(2)       i(V1)     
+ 27.        10.        1.4468    -171.06u   
+#Freq       npwr(n2)  
+ 1.K        3.2142p   
+ 10.K       321.49f   
+ 100.K      32.211f   
+ 1.Meg      3.2833f   
+ 10.Meg     390.6E-18 
+ 100.Meg    101.3E-18 
+#           v(1)       v(2)       i(V1)     
+ 27.        10.        1.4468    -171.06u   
+#Freq       npwr(n2)  
+ 1.K        3.2142p   
+ 10.K       321.49f   
+ 100.K      32.211f   
+ 1.Meg      3.2833f   
+ 10.Meg     390.6E-18 
+ 100.Meg    101.3E-18 
+Gnucap   System status
+iterations: op=11, dc=0, tran=0, fourier=0, total=51
+transient timesteps: accepted=0, rejected=0, total=0
+nodes: user=3, subckt=0, model=2, total=5
+dctran density=52.0%, ac density=52.0%

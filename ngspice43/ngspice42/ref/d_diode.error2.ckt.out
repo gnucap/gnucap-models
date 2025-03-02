@@ -1,0 +1,4 @@
+ 
+.ngspice_dio d1 1 0 foo bar=1 
+                        ^ ? d1: bad parameter bar ignored
+d1: model foo is not a ngspice_dio

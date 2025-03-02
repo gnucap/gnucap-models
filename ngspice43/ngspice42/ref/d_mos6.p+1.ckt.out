@@ -1,0 +1,9 @@
+pmos same gate 
+.model ppp pmos ... .E+18 nss=0. tpg=1. xj=1.E-15 ld=0. uo=600.  kf=0. af=1.
+                                        ^ ? ppp: bad parameter xj ignored
+.model ppp pmos ... E-15 ld=0. uo=600.  kf=0. af=1. fc=0.5) 
+                                        ^ ? ppp: bad parameter kf ignored
+.model ppp pmos ... d=0. uo=600.  kf=0. af=1. fc=0.5) 
+                                        ^ ? ppp: bad parameter af ignored
+#          
+ 27.       
