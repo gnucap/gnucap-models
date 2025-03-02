@@ -1,0 +1,25 @@
+
+dio:
+- works pretty much like ngspice17
+- except noise & m looks broken, see dio.noise0m.gc
+- need to revisit SenCond, maybe TranSEN could do it?
+
+bjt:
+- SenCond patch applied
+- sign flipped in ic, ie, ib probes, relative to ngspice17 version
+- c* probes have been removed
+
+jfet:
+- same results as ngspice17 version
+
+bsim1:
+- tests are d_mos4*ckt, "level 4"
+
+bsim3
+- d_mos8*ckt: very little difference to ngspice17 version
+- vth, vdsat, cgs, cgd probes added
+
+mos6
+- essentially same results as gnucap d_mos6
+- missing probes from gnucap tests, v{d,g,b,s}m ...
+
