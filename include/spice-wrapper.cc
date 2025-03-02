@@ -873,8 +873,7 @@ int DEV_SPICE::Set_param_by_name(std::string Name, std::string new_value)
     }else{
     }
   }
-
-  return mutable_common()->COMMON_COMPONENT::Set_param_by_name(Name, new_value);
+  throw Exception_No_Match(Name);
 }
 /*--------------------------------------------------------------------------*/
 int DEV_SPICE::set_param_by_name(std::string Name, std::string Value)
