@@ -1000,6 +1000,9 @@ void DEV_SPICE::expand()
   
   //-------- fix up internal nodes
   if (_sim->is_first_expand()) {
+    for(int i=net_nodes(); i<ext_nodes()+int_nodes(); ++i){
+      n_(i).clear();
+    }
     int start_internal = 0;
     if (UNCONNECTED_NODES == uGROUND) {
       for (int ii = net_nodes(); ii < max_nodes(); ++ii) {itested();
@@ -1030,16 +1033,16 @@ void DEV_SPICE::expand()
 	_n[ii].new_model_node('.' + long_label() + '.' + fake_name, this);
 	ihit[node[ii]] = ii+OFFSET;
 	trace2("new int", ii, node[ii]);
-	assert(_n[ii].n_());
+	assert(_n[ii].is_connected());
       }else if (node[ii] >= 0+OFFSET) {
 	// collapsed to an external node or previously allocated
 	_n[ii] = _n[node[ii]-OFFSET];
 	trace1("collapse", node[ii]);
-	assert(_n[ii].n_());
+	assert(_n[ii].is_connected());
       }else{
 	// not assigned
 	trace2("not used", ii, node[ii]);
-	assert(!_n[ii].n_());
+	assert(!_n[ii].is_connected());
       }
       ++(*fake_name);
     }
@@ -1050,21 +1053,24 @@ void DEV_SPICE::expand()
     
     // This could be one loop, but doing it this way gives more info.
     for (int ii = 0; ii < min_nodes(); ++ii) {
-      assert(_n[ii].n_());
+      assert(_n[ii].is_connected());
     }
     for (int ii = min_nodes(); ii < net_nodes(); ++ii) {
-      assert(_n[ii].n_());
+      assert(_n[ii].is_connected());
     }
     for (int ii = net_nodes(); ii < max_nodes(); ++ii) {itested();
       //assert(_n[ii].n_());
     }
     for (int ii = max_nodes(); ii < matrix_nodes(); ++ii) {
-      assert(_n[ii].n_() || !node[ii]);
+      assert(_n[ii].is_connected() || !node[ii]);
     }
   }else{untested();
   }
   assert_model_unlocalized();
   assert_instance();
+  for(int i=ext_nodes()+int_nodes(); i>net_nodes();){
+    n_(--i).allocate(2);
+  }
 }
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::precalc_last()
