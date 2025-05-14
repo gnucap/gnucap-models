@@ -12,7 +12,7 @@ CC_SRCS = spice-wrapper.cc
 OBJS = ${CC_SRCS:.cc=.o} ${C_SRCS:.c=.o}
 
 CC = gcc
-CCC = g++
+CXX = g++
 
 C_CC_FLAGS = -O2 -g -I. -I$(SPICE_INCLUDE) -DTRACE_UNTESTED -D$(SPICE_VERSION) \
  -DSTDC_HEADERS -DRETSIGTYPE=void -fPIC
@@ -29,14 +29,14 @@ SO_EXTENSION = .so
 
 .SUFFIXES:
 .SUFFIXES: .o .cc .c
-.cc.o:; $(CCC) $(CCFLAGS) -c $<
+.cc.o:; $(CXX) $(CCFLAGS) -c $<
 .c.o:; $(CC) $(CFLAGS) -c $<
 
 $(TARGET) : $(TARGET)$(SO_EXTENSION)
 	echo $(TARGET) done
 
 $(TARGET)$(SO_EXTENSION) : $(OBJS) Makefile
-	$(CCC) $(LDFLAGS) $(OBJS) $(LIBS) -o $(TARGET)$(SO_EXTENSION)
+	$(CXX) $(LDFLAGS) $(OBJS) $(LIBS) -o $(TARGET)$(SO_EXTENSION)
 
 clean: $(HDRS)
 	-rm *.o $(TARGET)$(SO_EXTENSION) $(TARGET)
