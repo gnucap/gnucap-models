@@ -11,8 +11,6 @@ xq1 c b 0 bfs17c
 vce 1 0 dc 3.0
 vgain 1 c dc 0.0
 
-.list
-
 *****************************************************************
 * SPICE2G6 MODEL OF THE NPN BIPOLAR TRANSISTOR BFS17 (SOT-23)   *
 * REV: 98.1                  DANALYSE GMBH BERLIN (27.07.1998)  *
@@ -41,6 +39,7 @@ CGCE 6 8 15.00F
 + KF=1.000F AF=1.000)
 
 * foreach myic 0.5e-3 1e-3 5e-3 10e-3 50e-3 100e-3
+.list
 
 .parameter myic = 0.01
 .print ac v(vgain)

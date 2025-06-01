@@ -686,9 +686,9 @@ void MODEL_SPICE::set_dev_type(const std::string& new_type)
 }
 /*--------------------------------------------------------------------------*/
 bool MODEL_SPICE::param_is_printable(int i)const
-{ untested();
+{
   assert(i < MODEL_SPICE::param_count());
-  if (i < int(_params.size())) { untested();
+  if (i < int(_params.size())) {
     return _params.is_printable(i);
   }else{ untested();
     return MODEL_CARD::param_is_printable(i-_params.size());
@@ -696,9 +696,9 @@ bool MODEL_SPICE::param_is_printable(int i)const
 }
 /*--------------------------------------------------------------------------*/
 std::string MODEL_SPICE::param_name(int i)const
-{ untested();
+{
   assert(i < MODEL_SPICE::param_count());
-  if (i < int(_params.size())) { untested();
+  if (i < int(_params.size())) {
     return _params.name(i);
   }else{ untested();
     return MODEL_CARD::param_name(i-_params.size());
@@ -718,9 +718,9 @@ std::string MODEL_SPICE::param_name(int i, int j)const
 }
 /*--------------------------------------------------------------------------*/
 std::string MODEL_SPICE::param_value(int i)const
-{ untested();
+{
   assert(i < MODEL_SPICE::param_count());
-  if (i < int(_params.size())) { untested();
+  if (i < int(_params.size())) {
     return _params.value(i);
   }else{ untested();
     return MODEL_CARD::param_value(i-_params.size());
