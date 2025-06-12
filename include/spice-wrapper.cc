@@ -77,6 +77,7 @@ extern "C" {
 #include "e_paramlist.h"
 #include "e_storag.h"
 #include "e_model.h"
+#include "e_cardlist.h"
 #undef LINEAR
 /*--------------------------------------------------------------------------*/
 // customization -- must be last
@@ -636,7 +637,7 @@ int MODEL_SPICE::set_param_by_name(std::string Name, std::string Value)
   }else{ untested();
   }
   _params.set(Name, Value);
-  return Set_param_by_name(Name, to_string(_params[Name].e_val(1,scope())));
+  return Set_param_by_name(Name, to_string(_params[Name].e_val(1,scope()->params())));
 }
 /*--------------------------------------------------------------------------*/
 void MODEL_SPICE::precalc_first()
@@ -649,7 +650,7 @@ void MODEL_SPICE::precalc_first()
   for (PARAM_LIST::iterator i = _params.begin(); i != _params.end(); ++i) {
     if (i->second.has_hard_value()) {
       try {
-	Set_param_by_name(i->first, to_string(i->second.e_val(1,scope())));
+	Set_param_by_name(i->first, to_string(i->second.e_val(1,scope()->params())));
       }catch (Exception_No_Match&) {
 	error(bTRACE, long_label() + ": bad parameter: " + i->first + ", ignoring\n");
       }
@@ -886,7 +887,7 @@ int DEV_SPICE::set_param_by_name(std::string Name, std::string Value)
     COMPONENT::set_param_by_name(Name, Value);
     COMMON_PARAMLIST* c = dynamic_cast<COMMON_PARAMLIST*>(mutable_common());
     assert(c);
-    return Set_param_by_name(Name, to_string(c->_params[Name].e_val(1,scope())));
+    return Set_param_by_name(Name, to_string(c->_params[Name].e_val(1,scope()->params())));
   }catch(Exception_No_Match const& e){
     COMPONENT::set_param_by_name(Name, "");
     throw e;
@@ -1089,7 +1090,7 @@ void DEV_SPICE::precalc_last()
   for (PARAM_LIST::iterator i = c->_params.begin(); i != c->_params.end(); ++i) {
     if (i->second.has_hard_value()) {
       try {
-	Set_param_by_name(i->first, to_string(i->second.e_val(1,scope())));
+	Set_param_by_name(i->first, to_string(i->second.e_val(1,scope()->params())));
       }catch (Exception_No_Match&) {
 	error(bTRACE, long_label() + ": bad parameter: " + i->first + ", ignoring\n");
       }
@@ -2124,7 +2125,7 @@ private:
     return new COMMON_SW(*this);
   }
 
-  void precalc_first(CARD_LIST const* scope)override {
+  void precalc_first(PARAM_LIST const* scope)override {
     COMMON_COMPONENT::precalc_first(scope);
   }
 };
