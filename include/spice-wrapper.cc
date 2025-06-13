@@ -647,12 +647,12 @@ void MODEL_SPICE::precalc_first()
   Set_param_by_name(_key, "1");
 
   // push down parameters into raw spice data
-  for (PARAM_LIST::iterator i = _params.begin(); i != _params.end(); ++i) {
-    if (i->second.has_hard_value()) {
+  for (int i=0; i<_params.size(); ++i) {
+    if (_params[i].has_hard_value()) {
       try {
-	Set_param_by_name(i->first, to_string(i->second.e_val(1,scope()->params())));
+	Set_param_by_name(_params.name(i), to_string(_params[i].e_val(1,scope()->params())));
       }catch (Exception_No_Match&) {
-	error(bTRACE, long_label() + ": bad parameter: " + i->first + ", ignoring\n");
+	error(bTRACE, long_label() + ": bad parameter: " + _params.name(i) + ", ignoring\n");
       }
     }else{ untested();
     }
@@ -1087,12 +1087,13 @@ void DEV_SPICE::precalc_last()
   // push down parameters into spice data
   COMMON_PARAMLIST* c = dynamic_cast<COMMON_PARAMLIST*>(mutable_common());
   assert(c);
-  for (PARAM_LIST::iterator i = c->_params.begin(); i != c->_params.end(); ++i) {
-    if (i->second.has_hard_value()) {
+  PARAM_LIST& params = c->_params;
+  for (int i=0; i<params.size(); ++i) {
+    if (params[i].has_hard_value()) {
       try {
-	Set_param_by_name(i->first, to_string(i->second.e_val(1,scope()->params())));
+	Set_param_by_name(params.name(i), to_string(params[i].e_val(1,scope()->params())));
       }catch (Exception_No_Match&) {
-	error(bTRACE, long_label() + ": bad parameter: " + i->first + ", ignoring\n");
+	error(bTRACE, long_label() + ": bad parameter: " + params.name(i) + ", ignoring\n");
       }
     }else{
     }

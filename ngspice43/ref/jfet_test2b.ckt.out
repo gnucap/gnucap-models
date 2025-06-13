@@ -1,12 +1,12 @@
 #jfet test circuit 
-.model asd njf ( cgd=1f cgs=1f)
-.model psd pjf ( cgd=1f cgs=1f)
+.model asd njf ( cgs=1f cgd=1f)
+.model psd pjf ( cgs=1f cgd=1f)
 .ngspice_jfet j1 2 1 0 asd zap=22 area=2 bob=33 
                            ^ ? j1: bad parameter zap ignored
 .ngspice_jfet j ... 0 asd zap=22 area=2 bob=33 
                                         ^ ? j1: bad parameter bob ignored
-.model asd njf ( cgd=1f cgs=1f)
-.model psd pjf ( cgd=1f cgs=1f)
+.model asd njf ( cgs=1f cgd=1f)
+.model psd pjf ( cgs=1f cgd=1f)
 j1 ( 2 1 0 )  asd  area=2
 v1 ( 3 0 )  DC  10.
 r1 ( 2 3 )  10.K
