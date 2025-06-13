@@ -1,8 +1,8 @@
 simple diode test 
 V1 ( 1 0 )  DC  10.  AC  1.
 R1 ( 1 2 )  100.K
-D1 ( 2 0 )  ddd  area=1
-.model ddd d ( af=1. bv=50 cjo=1.p eg=1.11 fc=0.5 ibv=0.001 is=10.f kf=0. m=0.5 n=1. rs=0. tt=0. vj=1. xti=3.)
+D1 ( 2 0 )  ddd 1
+.model ddd d ( is=10.f rs=0. n=1. tt=0. cjo=1.p vj=1. m=0.5 eg=1.11 xti=3. kf=0. af=1. fc=0.5 bv=50 ibv=0.001)
 #           v(1)       v(2)       i(V1)      i(R1)      id(D1)     vd(D1)     req(D1)    cd(D1)     z(D1)      zraw(D1)   gd(D1)     z(2)      
  27.        10.        0.59396   -94.061u    94.06u     94.06u     0.59396    ??         1.5471p    274.22     274.22     0.0036367  274.22    
 #           v(1)       v(2)       i(V1)      i(R1)      id(D1)     vd(D1)     req(D1)    cd(D1)     z(D1)      zraw(D1)   gd(D1)     z(2)       iter(0)   

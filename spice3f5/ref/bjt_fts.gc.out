@@ -6,6 +6,21 @@ ic ( 0 c )  DC myic
 xq1 ( c b 0 )  bfs17c 
 vce ( 1 0 )  DC  3.
 vgain ( 1 c )  DC  0.
+***************************************************************** 
+* SPICE2G6 MODEL OF THE NPN BIPOLAR TRANSISTOR BFS17 (SOT-23)   * 
+* REV: 98.1                  DANALYSE GMBH BERLIN (27.07.1998)  * 
+***************************************************************** 
+.subckt BFS17C ( 1 2 3 )
+Q1 ( 6 5 7 )  BFS17 
+LC ( 1 6 )  350.p
+L1 ( 2 4 )  400.p
+LB ( 4 5 )  500.p
+L2 ( 3 8 )  400.p
+LE ( 8 7 )  600.p
+CGBC ( 4 6 )  70.f
+CGBE ( 4 8 )  150.f
+CGCE ( 6 8 )  15.f
+.ends BFS17C
 #           v(1)       v(2)       v(b)       v(c)      
  0.         3.         0.8087     0.8087     3.        
 #Freq       v(vgain)  
