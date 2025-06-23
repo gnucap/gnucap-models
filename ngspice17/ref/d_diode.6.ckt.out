@@ -2,7 +2,7 @@ simple diode test
 V1 ( 1 0 )  DC  10.
 R1 ( 1 2 )  100.K
 D1 ( 2 0 )  ddd  m=2.
-.model ddd d ( af=1. cjo=1.p eg=1.11 fc=0.5 is=10.f kf=0. m=0.5 n=1. rs=0. tt=0. vj=1. xti=3.)
+.model ddd d ( is=10.f rs=0. n=1. tt=0. cjo=1.p vj=1. m=0.5 eg=1.11 xti=3. kf=0. af=1. fc=0.5)
 #           v(1)       v(2)       i(V1)      i(R1)      id(D1)     vd(D1)     gd(D1)     cd(D1)     zraw(D1)   z(2)      
  27.        10.        0.57608   -94.239u    94.239u    94.239u    0.57608    0.0036436  3.0436p    273.7      273.7     
 #           v(1)       v(2)       i(V1)      i(R1)      id(D1)     vd(D1)     gd(D1)     cd(D1)     zraw(D1)   z(2)       iter(0)   

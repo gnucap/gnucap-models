@@ -1,8 +1,8 @@
 #jfet test circuit 
-.model asd njf ( cgd=cap cgs=cap)
-.model psd pjf ( cgd=cap cgs=cap)
-.model asd njf ( cgd=cap cgs=cap)
-.model psd pjf ( cgd=cap cgs=cap)
+.model asd njf ( cgs=cap cgd=cap)
+.model psd pjf ( cgs=cap cgd=cap)
+.model asd njf ( cgs=cap cgd=cap)
+.model psd pjf ( cgs=cap cgd=cap)
 j1 ( 2 1 0 )  asd  area=foo
 v1 ( 3 0 )  DC  10.
 r1 ( 2 3 )  10.K

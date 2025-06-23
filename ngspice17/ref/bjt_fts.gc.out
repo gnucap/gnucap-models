@@ -11,7 +11,7 @@ vgain ( 1 c )  DC  0.
 * REV: 98.1                  DANALYSE GMBH BERLIN (27.07.1998)  * 
 ***************************************************************** 
 .subckt BFS17C ( 1 2 3 )
-Q1 ( 6 5 7 )  BFS17  area=1.000
+Q1 ( 6 5 7 )  BFS17 1.000
 LC ( 1 6 )  350.p
 L1 ( 2 4 )  400.p
 LB ( 4 5 )  500.p
@@ -21,7 +21,7 @@ CGBC ( 4 6 )  70.f
 CGBE ( 4 8 )  150.f
 CGCE ( 6 8 )  15.f
 .ends BFS17C
-.model BFS17 npn ( af=1.000 bf=99.655 br=38.400 cjc=1.050P cje=1.325P eg=1.110 fc=0.890 ikf=0.190 ikr=93.200M irb=0.100M is=0.480F isc=0.200F ise=7.490F itf=0.700 kf=1.000F level=1 mjc=0.240 mje=0.220 nc=1.042 ne=1.762 nf=1.008 nr=1.010 ptf=21.000 rb=1.500 rbm=1.200 rc=2.680 re=0.500 tf=56.940P tr=1.000N vaf=90.000 var=7.000 vjc=0.610 vje=0.700 vtf=0.600 xcjc=0.400 xtb=1.600 xtf=68.398 xti=3.000)
+.model BFS17 npn ( level=1 is=0.480F nf=1.008 bf=99.655 vaf=90.000 ikf=0.190 ise=7.490F ne=1.762 nr=1.010 br=38.400 var=7.000 ikr=93.200M isc=0.200F nc=1.042 rb=1.500 irb=0.100M rbm=1.200 re=0.500 rc=2.680 cje=1.325P vje=0.700 mje=0.220 fc=0.890 cjc=1.050P vjc=0.610 mjc=0.240 xcjc=0.400 tf=56.940P tr=1.000N ptf=21.000 xtf=68.398 vtf=0.600 itf=0.700 xtb=1.600 eg=1.110 xti=3.000 kf=1.000F af=1.000)
 * foreach myic 0.5e-3 1e-3 5e-3 10e-3 50e-3 100e-3 
 #           v(1)       v(2)       v(b)       v(c)      
  0.         3.         0.8087     0.8087     3.        
