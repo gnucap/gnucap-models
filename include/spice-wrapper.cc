@@ -387,7 +387,7 @@ void MODEL_SPICE::init_ckt()
 {
   assert(ckt());
   ckt()->CKTtime = _sim->_time0;
-  ckt()->CKTtemp    = _sim->_temp_c + CONSTCtoK; //manage by update
+  ckt()->CKTtemp    = _sim->_temp_k;
   ckt()->CKTnomTemp = OPT::tnom_c + CONSTCtoK;
   ckt()->CKTintegrateMethod = 0; // disable
   trace2("init_ckt", ckt()->CKTcurrentAnalysis, _sim->command_is_op());
@@ -432,7 +432,7 @@ void MODEL_SPICE::init_ckt()
 #define assert_ckt_up_to_date(ckt) {				\
     assert_ckt_initialized(ckt);				\
     assert((ckt)->CKTtime == CKT_BASE::_sim->_time0);		\
-    assert((ckt)->CKTtemp == CKT_BASE::_sim->_temp_c + CONSTCtoK);	\
+    assert((ckt)->CKTtemp == CKT_BASE::_sim->_temp_k);		\
   }
 
 void DEV_SPICE::update_ckt()const
@@ -442,7 +442,7 @@ void DEV_SPICE::update_ckt()const
   ckt()->CKTstat = NULL; // mark as not localized
   ckt()->CKTtime = _sim->_time0;
   ckt()->CKTdelta = NOT_VALID; // localized
-  ckt()->CKTtemp = _sim->_temp_c + CONSTCtoK;
+  ckt()->CKTtemp = _sim->_temp_k;
   ckt()->CKTmode = 0;
   ckt()->CKTomega = _sim->_jomega.imag();
   assert_ckt_up_to_date(ckt());
