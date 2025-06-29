@@ -1,0 +1,11 @@
+M1   2  1  0  0  nnn l=9.u w=9.u temp=50 $temperature=300.15 
+                                 ^ ? M1: bad parameter temp ignored
+#           i(Vds)    
+ 0.        -196.53u   
+#           i(Vds)    
+ 0.        -196.53u   
+#           i(Vds)    
+ 0.        -196.53u   
+ 25.       -196.53u   
+ 50.       -196.53u   
+ 75.       -196.53u   

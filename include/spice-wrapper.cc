@@ -387,7 +387,7 @@ void MODEL_SPICE::init_ckt()
 {
   assert(ckt());
   ckt()->CKTtime = _sim->_time0;
-  ckt()->CKTtemp    = _sim->_temp_k;
+ // ckt()->CKTtemp    = _sim->_temp_k;
   ckt()->CKTnomTemp = OPT::tnom_c + CONSTCtoK;
   ckt()->CKTintegrateMethod = 0; // disable
   trace2("init_ckt", ckt()->CKTcurrentAnalysis, _sim->command_is_op());
@@ -429,10 +429,11 @@ void MODEL_SPICE::init_ckt()
   assert_ckt_initialized(ckt());
 }
 
-#define assert_ckt_up_to_date(ckt) {				\
+#define assert_ckt_up_to_date(ckt, common) {			\
     assert_ckt_initialized(ckt);				\
+    assert(common);						\
     assert((ckt)->CKTtime == CKT_BASE::_sim->_time0);		\
-    assert((ckt)->CKTtemp == CKT_BASE::_sim->_temp_k);		\
+    assert((ckt)->CKTtemp == common->temp_k());			\
   }
 
 void DEV_SPICE::update_ckt()const
@@ -442,14 +443,15 @@ void DEV_SPICE::update_ckt()const
   ckt()->CKTstat = NULL; // mark as not localized
   ckt()->CKTtime = _sim->_time0;
   ckt()->CKTdelta = NOT_VALID; // localized
-  ckt()->CKTtemp = _sim->_temp_k;
+  assert(common());
+  ckt()->CKTtemp = common()->temp_k();
   ckt()->CKTmode = 0;
   ckt()->CKTomega = _sim->_jomega.imag();
-  assert_ckt_up_to_date(ckt());
+  assert_ckt_up_to_date(ckt(), common());
 }
 
-#define assert_ckt_localized(ckt) {				\
-    assert_ckt_up_to_date(ckt);					\
+#define assert_ckt_localized(ckt, common) {			\
+    assert_ckt_up_to_date(ckt, common);				\
     assert((ckt)->CKTstat);					\
     DEV_SPICE* d = reinterpret_cast<DEV_SPICE*>((ckt)->CKTstat);\
     assert(d);							\
@@ -474,7 +476,7 @@ void DEV_SPICE::update_ckt()const
 
 void DEV_SPICE::localize_ckt()const
 {
-  assert_ckt_up_to_date(ckt());
+  assert_ckt_up_to_date(ckt(), common());
   ckt()->CKTstat = reinterpret_cast<STATistics*>(const_cast<DEV_SPICE*>(this));
   assert(OPT::_keep_time_steps <= 8);
   for (int ii=0; ii<8; ++ii) {
@@ -506,7 +508,7 @@ void DEV_SPICE::localize_ckt()const
   ckt()->CKTirhs = const_cast<double*>(_i1);
   ckt()->CKTmode = 0;
   ckt()->CKTtimePoints = const_cast<double*>(_time);
-  assert_ckt_localized(ckt());
+  assert_ckt_localized(ckt(), common());
 }
 
 #define assert_model_raw() {				\
@@ -878,19 +880,23 @@ int DEV_SPICE::Set_param_by_name(std::string Name, std::string new_value)
 }
 /*--------------------------------------------------------------------------*/
 int DEV_SPICE::set_param_by_name(std::string Name, std::string Value)
-{
-  if (OPT::case_insensitive) {
+{ untested();
+  if (OPT::case_insensitive) { untested();
     notstd::to_lower(&Name);
   }else{ untested();
   }
-  try{
-    COMPONENT::set_param_by_name(Name, Value);
-    COMMON_PARAMLIST* c = dynamic_cast<COMMON_PARAMLIST*>(mutable_common());
-    assert(c);
-    return Set_param_by_name(Name, to_string(c->_params[Name].e_val(1,scope()->params())));
-  }catch(Exception_No_Match const& e){
-    COMPONENT::set_param_by_name(Name, "");
-    throw e;
+  if(Name[0]=='$'){
+    return COMPONENT::set_param_by_name(Name, Value);
+  }else{
+    try{ untested();
+      COMPONENT::set_param_by_name(Name, Value);
+      COMMON_PARAMLIST* c = dynamic_cast<COMMON_PARAMLIST*>(mutable_common());
+      assert(c);
+      return Set_param_by_name(Name, to_string(c->_params[Name].e_val(1,scope()->params())));
+    }catch(Exception_No_Match const& e){ untested();
+      COMPONENT::set_param_by_name(Name, "");
+      throw e;
+    }
   }
 }
 /*--------------------------------------------------------------------------*/
@@ -1488,7 +1494,7 @@ void DEV_SPICE::tr_accept()
 double DEV_SPICE::tr_probe_num(const std::string& x)const
 {
   localize_ckt();
-  assert_ckt_up_to_date(ckt());
+  assert_ckt_up_to_date(ckt(), common());
   assert_instance();
 
   // all of the "states" in state array
@@ -1614,7 +1620,7 @@ void DEV_SPICE::do_ac()
 void DEV_SPICE::ac_load()
 {
   if (info.DEVacLoad) {
-    assert_ckt_up_to_date(ckt());
+    assert_ckt_up_to_date(ckt(), common());
     
     int ihit[MATRIX_NODES+OFFSET];
     int jhit[MATRIX_NODES+OFFSET];
@@ -1964,7 +1970,9 @@ extern "C" {
   //------------------------------------------------
   void CKTterr(int qcap, CKTcircuit* ckt,double *time_step)
   {
-    assert_ckt_localized(ckt);
+    DEV_SPICE* d = reinterpret_cast<DEV_SPICE*>(ckt->CKTstat);
+    assert(d);
+    assert_ckt_localized(ckt, d->common());
 
     std::valarray<FPOLY1> q(OPT::_keep_time_steps);
 
@@ -1975,8 +1983,6 @@ extern "C" {
       q[ii].f1 = NOT_VALID;
     }
 
-    DEV_SPICE* d = reinterpret_cast<DEV_SPICE*>(ckt->CKTstat);
-    assert(d);
     assert(dynamic_cast<DEV_SPICE*>(d));
 
     *time_step = std::min(d->tr_review_trunc_error(&q[0]), *time_step);
@@ -1984,7 +1990,9 @@ extern "C" {
   //------------------------------------------------
   int NIintegrate(CKTcircuit* ckt,double* geq,double* ceq,double cap,int qcap)
   { //-- used by DEVload (not DC)
-    assert_ckt_localized(ckt);
+    DEV_SPICE* d = reinterpret_cast<DEV_SPICE*>(ckt->CKTstat);
+    assert(d);
+    assert_ckt_localized(ckt, d->common());
 
     METHOD method;
     if (ckt->CKTorder == 1) {
