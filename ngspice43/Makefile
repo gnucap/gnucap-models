@@ -1,17 +1,18 @@
-
-include Make1
+include MakeList
 
 all: ${SUBDIRS:%=%-all}
+
+${SUBDIRS:%=%-all}: configure_stub
 
 ${SUBDIRS:%=%-all}: %-all:
 	$(MAKE) -C $*
 
-clean:
+clean: configure_stub
 	for dir in $(SUBDIRS); do \
 	$(MAKE) -C $$dir clean; \
 	done
 
-install:
+install: configure_stub
 	for dir in $(SUBDIRS); do \
 	$(MAKE) -C $$dir install; \
 	done
@@ -19,10 +20,12 @@ install:
 GNUCAP = gnucap
 # TODO: load with wildcard.
 # BUG: depends on attach order.
-GNUCAP_ARGS = ${SUBDIRS:%=-a ./%}
-GNUCAP_ARGS = -a ./bjt -a ./dio -a ./bsim2 -a ./jfet -a ./mes \
-				  -a ./mos1 -a ./mos2 -a ./mos6 \
-              -a ./bsim1 -a ./bsim3
+GNUCAP_ARGS = -a ./dio -a ./vbic -a ./bjt -a ./jfet -a ./bsim2 -a ./bsim1 -a ./mes \
+              -a ./mesa -a ./hfet1 -a ./hfet2 -a ./mos1 -a ./mos6 \
+              -a ./bsim3
 include ../Make.test
 
-.PHONY: all ${SUBDIRS:%=%-all}
+configure_stub:
+	for i in ${SUBDIRS}; do echo "include MakeList" > $$i/Makefile; echo include ../MakeConf >> $$i/Makefile; done
+
+.PHONY: all configure_stub ${SUBDIRS:%=%-all}
