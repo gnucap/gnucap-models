@@ -1,4 +1,2 @@
-
-include Make1
-include ../Make2
-#include Make3
+include MakeList
+include ../MakeConf

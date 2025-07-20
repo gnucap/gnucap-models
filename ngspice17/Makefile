@@ -1,16 +1,18 @@
-include Make1
+include MakeList
 
 all: ${SUBDIRS:%=%-all}
+
+${SUBDIRS:%=%-all}: configure_stub
 
 ${SUBDIRS:%=%-all}: %-all:
 	$(MAKE) -C $*
 
-clean:
+clean: configure_stub
 	for dir in $(SUBDIRS); do \
 	$(MAKE) -C $$dir clean; \
 	done
 
-install:
+install: configure_stub
 	for dir in $(SUBDIRS); do \
 	$(MAKE) -C $$dir install; \
 	done
@@ -23,4 +25,7 @@ GNUCAP_ARGS = -a ./dio -a ./vbic -a ./bjt -a ./jfet -a ./bsim2 -a ./bsim1 -a ./m
               -a ./bsim3
 include ../Make.test
 
-.PHONY: all ${SUBDIRS:%=%-all}
+configure_stub:
+	for i in ${SUBDIRS}; do echo "include MakeList" > $$i/Makefile; echo include ../MakeConf >> $$i/Makefile; done
+
+.PHONY: all configure_stub ${SUBDIRS:%=%-all}

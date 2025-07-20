@@ -1,5 +1,5 @@
 
-include Make1
+include MakeList
 
 all:
 	for dir in $(SUBDIRS); do \

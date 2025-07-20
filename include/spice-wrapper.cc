@@ -880,20 +880,20 @@ int DEV_SPICE::Set_param_by_name(std::string Name, std::string new_value)
 }
 /*--------------------------------------------------------------------------*/
 int DEV_SPICE::set_param_by_name(std::string Name, std::string Value)
-{ untested();
-  if (OPT::case_insensitive) { untested();
+{
+  if (OPT::case_insensitive) {
     notstd::to_lower(&Name);
   }else{ untested();
   }
   if(Name[0]=='$'){
     return COMPONENT::set_param_by_name(Name, Value);
   }else{
-    try{ untested();
+    try{
       COMPONENT::set_param_by_name(Name, Value);
       COMMON_PARAMLIST* c = dynamic_cast<COMMON_PARAMLIST*>(mutable_common());
       assert(c);
       return Set_param_by_name(Name, to_string(c->_params[Name].e_val(1,scope()->params())));
-    }catch(Exception_No_Match const& e){ untested();
+    }catch(Exception_No_Match const& e){
       COMPONENT::set_param_by_name(Name, "");
       throw e;
     }
