@@ -1,0 +1,30 @@
+* One-shot trigger (tran) ported from BSIM481/benchmark_test/gstage.b4
+
+load mgsim
+load vams/vsine.so
+* load ../BSIM483/bsim483.so
+include ../BSIM481/benchmark_test/modelcard.nmos
+
+* Enable verilog mode
+verilog
+
+options numdgt=7
+// Declare ground
+ground \0 ;
+
+// Power supply
+vsource #(.dc(1.8)) Vdd(vdd, \0 );
+vsine #(.mag(0.1) .dc(1.2)) Vin(in, \0 );
+
+resistor #(.r(100k)) Rsource(in, g);
+resistor #(.r(25k)) Rload(d, vdd);
+
+N1 #(.w(4u), .l(0.09u)) M1(.d(d), .g(g), .s(\0 ), .b(\0 ));
+
+// Simulation control
+list
+print ac vdb(d) iter(0)
+dc
+ac dec 10 100 1000Meg basic
+status notime
+

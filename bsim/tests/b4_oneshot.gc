@@ -1,0 +1,55 @@
+* One-shot trigger (tran)
+load mgsim
+load vams/vpulse.so
+*load ../BSIM483/bsim483.so
+include ../BSIM481/benchmark_test/modelcard.nmos
+include ../BSIM481/benchmark_test/modelcard.pmos
+
+* Enable verilog mode
+verilog
+
+// Declare ground
+ground \0 ;
+
+// Power supply
+vsource #(.dc(1.8)) vcc(dd, \0 );
+// Input signal
+vpulse #(.val0(0.0), .val1(1.8), .td(1n), .rise(0.1n), .fall(0.1n), .width(0.8n), .period(5n)) vin(in,\0 );
+
+P1 #(.l(0.2u), .w(3.6u)) Md1(.d(out1), .g(in), .s(dd), .b(dd));
+N1 #(.l(0.2u), .w(1.8u)) Md2(.d(out1), .g(in), .s(\0 ), .b(\0 ));
+P1 #(.l(0.2u), .w(3.6u)) Md3(.d(A), .g(out1), .s(dd), .b(dd));
+N1 #(.l(0.2u), .w(1.8u)) Md4(.d(A), .g(out1), .s(\0 ), .b(\0 ));
+
+capacitor #(.c(100f)) c_out1(out1, \0 );
+capacitor #(.c(100f)) c_A(A, \0 );
+
+P1 #(.l(0.2u), .w(3.6u)) M1(.d(Anot), .g(A), .s(dd), .b(dd));
+N1 #(.l(0.2u), .w(1.8u)) M2(.d(Anot), .g(A), .s(\0 ), .b(\0 ));
+
+P1 #(.l(0.2u), .w(3.6u)) M3(.d(Bnot), .g(in), .s(dd), .b(dd));
+N1 #(.l(0.2u), .w(1.8u)) M4(.d(Bnot), .g(in), .s(\0 ), .b(\0 ));
+
+P1 #(.l(3.6u), .w(1.8u)) M5(.d(AorBnot), .g(\0 ), .s(dd), .b(dd));
+N1 #(.l(0.2u), .w(1.8u)) M6(.d(AorBnot), .g(in), .s(in_Anot_j), .b(\0 ));
+N1 #(.l(0.2u), .w(1.8u)) M7(.d(in_Anot_j), .g(Anot), .s(\0 ), .b(\0 ));
+
+P1 #(.l(3.6u), .w(1.8u)) M8(.d(Lnot), .g(\0 ), .s(dd), .b(dd));
+N1 #(.l(0.2u), .w(1.8u)) M9(.d(Lnot), .g(Bnot), .s(bnot_a_j), .b(\0 ));
+N1 #(.l(0.2u), .w(1.8u)) M10(.d(bnot_a_j), .g(A), .s(\0 ), .b(\0 ));
+
+P1 #(.l(3.6u), .w(3.6u)) M11(.d(out), .g(\0 ), .s(dd), .b(dd));
+N1 #(.l(0.2u), .w(1.8u)) M12(.d(out), .g(AorBnot), .s(aorb_lnot_j), .b(\0 ));
+N1 #(.l(0.2u), .w(1.8u)) M13(.d(aorb_lnot_j), .g(Lnot), .s(\0 ), .b(\0 ));
+
+// Simulation control
+list
+print tran v(in) v(out) iter(0)
+tran 10n basic
+status notime
+
+
+
+
+
+

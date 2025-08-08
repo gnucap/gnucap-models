@@ -17,7 +17,9 @@ install:
 	$(MAKE) -C $$dir install; \
 	done
 
+# only check most recent versions
 check:
-	${MAKE} -C BSIM480 check
+	${MAKE} -C BSIM3v330 check
+	${MAKE} -C BSIM483 check
 
 .PHONY: all ${SUBDIRS:%=%-all} check clean install
