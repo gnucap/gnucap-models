@@ -693,7 +693,7 @@ bool MODEL_SPICE::param_is_printable(int i)const
   assert(i < MODEL_SPICE::param_count());
   if (i < int(_params.size())) {
     return _params.is_printable(i);
-  }else{ untested();
+  }else{
     return MODEL_CARD::param_is_printable(i-_params.size());
   }
 }
@@ -703,7 +703,7 @@ std::string MODEL_SPICE::param_name(int i)const
   assert(i < MODEL_SPICE::param_count());
   if (i < int(_params.size())) {
     return _params.name(i);
-  }else{ untested();
+  }else{
     return MODEL_CARD::param_name(i-_params.size());
   }
 }
@@ -725,7 +725,7 @@ std::string MODEL_SPICE::param_value(int i)const
   assert(i < MODEL_SPICE::param_count());
   if (i < int(_params.size())) {
     return _params.value(i);
-  }else{ untested();
+  }else{
     return MODEL_CARD::param_value(i-_params.size());
   }
 }
@@ -883,7 +883,7 @@ int DEV_SPICE::set_param_by_name(std::string Name, std::string Value)
 {
   if (OPT::case_insensitive) {
     notstd::to_lower(&Name);
-  }else{ untested();
+  }else{
   }
   if(Name[0]=='$'){
     return COMPONENT::set_param_by_name(Name, Value);

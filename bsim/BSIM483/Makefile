@@ -1,17 +1,6 @@
-
-TARGET = bsim483
-$(TARGET):
-
-include makedefs
-
-HDRS = bsim4def.h  bsim4ext.h  bsim4itf.h wrapper.h
-
-SPICE_VERSION = SPICE_3f
-
-
-TESTDIR = ../tests
-TESTCASES = b4_
-GNUCAP_ARGS = -a ./${TARGET}.so
-
+include MakeList
 include ../Make2
 include ../../Make.test
+
+#BUG, elsewhere.
+prep: ${TARGET}${SO_EXTENSION}
