@@ -1,0 +1,146 @@
+paramset N1 nmos;
+ .level=14; .version=4.81; .binunit=1; .paramchk=1; .mobmod=0; .capmod=1; .igcmod=1; .igbmod=1; .geomod=1; .diomod=1; .rdsmod=0; .rbodymod=0; .rgatemod=1; .permod=1; .acnqsmod=0; .trnqsmod=0; .tempmod=0; .mtrlmod=1; .cvchargemod=0; .mtrlcompatmod=1; .eot=1.8E-9; .vddeot=1.5; .ados=1.1; .bdos=1.0; .tnom=27; .toxe=1.8E-9; .toxp=10E-10; .toxm=1.8E-9; .dtox=8E-10; .epsrox=3.9; .wint=5E-9; .lint=1E-9; .ll=0; .wl=0; .lln=1; .wln=1; .lw=0; .ww=0; .lwn=1; .wwn=1; .lwl=0; .wwl=0; .xpart=1; .toxref=1.4E-9; .phig=4.05; .epsrgate=11.7; .saref=5E-6; .sbref=5E-6; .wlod=2E-6; .ku0=-4E-6; .kvsat=0.2; .kvth0=-2E-8; .tku0=0; .llodku0=1.1; .wlodku0=1.1; .llodvth=1.0; .wlodvth=1.0; .lku0=1E-6; .wku0=1E-6; .pku0=0; .lkvth0=1.1E-6; .wkvth0=1.1E-6; .pkvth0=0; .stk2=0; .lodk2=1.0; .steta0=0; .lodeta0=1.0; .lambda=4E-10; .vsat=1.1E5; .vtl=2.0E5; .xn=6.0; .lc=5E-9; .rnoia=0.577; .rnoib=0.37; .lintnoi=1E-009; .tvoff=0; .tvfbsdoff=0; .vth0=0.25; .k1=0.35; .k2=0.05; .k3=0; .k3b=0; .w0=2.5E-6; .dvt0=1.8; .dvt1=0.52; .dvt2=-0.032; .dvt0w=0; .dvt1w=0; .dvt2w=0; .dsub=2; .minv=0.05; .voffl=0; .dvtp0=1E-7; .minvcv=2; .voffcvl=0; .dvtp1=0.05; .lpe0=5.75E-8; .lpeb=2.3E-10; .xj=2E-8; .ngate=5E20; .ndep=2.8E18; .nsd=1E20; .phin=0; .cdsc=0.0002; .cdscb=0; .cdscd=0; .cit=0; .voff=-0.15; .nfactor=1.2; .eta0=0.05; .etab=0; .uc=-3E-11; .vfb=-0.55; .u0=0.032; .ua=5.0E-11; .ub=3.5E-18; .a0=2; .ags=1E-20; .a1=0; .a2=1; .b0=-1E-20; .b1=0; .keta=0.04; .dwg=0; .dwb=0; .pclm=0.08; .pdiblc1=0.028; .pdiblc2=0.022; .pdiblcb=-0.005; .drout=0.45; .pvag=1E-20; .delta=0.01; .pscbe1=8.14E8; .pscbe2=5E-8; .fprout=0.2; .pdits=0.2; .pditsd=0.23; .pditsl=2.3E6; .rsh=0; .rdsw=50; .rsw=50; .rdw=50; .rdswmin=0; .rdwmin=0; .rswmin=0; .prwg=0; .prwb=6.8E-11; .wr=1; .alpha0=0.074; .alpha1=0.005; .beta0=30; .agidl=0.0001; .bgidl=2.1E9; .cgidl=0.0001; .egidl=0.8; .agisl=0.0002; .bgisl=2.1E9; .cgisl=0.0002; .egisl=0.8; .aigbacc=0.012; .bigbacc=0.0028; .cigbacc=0.002; .nigbacc=1; .aigbinv=0.014; .bigbinv=0.004; .cigbinv=0.004; .eigbinv=1.1; .nigbinv=3; .aigc=0.012; .bigc=0.0028; .cigc=0.002; .aigs=0.012; .bigs=0.0028; .cigs=0.002; .nigc=1; .poxedge=1; .pigcd=1; .ntox=1; .aigd=0.01; .bigd=0.003; .cigd=0.0015; .xrcrg1=12; .xrcrg2=5; .cgso=6.238E-10; .cgdo=6.238E-10; .cgbo=2.56E-11; .cgdl=2.495E-10; .cgsl=2.495E-10; .ckappas=0.03; .ckappad=0.03; .acde=1; .moin=15; .noff=0.9; .voffcv=-0.02; .kt1=-0.37; .kt1l=0.0; .kt2=-0.042; .ute=-1.5; .ua1=1E-9; .ub1=-3.5E-19; .uc1=0; .prt=0; .at=53000; .fnoimod=1; .tnoimod=0; .jss=0.0001; .jsws=1E-11; .jswgs=1E-10; .njs=1; .ijthsfwd=0.01; .ijthsrev=0.001; .bvs=10; .xjbvs=1; .jsd=0.0001; .jswd=1E-11; .jswgd=1E-10; .njd=1; .ijthdfwd=0.01; .ijthdrev=0.001; .bvd=10; .xjbvd=1; .pbs=1; .cjs=0.0005; .mjs=0.5; .pbsws=1; .cjsws=5E-10; .mjsws=0.33; .pbswgs=1; .cjswgs=3E-10; .mjswgs=0.33; .pbd=1; .cjd=0.0005; .mjd=0.5; .pbswd=1; .cjswd=5E-10; .mjswd=0.33; .pbswgd=1; .cjswgd=5E-10; .mjswgd=0.33; .tpb=0.005; .tcj=0.001; .tpbsw=0.005; .tcjsw=0.001; .tpbswg=0.005; .tcjswg=0.001; .xtis=3; .xtid=3; .dmcg=0; .dmci=0; .dmdg=0; .dmcgt=0; .dwj=0; .xgw=0; .xgl=0; .rshg=0.4; .gbmin=1E-10; .rbpb=5; .rbpd=15; .rbps=15; .rbdb=15; .rbsb=15; .ngcon=1; .jtss=1E-4; .jtsd=1E-4; .jtssws=1E-10; .jtsswd=1E-10; .jtsswgs=1E-7; .jtsswgd=1E-7; .njts=20.0; .njtssw=15; .njtsswg=6; .vtss=10; .vtsd=10; .vtssws=10; .vtsswd=10; .njtsd=15.0; .njtsswd=20; .njtsswgd=6; .tnjts=0.1; .tnjtsd=0.05; .vtsswgs=2; .vtsswgd=2; .xtss=0.02; .xtsd=0.02; .xtssws=0.02; .xtsswd=0.02; .xtsswgs=0.02; .xtsswgd=0.02; .tnom=NA( 27.);
+endparamset
+
+paramset P1 pmos;
+ .level=14; .version=4.81; .binunit=1; .paramchk=1; .mobmod=0; .capmod=2; .igcmod=1; .igbmod=1; .geomod=1; .diomod=1; .rdsmod=0; .rbodymod=0; .rgatemod=1; .permod=1; .acnqsmod=0; .trnqsmod=0; .tempmod=0; .mtrlmod=1; .cvchargemod=0; .mtrlcompatmod=1; .eot=1.8E-9; .vddeot=-1.5; .ados=1.1; .bdos=1.0; .tnom=27; .toxe=1.8E-9; .toxp=10E-10; .toxm=1.8E-9; .dtox=8E-10; .epsrox=3.9; .wint=5E-9; .lint=1E-9; .ll=0; .wl=0; .lln=1; .wln=1; .lw=0; .ww=0; .lwn=1; .wwn=1; .lwl=0; .wwl=0; .xpart=0; .toxref=1.8E-9; .phig=4.05; .epsrgate=11.7; .saref=5E-6; .sbref=5E-6; .wlod=2E-6; .ku0=4E-6; .kvsat=0.2; .kvth0=-2E-8; .tku0=0.0; .llodku0=1.1; .wlodku0=1.1; .llodvth=1.0; .wlodvth=1.0; .lku0=1E-6; .wku0=1E-6; .pku0=0.0; .lkvth0=1.1E-6; .wkvth0=1.1E-6; .pkvth0=0; .stk2=0; .lodk2=1.0; .steta0=0; .lodeta0=1.0; .lambda=4E-10; .vsat=1.1E5; .vtl=2.0E5; .xn=6.0; .lc=5E-9; .rnoia=0.577; .rnoib=0.37; .lintnoi=1E-9; .tvoff=0; .tvfbsdoff=0; .vth0=-0.25; .k1=0.35; .k2=0.05; .k3=0; .k3b=0; .w0=2.5E-6; .dvt0=1.8; .dvt1=0.52; .dvt2=-0.032; .dvt0w=0; .dvt1w=0; .dvt2w=0; .dsub=2; .minv=0.05; .voffl=0; .dvtp0=1E-7; .minvcv=2; .voffcvl=0; .dvtp1=0.05; .lpe0=5.75E-8; .lpeb=2.3E-10; .xj=2E-8; .ngate=5E20; .ndep=2.8E18; .nsd=1E20; .phin=0; .cdsc=0.0002; .cdscb=0; .cdscd=0; .cit=0; .voff=-0.15; .nfactor=1.2; .eta0=0.05; .etab=0; .vfb=0.55; .u0=0.0095; .ua=5.0E-11; .ub=3.5E-18; .uc=-3E-11; .a0=2; .ags=1E-20; .a1=0; .a2=1; .b0=-1E-20; .b1=0; .keta=0.04; .dwg=0; .dwb=0; .pclm=0.08; .pdiblc1=0.028; .pdiblc2=0.022; .pdiblcb=-0.005; .drout=0.45; .pvag=1E-20; .delta=0.01; .pscbe1=8.14E8; .pscbe2=5E-8; .fprout=0.2; .pdits=0.2; .pditsd=0.23; .pditsl=2.3E6; .rsh=0; .rdsw=50; .rsw=50; .rdw=50; .rdswmin=0; .rdwmin=0; .rswmin=0; .prwg=0; .prwb=6.8E-11; .wr=1; .alpha0=0.074; .alpha1=0.005; .beta0=30; .agidl=0.0002; .bgidl=2.1E9; .cgidl=0.0002; .egidl=0.8; .agisl=0.0003; .bgisl=2.5E9; .cgisl=0.0003; .egisl=0.8; .aigbacc=0.012; .bigbacc=0.0028; .cigbacc=0.002; .nigbacc=1; .aigbinv=0.014; .bigbinv=0.004; .cigbinv=0.004; .eigbinv=1.1; .nigbinv=3; .aigc=0.012; .bigc=0.0028; .cigc=0.002; .aigs=0.012; .bigs=0.0028; .cigs=0.002; .nigc=1; .poxedge=1; .pigcd=1; .ntox=1; .aigd=0.01; .bigd=0.003; .cigd=0.0015; .xrcrg1=12; .xrcrg2=5; .cgso=6.238E-10; .cgdo=6.238E-10; .cgbo=2.56E-11; .cgdl=2.495E-10; .cgsl=2.495E-10; .ckappas=0.03; .ckappad=0.03; .acde=1; .moin=15; .noff=0.9; .voffcv=0.02; .kt1=-0.37; .kt1l=0.0; .kt2=-0.042; .ute=-1.5; .ua1=1E-9; .ub1=-3.5E-19; .uc1=0; .prt=0; .at=53000; .fnoimod=1; .tnoimod=0; .jss=0.0001; .jsws=1E-11; .jswgs=1E-10; .njs=1; .ijthsfwd=0.01; .ijthsrev=0.001; .bvs=10; .xjbvs=1; .jsd=0.0001; .jswd=1E-11; .jswgd=1E-10; .njd=1; .ijthdfwd=0.01; .ijthdrev=0.001; .bvd=10; .xjbvd=1; .pbs=1; .cjs=0.0005; .mjs=0.5; .pbsws=1; .cjsws=5E-10; .mjsws=0.33; .pbswgs=1; .cjswgs=3E-10; .mjswgs=0.33; .pbd=1; .cjd=0.0005; .mjd=0.5; .pbswd=1; .cjswd=5E-10; .mjswd=0.33; .pbswgd=1; .cjswgd=5E-10; .mjswgd=0.33; .tpb=0.005; .tcj=0.001; .tpbsw=0.005; .tcjsw=0.001; .tpbswg=0.005; .tcjswg=0.001; .xtis=3; .xtid=3; .dmcg=0; .dmci=0; .dmdg=0; .dmcgt=0; .dwj=0; .xgw=0; .xgl=0; .rshg=0.4; .gbmin=1E-10; .rbpb=5; .rbpd=15; .rbps=15; .rbdb=15; .rbsb=15; .ngcon=1; .jtss=1E-4; .jtsd=1E-4; .jtssws=1E-10; .jtsswd=1E-10; .jtsswgs=1E-7; .jtsswgd=1E-7; .njts=20.0; .njtssw=15; .njtsswg=4; .vtss=10; .vtsd=10; .vtssws=10; .vtsswd=10; .njtsd=15.0; .njtsswd=20; .njtsswgd=6; .tnjts=0.1; .tnjtsd=0.05; .vtsswgs=2; .vtsswgd=2; .xtss=0.02; .xtsd=0.02; .xtssws=0.02; .xtsswd=0.02; .xtsswgs=0.02; .xtsswgd=0.02; .tnom=NA( 27.);
+endparamset
+
+// Define ground
+ground \0 ;
+// Power supply
+vsource #(.dc(2.0)) Vdd (.p(n01),.n(\0 ));
+// inverter (input, output, power supply, ground)
+module not1 (.z(z),.a(a),.vss(vss),.vdd(vdd));
+  P1 #(.l(0.18u),.w(10u),.ad(5p),.pd(22u),.as(5p),.ps(22u),.sa(2u),.sb(8u),.nf(3),.sd(0.2u)) m01 (.d(z),.g(a),.s(vdd),.b(vdd));
+  N1 #(.l(0.18u),.w(5u),.ad(5p),.pd(22u),.as(5p),.ps(22u),.sa(2u),.sb(8u),.nf(3),.sd(0.2u)) m02 (.d(z),.g(a),.s(vss),.b(vss));
+endmodule // not1
+
+// 17-stage ring oscillator
+resistor #(.r(1G)) rkick (.p(n02),.n(\0 ));
+not1 #() X01 (.z(n03),.a(n02),.vss(\0 ),.vdd(n01));
+not1 #() X02 (.z(n04),.a(n03),.vss(\0 ),.vdd(n01));
+not1 #() X03 (.z(n05),.a(n04),.vss(\0 ),.vdd(n01));
+not1 #() X04 (.z(n06),.a(n05),.vss(\0 ),.vdd(n01));
+not1 #() X05 (.z(n07),.a(n06),.vss(\0 ),.vdd(n01));
+not1 #() X06 (.z(n08),.a(n07),.vss(\0 ),.vdd(n01));
+not1 #() X07 (.z(n09),.a(n08),.vss(\0 ),.vdd(n01));
+not1 #() X08 (.z(n10),.a(n09),.vss(\0 ),.vdd(n01));
+not1 #() X09 (.z(n11),.a(n10),.vss(\0 ),.vdd(n01));
+not1 #() X10 (.z(n12),.a(n11),.vss(\0 ),.vdd(n01));
+not1 #() X11 (.z(n13),.a(n12),.vss(\0 ),.vdd(n01));
+not1 #() X12 (.z(n14),.a(n13),.vss(\0 ),.vdd(n01));
+not1 #() X13 (.z(n15),.a(n14),.vss(\0 ),.vdd(n01));
+not1 #() X14 (.z(n16),.a(n15),.vss(\0 ),.vdd(n01));
+not1 #() X15 (.z(n17),.a(n16),.vss(\0 ),.vdd(n01));
+not1 #() X16 (.z(n18),.a(n17),.vss(\0 ),.vdd(n01));
+not1 #() X17 (.z(n02),.a(n18),.vss(\0 ),.vdd(n01));
+capacitor #(.c(0.1p)) c1 (.p(n18),.n(\0 ));
+// Simulation control
+#Time       v(n02)     v(n05)     iter(0)   
+ 0.         0.         0.         0.        
+ 100.E-12   1.6812     0.55846    139.      
+ 200.E-12   1.7677     0.072317   26.       
+ 300.E-12   1.7338     0.074549   23.       
+ 400.E-12   1.0804     0.075748   24.       
+ 500.E-12   0.087045   0.056777   23.       
+ 600.E-12   0.061746   0.72592    23.       
+ 700.E-12   0.074005   1.7669     23.       
+ 800.E-12   0.074488   1.8749     22.       
+ 900.E-12   0.074337   1.88       23.       
+ 1.E-9      0.074324   1.8794     23.       
+ 1.1E-9     0.074329   1.8794     22.       
+ 1.2E-9     0.074321   1.8794     22.       
+ 1.3E-9     0.073883   1.8794     23.       
+ 1.4E-9     0.07903    1.8794     22.       
+ 1.5E-9     0.091007   1.8798     22.       
+ 1.6E-9     1.1007     1.8752     22.       
+ 1.7E-9     1.8208     1.9932     23.       
+ 1.8E-9     1.8777     0.65933    23.       
+ 1.9E-9     1.8796     0.055236   22.       
+ 2.E-9      1.8792     0.066898   23.       
+ 2.1E-9     1.8791     0.074618   24.       
+ 2.2E-9     1.8792     0.074749   22.       
+ 2.3E-9     1.8792     0.074655   23.       
+ 2.4E-9     1.8791     0.074649   23.       
+ 2.5E-9     1.8817     0.074652   24.       
+ 2.6E-9     1.8924     0.074733   22.       
+ 2.7E-9     1.8199     0.074226   21.       
+ 2.8E-9     0.40793    0.082314   22.       
+ 2.9E-9     0.056509   0.07928    22.       
+ 3.E-9      0.069992   1.3537     22.       
+ 3.1E-9     0.074426   1.845      22.       
+ 3.2E-9     0.074347   1.8792     23.       
+ 3.3E-9     0.07429    1.8798     23.       
+ 3.4E-9     0.07429    1.8794     23.       
+ 3.5E-9     0.074286   1.8794     22.       
+ 3.6E-9     0.074466   1.8794     23.       
+ 3.7E-9     0.074391   1.8794     23.       
+ 3.8E-9     0.060202   1.8792     22.       
+ 3.9E-9     0.38394    1.8821     22.       
+ 4.E-9      1.5926     1.8717     22.       
+ 4.1E-9     1.8637     1.7166     23.       
+ 4.2E-9     1.8794     0.17346    22.       
+ 4.3E-9     1.8794     0.056699   23.       
+ 4.4E-9     1.8792     0.072825   21.       
+ 4.5E-9     1.8792     0.074828   23.       
+ 4.6E-9     1.8792     0.074654   22.       
+ 4.7E-9     1.8793     0.074626   23.       
+ 4.8E-9     1.8791     0.074628   21.       
+ 4.9E-9     1.8749     0.074609   24.       
+ 5.E-9      1.9832     0.07474    21.       
+ 5.1E-9     1.3022     0.074402   20.       
+ 5.2E-9     0.11249    0.067477   20.       
+ 5.3E-9     0.059365   0.54157    22.       
+ 5.4E-9     0.073577   1.7166     22.       
+ 5.5E-9     0.074441   1.8717     23.       
+ 5.6E-9     0.074272   1.8801     24.       
+ 5.7E-9     0.074256   1.8796     22.       
+ 5.8E-9     0.074262   1.8795     23.       
+ 5.9E-9     0.074241   1.8795     23.       
+ 6.E-9      0.074058   1.8795     23.       
+ 6.1E-9     0.079935   1.8795     23.       
+ 6.2E-9     0.062197   1.8795     21.       
+ 6.3E-9     0.93538    1.8783     22.       
+ 6.4E-9     1.7979     1.9781     23.       
+ 6.5E-9     1.8766     0.90597    23.       
+ 6.6E-9     1.8798     0.061376   23.       
+ 6.7E-9     1.8793     0.064284   22.       
+ 6.8E-9     1.8793     0.074484   23.       
+ 6.9E-9     1.8793     0.074779   23.       
+ 7.E-9      1.8793     0.074659   22.       
+ 7.1E-9     1.8793     0.074651   22.       
+ 7.2E-9     1.8816     0.074658   23.       
+ 7.3E-9     1.8764     0.074685   22.       
+ 7.4E-9     1.8935     0.074331   22.       
+ 7.5E-9     0.57736    0.080466   21.       
+ 7.6E-9     0.057611   0.048081   22.       
+ 7.7E-9     0.067981   1.1803     23.       
+ 7.8E-9     0.074282   1.8302     23.       
+ 7.9E-9     0.074321   1.8789     22.       
+ 8.E-9      0.074242   1.88       22.       
+ 8.1E-9     0.074241   1.8796     23.       
+ 8.2E-9     0.074245   1.8795     24.       
+ 8.3E-9     0.074371   1.8795     22.       
+ 8.4E-9     0.073718   1.8795     22.       
+ 8.5E-9     0.068109   1.8794     23.       
+ 8.6E-9     0.25776    1.8816     23.       
+ 8.7E-9     1.4817     1.8665     22.       
+ 8.8E-9     1.8555     1.8777     22.       
+ 8.9E-9     1.8791     0.25986    23.       
+ 9.E-9      1.8795     0.055393   22.       
+ 9.1E-9     1.8793     0.071734   23.       
+ 9.2E-9     1.8793     0.074866   22.       
+ 9.3E-9     1.8793     0.074727   23.       
+ 9.4E-9     1.8793     0.074686   22.       
+ 9.5E-9     1.879      0.074686   23.       
+ 9.6E-9     1.8784     0.074674   23.       
+ 9.7E-9     1.9653     0.074863   22.       
+ 9.8E-9     1.4778     0.074055   20.       
+ 9.9E-9     0.15988    0.075353   22.       
+ 10.E-9     0.057952   0.36148    23.       
+Gnucap   System status
+iterations: op=0, dc=0, tran=2364, fourier=0, total=2793
+transient timesteps: accepted=429, rejected=0, total=429
+nodes: user=18, subckt=0, model=34, total=52
+dctran density=40.7%, ac density=40.7%
