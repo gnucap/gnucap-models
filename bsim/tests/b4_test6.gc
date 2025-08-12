@@ -1,7 +1,7 @@
 * NMOS Id-Vg with Vb @ -55C
-load mgsim
+*load mgsim
 *load ../BSIM483/bsim483.so
-include ../BSIM481/benchmark_test/modelcard.nmos
+*include ../BSIM481/benchmark_test/modelcard.nmos
 
 * Enable Verilog mode
 verilog

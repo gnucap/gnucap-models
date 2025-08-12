@@ -11,4 +11,7 @@ SPICE_VERSION = SPICE_3f
 
 TESTDIR = ../tests
 TESTCASES = b4_
-GNUCAP_ARGS = -a ./${TARGET}.so
+
+GNUCAP_LOADS = -a mgsim -a ./${TARGET}.so
+GNUCAP_INCLUDES = -i ../BSIM481/benchmark_test/modelcard.nmos -i ../BSIM481/benchmark_test/modelcard.pmos
+GNUCAP_ARGS = ${GNUCAP_LOADS} ${GNUCAP_INCLUDES}

@@ -1,9 +1,9 @@
 * One-Bit Comparator (tran)
-load mgsim
+*load mgsim
 load vams/vpulse.so
 load ../BSIM483/bsim483.so
-include ../BSIM481/benchmark_test/modelcard.nmos
-include ../BSIM481/benchmark_test/modelcard.pmos
+*include ../BSIM481/benchmark_test/modelcard.nmos
+*include ../BSIM481/benchmark_test/modelcard.pmos
 
 // Enable verilog mode
 verilog
