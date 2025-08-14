@@ -1,0 +1,3 @@
+TARGET = bsim4
+$(TARGET):
+PLUGINS_SO = bsim4.so
