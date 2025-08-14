@@ -1,0 +1,53 @@
+# bsim4va tests
+
+We use the same test cases as for the Berkeley BSIM model (see gnucap-models/bsim/tests/b4_*.gc). 
+
+If test results with the Berkeley model (C source) and Cogenda model (Verilog-AMS source) match within numerical tolerance, this provides a strong sanity check for both the Gnucap model generator and the simulator.   
+
+## Ratings
+
+Each test result is rated according to is level of agreement with the official benchmark output files `bsim/BSIM481/benchmark_test/*.out`. 
+
++ Basic sanity check passed - result appears physically reasonable
+++ Good qualitative match with benchmark 
++++ Quantative match up to numerical tolerance 
+
+### DC sweeps 
+```
+b4_test1.gc  +++
+b4_test2.gc  +++ 
+b4_test3.gc  +++
+b4_test4.gc  +++
+b4_test5.gc  +++
+b4_test6.gc  +++
+b4_test7.gc  +++
+b4_test8.gc  +++
+b4_test9.gc  +++
+b4_test10.gc +++
+b4_test11.gc +++
+b4_test12.gc +++
+b4_test13.gc +++
+b4_test14.gc +++
+```
+### AC tests
+```
+b4_gstage.gc +++    
+b4_opamp.gc ++
+```
+### Trans tests
+```
+b4_oneshot.gc +
+b4_comprt.gc + 
+b4_comprt_tr1.gc ++ 
+b4_oneshot_tr1.gc +
+b4_oneshot_tr01.gc ++
+b4_oneshot_tr001.gc ++
+b4_comprt_tr1.gc ++
+b4_ro_17.gc +
+b4_ro_17_tr1.gc +
+b4_ro_17_tr01.gc ++
+b4_ro_17_tr001.gc ++
+```
+### Notes
+
+- For transient test cases `b4_comprt.gc`, `b4_oneshot.gc` and `b4_ro_17.gc` a small truncation error (trtol <= 1) is required for the simulation results of the Cogenda model to converge to Berkeley model.  
