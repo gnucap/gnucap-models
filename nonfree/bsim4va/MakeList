@@ -1,3 +1,7 @@
+SECTION = nonfree/bsim4va
 TARGET = bsim4
-$(TARGET):
-PLUGINS_SO = bsim4.so
+PLUGINS_SO = ${TARGET:%=%.so}
+$(PLUGINS_SO):
+
+TESTDIR = ../../bsim/tests
+TESTCASES = NOTYET_
