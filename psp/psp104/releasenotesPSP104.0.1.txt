@@ -1,0 +1,238 @@
+﻿
+======================================================================================
+======================================================================================
+                      Silicon Integration Initiative (Si2)
+                    Compact Model Coalition In-Code Statement
+
+  Software is distributed as is, completely without warranty or service support. The
+  Commissariat a l'energie atomique et aux energies alternatives (CEA), NXP
+  Semiconductors, and Delft University of Technology, along with their employees are
+  not liable for the condition or performance of the software.
+
+  NXP Semiconductors, Delft University of Technology, and CEA own the copyright and
+  grant users a perpetual, irrevocable, worldwide, non-exclusive, royalty-free license
+  with respect to the software as set forth below.
+  
+  NXP Semiconductors, Delft University of Technology, and CEA hereby disclaim all
+  implied warranties.
+
+  NXP Semiconductors, Delft University of Technology, and CEA grant the users the right
+  to modify, copy, and redistribute the software and documentation, both within the
+  user's organization and externally, subject to the following restrictions:
+  
+    1. The users agree not to charge for the NXP Semiconductors, Delft University of
+       Technology, and CEA-developed code itself but may charge for additions,
+       extensions, or support.
+
+    2. In any product based on the software, the users agree to acknowledge NXP
+       Semiconductors, Delft University of Technology, and CEA that developed the
+       software. This acknowledgement shall appear in the product documentation.
+
+    3. Redistributions to others of source code and documentation must retain the
+       copyright notice, disclaimer, and list of conditions.
+
+    4. Redistributions to others in binary form must reproduce the copyright notice,
+       disclaimer, and list of conditions in the documentation and/or other materials
+       provided with the distribution.
+
+  CMC In-Code Statement Revision: 104.0.1 (PSP), 2024/10/21
+                                  200.6.3 (JUNCAP), 2024/10/21
+
+======================================================================================
+======================================================================================
+
+  Authors: G.D.J. Smit, A.J. Scholten, and D.B.M. Klaassen (NXP Semiconductors)
+           O. Rozeau, S. Martinie and T. Poiroux (CEA-Leti)
+
+  Former contributers:
+           G. Gildenblat, W. Yao, Z. Zhu, X. Li and W. Wu (Arizona State University)
+           R. van Langevelde (Philips Research)
+           R. van der Toorn (Delft University of Technology)
+           J.C. Barbé (CEA-Leti)
+
+  The most recent version of the model code, the documentation, and contact
+  information can be found on:
+
+       http://www.cea.fr/cea-tech/leti/pspsupport
+       
+======================================================================================
+======================================================================================
+
+This package consists of the following files:
+
+     - releasenotesPSP104.txt         This file
+
+     - psp104.va                      Main file for PSP model
+     - psp104t.va                     Main file for PSP model with self heating
+     - psp104_nqs.va                  Main file for PSP model with NQS-effects
+     - juncap200.va                   Main file for JUNCAP2 stand-alone model
+
+     - Common104_macrodefs.include    Common macro definitions
+     - PSP104_macrodefs.include       Macro definitions for PSP
+     - PSP104_module.include          Actual model code for intrinsic MOS model
+     - PSP104_parlist.include         Model parameter list for PSP model
+     - PSP104_scaling.include         Geometry scaling equations for PSP model
+     - PSP104_opvar.include           Definition and calculation of .DC OP variables
+     - PSP104_nqs_macrodefs.include   All macro definitions for PSP-NQS
+     - JUNCAP200_macrodefs.include    Macro definitions for JUNCAP2 model
+     - JUNCAP200_parlist.include      JUNCAP2 parameter list
+     - JUNCAP200_varlist.include      JUNCAP2 variable declarations
+     - JUNCAP200_InitModel.include    JUNCAP2 model initialization code
+
+     - discipline.h                   Definition of electrical and thermal analog nodes and branches
+
+======================================================================================
+======================================================================================
+
+Usage
+-----
+
+Depending which model one wants to use, one should compile one of the four .va-files
+(psp104.va, psp104t.va, psp104_nqs.va, and juncap200.va). The module names are
+"PSP104VA", "PSP104TVA", and "PSPNQS104VA" (for QS, self heating, and NQS,
+respectively), and "JUNCAP200" for the JUNCAP2-model.
+
+
+======================================================================================
+======================================================================================
+
+Release notes vA-code of PSP 104.0.1 (October 2024)
+----------------------------------------------------
+
+This release includes bug fixes only.
+Changes include:
+   -  PSP104_macrodefs.include:
+      -  line 297: addition of new variables aphi, V_xb
+      -  line 298: addition of new variables dVbstar
+      -  line 461: includes dVbstar to fix the bug on NUD effect model
+      -  lines 500 to 502: modification of delxb calculation to fix bug on nscr and ysat NAN issue
+      -  lines 510 to 512: addition of qbscr and qiscr initializing
+      -  line 513: new condition for SCE model for negative gate voltage
+      -  lines 526 and 527: new calculation of qbscr to fix bug on qbscr NAN issue
+      -  line 529: xn_s is now calculated in the condition
+      -  line 678: addition of a new condition on x_inf calculation to avoid division by zero
+      -  lines 680 to 682: new calculation of qisat and qbsat to fix NAN issue
+      -  lines 691 to 697: new calculation of delta_gmob to fix possible negative gds
+   -  PSP104_module.include:
+      -  line 131 to 132: Move instance parameters from JUNCAP200_parlist.include to PSP104_module.va
+      -  lines 324 and 325: modification of macro link due to modifications of JUNCAP200_InitModel.include file
+      -  lines 344 to 355: the caclulations of device temperature variables (TKA, rTa, delTa, etc.) are moved 
+            to the section initial_instance because their values depend on instance parameter TRISE
+      -  lines 358 and 359: addition of macro link due to modifications of JUNCAP200_InitModel.include file
+      -  lines 465 and 468: removing the if statement on SWIGATE=2 (bug fix correction)
+      -  line 668: addition of a new variable V_xb_dc_tmp
+      -  lines 700 to 703: addition of a new variable dVbstar_dc
+      -  line 770: temp variable is replaced by V_xb variable
+      -  line 774: dVbstar_dc is set to zero (case with NUD effect disabled)
+      -  line 784: calculation of dVbstar_dc to fix the inappropriate behavior of NUD effect model
+      -  line 789: initialing of aphi variable for IV model
+      -  line 792: initialing of dVbstar variable for IV model
+      -  line 1110: initialing of aphi variable for Q-model
+      -  line 1112: initialing of V_xb variable for Q-model
+      -  line 1114: initialing of dVbstar variable for Q-model
+      -  lines 1117 and 1124: temp variable is replaced by V_xb variable
+      -  line 1110: initialing of aphi variable for Q-model when SWDELVTAC is activated
+   -  PSP104_scaling.include:
+      -  lines 143, 144, 341 and 342: removing $param_given(GC2OV), ... (bug fix correction relative to removing the if statement on SWIGATE=2 )
+   -  psp104.va
+      -  line 31: JUNCAP200_InitModel.include must be included due to its modification
+   -  psp104t.va
+      -  line 33: JUNCAP200_InitModel.include must be included due to its modification
+   -  psp104_nqs.va
+      -  line 33: JUNCAP200_InitModel.include must be included due to its modification
+
+PSP104.0.1 is backward compatible with PSP104.0.0.
+
+======================================================================================
+======================================================================================
+
+Release notes vA-code of JUNCAP 200.6.3 (October 2024)
+----------------------------------------------------
+
+This release includes bug fixe only on verilog-A code.
+Changes include:
+   -  JUNCAP200_InitModel.include:
+      -  Code organisation is changed to separate the calculation of instance independent variables
+            to instance dependent variables due to the introduction of TRISE parameter
+   -  juncap200.va
+      -  line 31: JUNCAP200_InitModel.include must be included due to its modification
+      -  line 71 & 72: Move instance parameters from JUNCAP200_parlist.include to juncap200.va
+      -  line 127: addition of JUNCAP200_InitModel_Model macro for calculation of instance independent variables
+      -  line 137: addition of JUNCAP200_InitModel_Instance macro for calculation of instance dependent variables
+	  
+JUNCAP200.6.3 is backward compatible with JUNCAP200.6.2.
+
+=====================================================================================
+======================================================================================
+The authors want to thank Laurent Lemaitre and Colin McAndrew (Freescale)
+for their help with ADMS and the implementation of the model code. Geoffrey
+Coram (Analog Devices) is acknowledged for input concerning the Verilog-A
+implementation of the model.
+
+=====================================================================================
+=====================================================================================
+=====================================================================================
+=====================================================================================
+
+Vampyre 1.9.4 output on psp104.va (same for psp104_nqs and psp104t.va)
+-----------------------------------------------------------------------
+
+Reading psp104.va
+Reading discipline.h
+Reading Common104_macrodefs.include
+Reading JUNCAP200_macrodefs.include
+Reading JUNCAP200_InitModel.include
+Reading PSP104_macrodefs.include
+Reading PSP104_opvar.include
+Reading PSP104_module.include
+Reading PSP104_parlist.include
+Reading JUNCAP200_parlist.include
+Reading JUNCAP200_varlist.include
+Reading PSP104_scaling.include
+WARNING in file PSP104_parlist.include, line 31: Parameter 'LEVEL' was never used
+STYLE in file psp104.va, line 49: Parameters should be declared in lowercase
+WARNING in file psp104.va, line 49: Variable 'initial_instance.JUNCAPexpressInit.qjunbot' was never used
+WARNING in file psp104.va, line 49: Variable 'initial_instance.JUNCAPexpressInit.qjunsti' was never used
+WARNING in file psp104.va, line 49: Variable 'initial_instance.JUNCAPexpressInit.qjungat' was never used
+
+Module: PSP104VA
+
+Instance parameters (33)
+
+Model parameters (863)
+
+Operating-point variables (100)
+
+=====================================================================================
+=====================================================================================
+
+Vampyre 1.9.4 output on juncap200.va
+------------------------------------
+
+Reading juncap200.va
+Reading discipline.h
+Reading Common104_macrodefs.include
+Reading JUNCAP200_macrodefs.include
+Reading JUNCAP200_InitModel.include
+Reading JUNCAP200_parlist.include
+Reading JUNCAP200_varlist.include
+STYLE in file juncap200.va, line 48: Port names should be lowercase ('a' not 'A')
+STYLE in file juncap200.va, line 48: Port names should be lowercase ('k' not 'K')
+WARNING in file juncap200.va, line 59: Parameter 'LEVEL' was never used
+STYLE in file juncap200.va, line 304: Parameters should be declared in lowercase
+WARNING in file juncap200.va, line 304: Variable 'initial_instance.JUNCAPexpressInit.qjunbot' was never used
+WARNING in file juncap200.va, line 304: Variable 'initial_instance.JUNCAPexpressInit.qjunsti' was never used
+WARNING in file juncap200.va, line 304: Variable 'initial_instance.JUNCAPexpressInit.qjungat' was never used
+
+Module: JUNCAP200
+
+Instance parameters (7):
+    AB, CFACTOR, IFACTOR, LG, LS, MULT, TRISE
+
+Model parameters (50)
+
+Operating-point variables (19):
+    cj, cjbot, cjgat, cjosbot, cjosgat, cjossti, cjsti, idsatsbot,
+    idsatsgat, idsatssti, ij, ijbot, ijgat, ijsti, si, vak, vbisbot,
+    vbisgat, vbissti
+

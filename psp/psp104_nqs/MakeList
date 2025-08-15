@@ -1,0 +1,36 @@
+SECTION = psp/psp104_nqs
+MODEL = psp104_nqs
+TARGET = $(MODEL)
+MGFLAGS = -I ../psp104
+
+PLUGINS_SO = ${TARGET:%=%.so}
+
+TESTDIR = NOTYET
+TESTCASES = b4_
+TESTEXCLUDE = \
+	b4_comprt \
+	b4_oneshot \
+	b4_test.ckt \
+	b4_test0.ckt \
+	b4_test1.ckt \
+	b4_test2.ckt
+
+GNUCAP_LOADS = -a mgsim
+#BUG: workaround excessive iterations in op
+GNUCAP_OPTIONS = --options\ vmin=0.0\ vmax=0.0
+
+TEST_PARAMSET_SELECT = interpreted
+
+ifeq ($(TEST_PARAMSET_SELECT), compiled)
+  GNUCAP_INCLUDES =
+  TEST_PLUGINS = $(MODEL)_nmos.so $(MODEL)_pmos.so
+else ifeq ($(TEST_PARAMSET_SELECT), interpreted)
+  TEST_PLUGINS = $(MODEL).so
+  GNUCAP_INCLUDES = -i $(MODEL)_nmos.paramset -i $(MODEL)_pmos.paramset
+endif
+
+GNUCAP_LOADS += ${TEST_PLUGINS:%=-a ./%}
+
+GNUCAP_INCLUDES += -i test_config.parameter
+
+GNUCAP_ARGS =  ${GNUCAP_LOADS} ${GNUCAP_INCLUDES} ${GNUCAP_OPTIONS}

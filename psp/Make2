@@ -1,0 +1,34 @@
+
+MGFLAGS += -a mgopt/nonoise.so -I $(shell $(GNUCAP_CONF) --includedir)
+MODELGEN_VERILOG = gnucap-mg-vams
+GNUCAP_CONF = gnucap-conf
+GNUCAP_CPPFLAGS = $(shell $(GNUCAP_CONF) --cppflags) -DADD_VERSION -DPIC # (gets c++ preprocessor flags from gnucap coniguration)
+CXXFLAGS = -fno-var-tracking-assignments -O0 -Wall -g
+
+PLUGINS_CC = ${PLUGINS_SO:%.so=%.cc}
+
+all: ${PLUGINS_SO}
+cc: ${PLUGINS_CC}
+
+%.cc: %.va
+	${MODELGEN_VERILOG} ${MGFLAGS} -o $@ --cc $<
+
+%.cc: %.vams
+	${MODELGEN_VERILOG} ${MGFLAGS} -o $@ --cc $<
+
+#%.dump: %.vams
+#	${MODELGEN_VERILOG} --nodump-unreachable --nodump-module ${MGFLAGS} -o $@ --dump $<
+
+%.o: %.cc
+	${CXX} $(GNUCAP_CPPFLAGS) $(CPPFLAGS) -shared -fPIC ${GNUCAP_CXXFLAGS} ${CXXFLAGS} $< -o $@ -c
+
+%.so: %.o
+	${CXX} -shared ${GNUCAP_LDFLAGS} ${LDFLAGS} $< -o $@
+
+clean:
+	-rm -f *.o $(PLUGINS_SO) $(PLUGINS_CC)
+
+# TODO
+# install:
+
+.PHONY: cc all
