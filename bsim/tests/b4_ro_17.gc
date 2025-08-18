@@ -44,5 +44,5 @@ capacitor #(.c(0.1p)) c1(n18, \0 );
 // Simulation control
 list
 print tran v(n02) v(n05) iter(0)
-tran 10n basic
+tran 10n basic uic
 status notime
