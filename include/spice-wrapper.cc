@@ -1302,7 +1302,7 @@ bool DEV_SPICE::do_tr()
     }else{unreachable();
       ckt()->CKTmode = 0;
     }
-    if (_sim->uic_now()) { untested();
+    if (_sim->uic_now()) {
       ckt()->CKTmode |= MODEINITFIX;
       ckt()->CKTmode |= MODEUIC;
     }else if (_sim->is_initial_step()) {
