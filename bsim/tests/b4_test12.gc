@@ -1,7 +1,7 @@
  * PMOS Id-Vg with Vb
-load mgsim
+*load mgsim
 *load ../BSIM483/bsim483.so
-include ../BSIM481/benchmark_test/modelcard.pmos
+*include ../BSIM481/benchmark_test/modelcard.pmos
 
 * Enable Verilog mode
 verilog

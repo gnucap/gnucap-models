@@ -1,0 +1,14 @@
+SECTION = nonfree/bsim4va
+TARGET = bsim4
+PLUGINS_SO = ${TARGET:%=%.so}
+$(PLUGINS_SO):
+
+TESTDIR = ../../bsim/tests
+TESTCASES = b4_
+
+GNUCAP_LOADS = -a mgsim -a ./${TARGET}.so
+GNUCAP_INCLUDES = -i modelcard.nmos.paramset -i modelcard.pmos.paramset
+#BUG: workaround excessive iterations in op
+GNUCAP_OPTIONS = --options\ vmin=0.0\ vmax=0.0
+GNUCAP_ARGS =  ${GNUCAP_LOADS} ${GNUCAP_INCLUDES} ${GNUCAP_OPTIONS}
+

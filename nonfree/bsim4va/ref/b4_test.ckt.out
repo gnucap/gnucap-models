@@ -1,0 +1,4 @@
+' 
+.model nn nmos level=54 
+          ^ ? model: "nmos54" no match
+m1: can't find: nn

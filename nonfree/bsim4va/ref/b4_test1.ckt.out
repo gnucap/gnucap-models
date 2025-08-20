@@ -1,0 +1,8 @@
+** NMOSFET: Benchmarking Implementation of BSIM4.8.0 
+m1 2 1 0 b n1 L=0.09u W=10.0u NF=5 rgeomod=1 geomod=0 
+                              ^ ? m1: bad parameter NF ignored
+m1 2 1 0 b n1 L=0.09u W=10.0u NF=5 rgeomod=1 geomod=0 
+                                   ^ ? m1: bad parameter rgeomod ignored
+m1 2 1 0 b n1 L ... 0.0u NF=5 rgeomod=1 geomod=0 
+                                        ^ ? m1: bad parameter geomod ignored
+modelcard.nmos:No such file or directory
