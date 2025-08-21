@@ -6,26 +6,27 @@
 * Enable Verilog mode
 verilog
 
-// Define ground
-ground \0 ;
+module main(d);
+  output d;
+  electrical d;
+  ground gnd;
 
-// Declare voltage sources (drain, gate, source, bulk)
-vsource #(.dc(vb)) sb(b , \0 );
-vsource #(.dc(vs)) sb(s , \0 );
-vsource #(.dc(vd)) sd(d , \0 );
-vsource #(.dc(vg)) sg(g , \0 );
+  parameter real vd = 0.;
+  parameter real vg = 0.;
 
-// Assign initial voltages
-parameter vd = 0.0 // Drain (will be overwritten during sweep)
-parameter vg = 0.0 // Gate (will be overwritten during sweep)
-parameter vs = 0.0 // Source (fixed)
-parameter vb = 0.0 // Bulk (fixed)
+  vsource #(.dc(vd)) sd(d, gnd);
+  vsource #(.dc(vg)) sg(g, gnd);
 
-// Instantiate NMOS transistor using bsim480 model
-N1 #(.l(0.09u), .w(10.0u)) M1(.d(d), .g(g), .s(s), .b(b));
+  N1 #(.l(0.09u), .w(10.0u)) M1(.d(d), .g(g), .s(gnd), .b(gnd));
+endmodule
 
-// Simulation control
-list
-print dc v(d) i(sd) iter(0)
+parameter real vd = 0.;
+parameter real vg = 0.;
+main #(.vd(vd), .vg(vg)) m(d);
+
+list N1
+list main
+
+print dc v(d) i(m.sd) iter(0)
 dc vg 0 1.2 0.02 vd 0.05 1.2 0.5 basic
 status notime
