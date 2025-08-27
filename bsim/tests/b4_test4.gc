@@ -1,7 +1,4 @@
 * NMOS Id-Vg
-*load mgsim
-*load ../BSIM483/bsim483.so
-*include ../BSIM481/benchmark_test/modelcard.nmos
 
 * Enable Verilog mode
 verilog
@@ -24,7 +21,7 @@ parameter real vd = 0.;
 parameter real vg = 0.;
 main #(.vd(vd), .vg(vg)) m(d);
 
-list N1
+// list N1
 list main
 
 print dc v(d) i(m.sd) iter(0)

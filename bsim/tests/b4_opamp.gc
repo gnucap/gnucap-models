@@ -1,10 +1,7 @@
 * Operational amplifier (ac) ported from BSIM481/benchmark_test/opamp.b4
-*load mgsim
+
 load vams/vsine.so
 load vams/vcvs.so
-* load ../BSIM483/bsim483.so
-*include ../BSIM481/benchmark_test/modelcard.nmos
-*include ../BSIM481/benchmark_test/modelcard.pmos
 
 * Enable verilog mode
 verilog
@@ -12,17 +9,11 @@ verilog
 options numdgt=7
 options reltol = 1e-5
 
-// Declare ground
 ground \0 ;
-
-// ported from BSIM481/benchmark_test/opamp.b4
-// port in1=1
-// port vout=8
 
 vsine #(.mag(0.1) .dc(0.0)) Vid(in1, c);
 vcvs #(.gain(-1.0), .offset(0.0)) Eid(in2, c, in1, c);
-// what's the point of having 0.0 source
-vsource #(.dc(0.0)) Vic(c, \0 );
+vsource #(.dc(0.0)) Vic(c, \0 ); // what's the point of having 0.0 source
 vsource #(.dc(-1.8)) Vss(vss, \0 );
 vsource #(.dc(+1.8)) Vdd(vdd, \0 );
 
@@ -38,15 +29,10 @@ N1 #(.w(2u),  .l(0.09u)) Mbias(.d(bias), .g(bias), .s(vss), .b(vss));
 N1 #(.w(2u),  .l(0.09u)) M6(.d(vout), .g(bias), .s(vss),   .b(vss));
 N1 #(.w(2u),  .l(0.09u)) M7(.d(vout), .g(bias2), .s(vdd),  .b(out));
 
-// Resistor bias
 resistor #(.r(195k)) Rbias(\0 , bias);
-
-// Feedback capacitor
 capacitor #(.c(2p)) Cfb(bias2, vout);
 
-// Simulation control 
 list
-
 print dc v(in1) v(in2) v(vout)
 dc
 print ac vdb(vout) iter(0)
