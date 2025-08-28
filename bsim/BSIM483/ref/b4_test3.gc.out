@@ -11,10 +11,10 @@ vsource #(.dc(vb)) sb (.p(b),.n(\0 ));
 vsource #(.dc(vs)) sb (.p(s),.n(\0 ));
 vsource #(.dc(vd)) sd (.p(d),.n(\0 ));
 vsource #(.dc(vg)) sg (.p(g),.n(\0 ));
-parameter vd = 0.0 
-parameter vg = 0.0 
-parameter vb = 0.0 
-parameter vs = 0.0 
+parameter vd = 0.0;
+parameter vg = 0.0;
+parameter vb = 0.0;
+parameter vs = 0.0;
 N1 #(.l(0.09u),.w(10.0u)) M1 (.d(d),.g(g),.s(s),.b(b));
 #           v(g)       i(sd)      iter(0)   
  0.         0.         0.         5.        
