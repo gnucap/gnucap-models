@@ -1,19 +1,13 @@
 * One-Bit Comparator (tran)
-*load mgsim
+
 load vams/vpulse.so
-load ../BSIM483/bsim483.so
-*include ../BSIM481/benchmark_test/modelcard.nmos
-*include ../BSIM481/benchmark_test/modelcard.pmos
 
 // Enable verilog mode
 verilog
 
 // BUG: needs noincmode
 options noincmode
-//options method = gear
-//options trtol = 0.01
 
-// Declare ground
 ground \0 ;
 
 capacitor #(.c(30f)) CQ(Qnot, \0 );
@@ -42,12 +36,10 @@ N1 #(.w(1.8u), .l(0.2u)) M2(.d(Anot), .g(A), .s(\0 ), .b(\0 ));
 P1 #(.w(3.6u), .l(0.2u)) M3(.d(Bnot), .g(B), .s(dd), .b(dd));
 N1 #(.w(1.8u), .l(0.2u)) M4(.d(Bnot), .g(B), .s(\0 ), .b(\0 ));
 
-// Power supply
 vsource #(.dc(1.8)) vcc(dd, \0 );
 vpulse #(.val0(0.0), .val1(1.8), .td(10n), .rise(0.1n), .fall(0.1n), .width(15n), .period(30n)) va(A, \0 );
 vsource #(.dc(0.0)) vb(B, \0 );
 
-// Simulation control
 list
 print tran v(A) v(B) v(out_l) v(out_q) iter(0)
 tran 60n basic

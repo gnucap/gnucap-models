@@ -1,33 +1,24 @@
  * PMOS Id-Vg with Vb @ -55C
-*load mgsim
-*load ../BSIM483/bsim483.so
-*include ../BSIM481/benchmark_test/modelcard.pmos
 
 * Enable Verilog mode
 verilog
 
-// Set temperature
 option temp = -55.0
 
-// Declare ground
 ground \0 ;
 
-// Declare voltage sources (drain, gate, source, bulk)
 vsource #(.dc(vd)) sd(d , \0 );
 vsource #(.dc(vg)) sg(g , \0 );
 vsource #(.dc(vs)) sb(s , \0 );
 vsource #(.dc(vb)) sb(b , \0 );
 
-// Assign initial voltages
-parameter vd = -0.1 // Drain (fixed)
-parameter vg = 0.0 // Gate (will be overwritten during sweep)
-parameter vs = 0.0 // Source (fixed)
-parameter vb = 0.0 // Bulk (will be overwritten during sweep)
+parameter vd = -0.1;
+parameter vg = 0.0;
+parameter vs = 0.0;
+parameter vb = 0.0;
 
-// Instantiate PMOS transistor using bsim483 model
 P1 #(.l(0.09u), .w(10.0u)) M1(.d(d), .g(g), .s(s), .b(b));
 
-// Simulation control
 list
 print dc v(b) i(sd) iter(0)
 dc vg 0.6 -1.2 -0.02 vb 0 1.2 0.3 basic
