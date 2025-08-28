@@ -29,8 +29,6 @@ paramset P1 bsim4va;
 endparamset
 
 ground \0 ;
-vsource #(.dc(1.8)) vcc (.p(dd),.n(\0 ));
-vpulse #(.val0(0.0),.val1(1.8),.td(1n),.rise(0.1n),.fall(0.1n),.width(0.8n),.period(5n)) vin (.p(in),.n(\0 ));
 P1 #(.l(0.2u),.w(3.6u)) Md1 (.d(out1),.g(in),.s(dd),.b(dd));
 N1 #(.l(0.2u),.w(1.8u)) Md2 (.d(out1),.g(in),.s(\0 ),.b(\0 ));
 P1 #(.l(0.2u),.w(3.6u)) Md3 (.d(A),.g(out1),.s(dd),.b(dd));
@@ -50,6 +48,8 @@ N1 #(.l(0.2u),.w(1.8u)) M10 (.d(bnot_a_j),.g(A),.s(\0 ),.b(\0 ));
 P1 #(.l(3.6u),.w(3.6u)) M11 (.d(out),.g(\0 ),.s(dd),.b(dd));
 N1 #(.l(0.2u),.w(1.8u)) M12 (.d(out),.g(AorBnot),.s(aorb_lnot_j),.b(\0 ));
 N1 #(.l(0.2u),.w(1.8u)) M13 (.d(aorb_lnot_j),.g(Lnot),.s(\0 ),.b(\0 ));
+vsource #(.dc(1.8)) vcc (.p(dd),.n(\0 ));
+vpulse #(.val0(0.0),.val1(1.8),.td(1n),.rise(0.1n),.fall(0.1n),.width(0.8n),.period(5n)) vin (.p(in),.n(\0 ));
 #Time       v(in)      v(out)     iter(0)   
 open circuit: internal node 122
 open circuit: internal node 124
@@ -89,8 +89,8 @@ open circuit: internal node 126
  3.2E-9     1.7123E-9  1.1733     5.        
  3.3E-9     1.7959E-9  0.99861    6.        
  3.4E-9     1.6756E-9  0.26478    7.        
- 3.5E-9     1.809E-9   0.019565   6.        
- 3.6E-9     1.6802E-9  0.071742   6.        
+ 3.5E-9     1.809E-9   0.019566   6.        
+ 3.6E-9     1.6802E-9  0.071741   6.        
  3.7E-9     1.814E-9   0.047628   5.        
  3.8E-9     1.6607E-9  0.055861   5.        
  3.9E-9     1.8262E-9  0.049671   5.        
@@ -116,7 +116,7 @@ open circuit: internal node 126
  5.9E-9     1.9637E-9  0.046191   5.        
  6.E-9      1.4831E-9  0.046114   5.        
  6.1E-9     1.8        0.0018868  32.       
- 6.2E-9     1.8        0.071464   39.       
+ 6.2E-9     1.8        0.071465   39.       
  6.3E-9     1.8        0.59477    15.       
  6.4E-9     1.8        0.86065    13.       
  6.5E-9     1.8        0.96592    12.       
@@ -138,11 +138,11 @@ open circuit: internal node 126
  8.1E-9    -691.6E-12  1.2622     5.        
  8.2E-9     4.2035E-9  1.1762     5.        
  8.3E-9    -711.5E-12  1.0041     6.        
- 8.4E-9     4.1998E-9  0.27338    7.        
+ 8.4E-9     4.1998E-9  0.27337    7.        
  8.5E-9    -731.9E-12  0.018684   6.        
  8.6E-9     4.2373E-9  0.072215   6.        
  8.7E-9    -759.2E-12  0.04738    5.        
- 8.8E-9     4.25E-9    0.056039   5.        
+ 8.8E-9     4.2499E-9  0.056039   5.        
  8.9E-9    -779.E-12   0.049546   5.        
  9.E-9      4.2627E-9  0.051884   5.        
  9.1E-9    -797.6E-12  0.049034   5.        
@@ -151,7 +151,7 @@ open circuit: internal node 126
  9.4E-9     4.2912E-9  0.048886   5.        
  9.5E-9    -833.9E-12  0.047842   5.        
  9.6E-9     4.3056E-9  0.048122   5.        
- 9.7E-9    -852.1E-12  0.047419   5.        
+ 9.7E-9    -852.1E-12  0.04742    5.        
  9.8E-9     4.3199E-9  0.047569   5.        
  9.9E-9    -869.7E-12  0.047079   5.        
  10.E-9     4.3349E-9  0.047154   5.        
@@ -159,4 +159,4 @@ Gnucap   System status
 iterations: op=0, dc=0, tran=956, fourier=0, total=1131
 transient timesteps: accepted=171, rejected=4, total=175
 nodes: user=12, subckt=0, model=121, total=133
-dctran density=17.9%, ac density=17.9%
+dctran density=18.0%, ac density=18.0%

@@ -9,8 +9,6 @@ ground \0 ;
 
 options vmin=0.0 vmax=2.0
 
-vsource #(.dc(2.0)) Vdd(n01, \0 );
-
 // cmos inverter
 module not1(z, a, vss, vdd);
   P1 #(.l(0.18u), .w(10u), .ad(5p), .pd(22u), .as(5p), .ps(22u), .sa(2u), .sb(8u), .nf(3), .sd(0.2u)) m01(.d(z), .g(a), .s(vdd), .b(vdd));
@@ -37,6 +35,8 @@ not1 #() X15(.z(n17), .a(n16), .vss(\0 ), .vdd(n01));
 not1 #() X16(.z(n18), .a(n17), .vss(\0 ), .vdd(n01));
 not1 #() X17(.z(n02), .a(n18), .vss(\0 ), .vdd(n01));
 capacitor #(.c(0.1p)) c1(n18, \0 );
+
+vsource #(.dc(2.0)) Vdd(n01, \0 );
 
 list
 print tran v(n02) v(n05) iter(0)

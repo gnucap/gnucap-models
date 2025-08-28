@@ -29,11 +29,11 @@ paramset P1 bsim4va;
 endparamset
 
 ground \0 ;
-vsource #(.dc(1.8)) Vdd (.p(vdd),.n(\0 ));
-vsine #(.dc(1.2),.mag(0.1)) Vin (.p(in),.n(\0 ));
 resistor #(.r(100k)) Rsource (.p(in),.n(g));
 resistor #(.r(25k)) Rload (.p(d),.n(vdd));
 N1 #(.w(4u),.l(0.09u)) M1 (.d(d),.g(g),.s(\0 ),.b(\0 ));
+vsource #(.dc(1.8)) Vdd (.p(vdd),.n(\0 ));
+vsine #(.dc(1.2),.mag(0.1)) Vin (.p(in),.n(\0 ));
 #            
  0.          
 #Freq         vdb(d)       iter(0)     
@@ -112,4 +112,4 @@ Gnucap   System status
 iterations: op=0, dc=7, tran=0, fourier=0, total=78
 transient timesteps: accepted=0, rejected=0, total=0
 nodes: user=4, subckt=0, model=8, total=12
-dctran density=59.7%, ac density=59.7%
+dctran density=61.1%, ac density=61.1%

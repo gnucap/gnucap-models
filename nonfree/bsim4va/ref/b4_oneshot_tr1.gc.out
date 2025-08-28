@@ -29,8 +29,6 @@ paramset P1 bsim4va;
 endparamset
 
 ground \0 ;
-vsource #(.dc(1.8)) vcc (.p(dd),.n(\0 ));
-vpulse #(.val0(0.0),.val1(1.8),.td(1n),.rise(0.1n),.fall(0.1n),.width(0.8n),.period(5n)) vin (.p(in),.n(\0 ));
 P1 #(.l(0.2u),.w(3.6u)) Md1 (.d(out1),.g(in),.s(dd),.b(dd));
 N1 #(.l(0.2u),.w(1.8u)) Md2 (.d(out1),.g(in),.s(\0 ),.b(\0 ));
 P1 #(.l(0.2u),.w(3.6u)) Md3 (.d(A),.g(out1),.s(dd),.b(dd));
@@ -50,6 +48,8 @@ N1 #(.l(0.2u),.w(1.8u)) M10 (.d(bnot_a_j),.g(A),.s(\0 ),.b(\0 ));
 P1 #(.l(3.6u),.w(3.6u)) M11 (.d(out),.g(\0 ),.s(dd),.b(dd));
 N1 #(.l(0.2u),.w(1.8u)) M12 (.d(out),.g(AorBnot),.s(aorb_lnot_j),.b(\0 ));
 N1 #(.l(0.2u),.w(1.8u)) M13 (.d(aorb_lnot_j),.g(Lnot),.s(\0 ),.b(\0 ));
+vsource #(.dc(1.8)) vcc (.p(dd),.n(\0 ));
+vpulse #(.val0(0.0),.val1(1.8),.td(1n),.rise(0.1n),.fall(0.1n),.width(0.8n),.period(5n)) vin (.p(in),.n(\0 ));
 #Time       v(in)      v(out)     iter(0)   
 open circuit: internal node 122
 open circuit: internal node 124
@@ -115,4 +115,4 @@ Gnucap   System status
 iterations: op=0, dc=0, tran=446, fourier=0, total=505
 transient timesteps: accepted=57, rejected=3, total=60
 nodes: user=12, subckt=0, model=121, total=133
-dctran density=17.9%, ac density=17.9%
+dctran density=18.0%, ac density=18.0%
