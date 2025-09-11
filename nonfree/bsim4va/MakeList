@@ -1,14 +1,24 @@
 SECTION = nonfree/bsim4va
-TARGET = bsim4
+MODEL = bsim4
+TARGET = $(MODEL) $(MODEL)_nmos $(MODEL)_pmos
 PLUGINS_SO = ${TARGET:%=%.so}
-$(PLUGINS_SO):
 
 TESTDIR = ../../bsim/tests
 TESTCASES = b4_
 
-GNUCAP_LOADS = -a mgsim -a ./${TARGET}.so
-GNUCAP_INCLUDES = -i modelcard.nmos.paramset -i modelcard.pmos.paramset
+GNUCAP_LOADS = -a mgsim
+
+TEST_PARAMSET_SELECT = compiled
+
+ifeq ($(TEST_PARAMSET_SELECT), compiled)
+  GNUCAP_LOADS += -a ./$(MODEL)_nmos.so -a ./$(MODEL)_pmos.so
+  GNUCAP_INCLUDES =
+else ifeq ($(TEST_PARAMSET_SELECT), interpreted)
+  GNUCAP_LOADS += -a ./$(MODEL).so
+  GNUCAP_INCLUDES = -i modelcard.nmos.paramset -i modelcard.pmos.paramset
+endif
+
 #BUG: workaround excessive iterations in op
 GNUCAP_OPTIONS = --options\ vmin=0.0\ vmax=0.0
-GNUCAP_ARGS =  ${GNUCAP_LOADS} ${GNUCAP_INCLUDES} ${GNUCAP_OPTIONS}
 
+GNUCAP_ARGS =  ${GNUCAP_LOADS} ${GNUCAP_INCLUDES} ${GNUCAP_OPTIONS}

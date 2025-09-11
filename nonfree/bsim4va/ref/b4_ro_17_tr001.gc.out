@@ -1,33 +1,3 @@
-paramset N1 bsim4va;
-  parameter real l=0.09u;
-   parameter real w=10.0u;
-   parameter integer nf = 1;
-   parameter integer rgeomod = 0 from [0:0];
-   parameter real ad=0;
-   parameter real pd=0;
-   parameter real as=0;
-   parameter real ps=0;
-   parameter real sa=0;
-   parameter real sb=0;
-   parameter real sd=0;
- .l=l; .w=w; .nf=nf; .ad=ad; .pd=pd; .as=as; .ps=ps; .sa=sa; .sb=sb; .sd=sd; .type=1; .level=14; .version=4.80; .binunit=1; .paramchk=1; .mobmod=0; .capmod=1; .igcmod=1; .igbmod=1; .geomod=1; .rgeomod=0; .diomod=1; .rdsmod=0; .rbodymod=0; .rgatemod=1; .permod=1; .acnqsmod=0; .trnqsmod=0; .tempmod=0; .mtrlmod=1; .cvchargemod=0; .mtrlcompatmod=1; .eot=1.8e-9; .vddeot=1.5; .ados=1.1; .bdos=1.0; .tnom=27.0; .toxe=1.8e-9; .toxp=1.0e-9; .toxm=1.8e-9; .dtox=8e-10; .epsrox=3.9; .wint=5e-9; .lint=1e-9; .ll=0; .wl=0; .lln=1; .wln=1; .lw=0; .ww=0; .lwn=1; .wwn=1; .lwl=0; .wwl=0; .xpart=1; .toxref=1.4e-9; .phig=4.05; .epsrgate=11.7; .saref=5e-6; .sbref=5e-6; .wlod=2e-6; .ku0=(- 4e-6); .kvsat=0.2; .kvth0=(- 2e-8); .tku0=0; .llodku0=1.1; .wlodku0=1.1; .llodvth=1.0; .wlodvth=1.0; .lku0=1e-6; .wku0=1e-6; .pku0=0; .lkvth0=1.1e-6; .wkvth0=1.1e-6; .pkvth0=0; .stk2=0; .lodk2=1.0; .steta0=0; .lodeta0=1.0; .lambda=4e-10; .vsat=1.1e5; .vtl=2.0e5; .xn=6.0; .lc=5e-9; .rnoia=0.577; .rnoib=0.37; .tvoff=0; .tvfbsdoff=0; .vth0=0.25; .k1=0.35; .k2=0.05; .k3=0; .k3b=0; .w0=2.5e-6; .dvt0=1.8; .dvt1=0.52; .dvt2=(- 0.032); .dvt0w=0; .dvt1w=0; .dvt2w=0; .dsub=2; .minv=0.05; .voffl=0; .dvtp0=1e-7; .minvcv=2; .voffcvl=0; .dvtp1=0.05; .lpe0=5.75e-8; .lpeb=2.3e-10; .xj=2e-8; .ngate=5e20; .ndep=2.8e18; .nsd=1e20; .phin=0; .cdsc=0.0002; .cdscb=0; .cdscd=0; .cit=0; .voff=(- 0.15); .nfactor=1.2; .eta0=0.05; .etab=0; .uc=(- 3e-11); .vfb=(- 0.55); .u0=0.032; .ua=5.0e-11; .ub=3.5e-18; .a0=2; .ags=1e-20; .a1=0; .a2=1; .b0=(- 1e-20); .b1=0; .keta=0.04; .dwg=0; .dwb=0; .pclm=0.08; .pdiblc1=0.028; .pdiblc2=0.022; .pdiblcb=(- 0.005); .drout=0.45; .pvag=1e-20; .delta=0.01; .pscbe1=8.14e8; .pscbe2=5e-8; .fprout=0.2; .pdits=0.2; .pditsd=0.23; .pditsl=2.3e6; .rsh=0; .rdsw=50; .rsw=50; .rdw=50; .rdswmin=0; .rdwmin=0; .rswmin=0; .prwg=0; .prwb=6.8e-11; .wr=1; .alpha0=0.074; .alpha1=0.005; .beta0=30; .agidl=0.0001; .bgidl=2.1e9; .cgidl=0.0001; .egidl=0.8; .agisl=0.0002; .bgisl=2.1e9; .cgisl=0.0002; .egisl=0.8; .aigbacc=0.012; .bigbacc=0.0028; .cigbacc=0.002; .nigbacc=1; .aigbinv=0.014; .bigbinv=0.004; .cigbinv=0.004; .eigbinv=1.1; .nigbinv=3; .aigc=0.012; .bigc=0.0028; .cigc=0.002; .aigs=0.012; .bigs=0.0028; .cigs=0.002; .nigc=1; .poxedge=1; .pigcd=1; .ntox=1; .aigd=0.01; .bigd=0.003; .cigd=0.0015; .xrcrg1=12; .xrcrg2=5; .cgso=6.238e-10; .cgdo=6.238e-10; .cgbo=2.56e-11; .cgdl=2.495e-10; .cgsl=2.495e-10; .ckappas=0.03; .ckappad=0.03; .acde=1; .moin=15; .noff=0.9; .voffcv=(- 0.02); .kt1=(- 0.37); .kt1l=0.0; .kt2=(- 0.042); .ute=(- 1.5); .ua1=1e-9; .ub1=(- 3.5e-19); .uc1=0; .prt=0; .at=53000; .fnoimod=1; .tnoimod=0; .jss=0.0001; .jsws=1e-11; .jswgs=1e-10; .njs=1; .ijthsfwd=0.01; .ijthsrev=0.001; .bvs=10; .xjbvs=1; .jsd=0.0001; .jswd=1e-11; .jswgd=1e-10; .njd=1; .ijthdfwd=0.01; .ijthdrev=0.001; .bvd=10; .xjbvd=1; .pbs=1; .cjs=0.0005; .mjs=0.5; .pbsws=1; .cjsws=5e-10; .mjsws=0.33; .pbswgs=1; .cjswgs=3e-10; .mjswgs=0.33; .pbd=1; .cjd=0.0005; .mjd=0.5; .pbswd=1; .cjswd=5e-10; .mjswd=0.33; .pbswgd=1; .cjswgd=5e-10; .mjswgd=0.33; .tpb=0.005; .tcj=0.001; .tpbsw=0.005; .tcjsw=0.001; .tpbswg=0.005; .tcjswg=0.001; .xtis=3; .xtid=3; .dmcg=0; .dmci=0; .dmdg=0; .dmcgt=0; .dwj=0; .xgw=0; .xgl=0; .rshg=0.4; .gbmin=1e-10; .rbpb=5; .rbpd=15; .rbps=15; .rbdb=15; .rbsb=15; .ngcon=1; .jtss=1e-4; .jtsd=1e-4; .jtssws=1e-10; .jtsswd=1e-10; .jtsswgs=1e-7; .jtsswgd=1e-7; .njts=20.0; .njtssw=15; .njtsswg=6; .vtss=10; .vtsd=10; .vtssws=10; .vtsswd=10; .njtsd=15.0; .njtsswd=20; .njtsswgd=6; .tnjts=0.1; .tnjtsd=0.05; .vtsswgs=2; .vtsswgd=2; .xtss=0.02; .xtsd=0.02; .xtssws=0.02; .xtsswd=0.02; .xtsswgs=0.02; .xtsswgd=0.02;
-endparamset
-
-paramset P1 bsim4va;
-  parameter real l=0.09u;
-   parameter real w=10.0u;
-   parameter integer nf=1;
-   parameter integer rgeomod = 0 from [0:0];
-   parameter real ad=0;
-   parameter real pd=0;
-   parameter real as=0;
-   parameter real ps=0;
-   parameter real sa=0;
-   parameter real sb=0;
-   parameter real sd=0;
- .l=l; .w=w; .nf=nf; .ad=ad; .pd=pd; .ps=ps; .as=as; .sa=sa; .sb=sb; .sd=sd; .type=(- 1); .level=14; .version=4.80; .binunit=1; .paramchk=1; .mobmod=0; .capmod=2; .igcmod=1; .igbmod=1; .geomod=1; .diomod=1; .rdsmod=0; .rbodymod=0; .rgatemod=1; .permod=1; .acnqsmod=0; .trnqsmod=0; .tempmod=0; .mtrlmod=1; .cvchargemod=0; .mtrlcompatmod=1; .eot=1.8e-9; .vddeot=(- 1.5); .ados=1.1; .bdos=1.0; .tnom=27.0; .toxe=1.8e-9; .toxp=1.0e-9; .toxm=1.8e-9; .dtox=8e-10; .epsrox=3.9; .wint=5e-9; .lint=1e-9; .ll=0; .wl=0; .lln=1; .wln=1; .lw=0; .ww=0; .lwn=1; .wwn=1; .lwl=0; .wwl=0; .xpart=0; .toxref=1.8e-9; .phig=4.05; .epsrgate=11.7; .saref=5e-6; .sbref=5e-6; .wlod=2e-6; .ku0=4e-6; .kvsat=0.2; .kvth0=(- 2e-8); .tku0=0.0; .llodku0=1.1; .wlodku0=1.1; .llodvth=1.0; .wlodvth=1.0; .lku0=1e-6; .wku0=1e-6; .pku0=0.0; .lkvth0=1.1e-6; .wkvth0=1.1e-6; .pkvth0=0; .stk2=0; .lodk2=1.0; .steta0=0; .lodeta0=1.0; .lambda=4e-10; .vsat=1.1e5; .vtl=2.0e5; .xn=6.0; .lc=5e-9; .rnoia=0.577; .rnoib=0.37; .tvoff=0; .tvfbsdoff=0; .vth0=(- 0.25); .k1=0.35; .k2=0.05; .k3=0; .k3b=0; .w0=2.5e-6; .dvt0=1.8; .dvt1=0.52; .dvt2=(- 0.032); .dvt0w=0; .dvt1w=0; .dvt2w=0; .dsub=2; .minv=0.05; .voffl=0; .dvtp0=1e-7; .minvcv=2; .voffcvl=0; .dvtp1=0.05; .lpe0=5.75e-8; .lpeb=2.3e-10; .xj=2e-8; .ngate=5e20; .ndep=2.8e18; .nsd=1e20; .phin=0; .cdsc=0.0002; .cdscb=0; .cdscd=0; .cit=0; .voff=(- 0.15); .nfactor=1.2; .eta0=0.05; .etab=0; .vfb=0.55; .u0=0.0095; .ua=5.0e-11; .ub=3.5e-18; .uc=(- 3e-11); .a0=2; .ags=1e-20; .a1=0; .a2=1; .b0=(- 1e-20); .b1=0; .keta=0.04; .dwg=0; .dwb=0; .pclm=0.08; .pdiblc1=0.028; .pdiblc2=0.022; .pdiblcb=(- 0.005); .drout=0.45; .pvag=1e-20; .delta=0.01; .pscbe1=8.14e8; .pscbe2=5e-8; .fprout=0.2; .pdits=0.2; .pditsd=0.23; .pditsl=2.3e6; .rsh=0; .rdsw=50; .rsw=50; .rdw=50; .rdswmin=0; .rdwmin=0; .rswmin=0; .prwg=0; .prwb=6.8e-11; .wr=1; .alpha0=0.074; .alpha1=0.005; .beta0=30; .agidl=0.0002; .bgidl=2.1e9; .cgidl=0.0002; .egidl=0.8; .agisl=0.0003; .bgisl=2.5e9; .cgisl=0.0003; .egisl=0.8; .aigbacc=0.012; .bigbacc=0.0028; .cigbacc=0.002; .nigbacc=1; .aigbinv=0.014; .bigbinv=0.004; .cigbinv=0.004; .eigbinv=1.1; .nigbinv=3; .aigc=0.012; .bigc=0.0028; .cigc=0.002; .aigs=0.012; .bigs=0.0028; .cigs=0.002; .nigc=1; .poxedge=1; .pigcd=1; .ntox=1; .aigd=0.01; .bigd=0.003; .cigd=0.0015; .xrcrg1=12; .xrcrg2=5; .cgso=6.238e-10; .cgdo=6.238e-10; .cgbo=2.56e-11; .cgdl=2.495e-10; .cgsl=2.495e-10; .ckappas=0.03; .ckappad=0.03; .acde=1; .moin=15; .noff=0.9; .voffcv=0.02; .kt1=(- 0.37); .kt1l=0.0; .kt2=(- 0.042); .ute=(- 1.5); .ua1=1e-9; .ub1=(- 3.5e-19); .uc1=0; .prt=0; .at=53000; .fnoimod=1; .tnoimod=0; .jss=0.0001; .jsws=1e-11; .jswgs=1e-10; .njs=1; .ijthsfwd=0.01; .ijthsrev=0.001; .bvs=10; .xjbvs=1; .jsd=0.0001; .jswd=1e-11; .jswgd=1e-10; .njd=1; .ijthdfwd=0.01; .ijthdrev=0.001; .bvd=10; .xjbvd=1; .pbs=1; .cjs=0.0005; .mjs=0.5; .pbsws=1; .cjsws=5e-10; .mjsws=0.33; .pbswgs=1; .cjswgs=3e-10; .mjswgs=0.33; .pbd=1; .cjd=0.0005; .mjd=0.5; .pbswd=1; .cjswd=5e-10; .mjswd=0.33; .pbswgd=1; .cjswgd=5e-10; .mjswgd=0.33; .tpb=0.005; .tcj=0.001; .tpbsw=0.005; .tcjsw=0.001; .tpbswg=0.005; .tcjswg=0.001; .xtis=3; .xtid=3; .dmcg=0; .dmci=0; .dmdg=0; .dmcgt=0; .dwj=0; .xgw=0; .xgl=0; .rshg=0.4; .gbmin=1e-10; .rbpb=5; .rbpd=15; .rbps=15; .rbdb=15; .rbsb=15; .ngcon=1; .jtss=1e-4; .jtsd=1e-4; .jtssws=1e-10; .jtsswd=1e-10; .jtsswgs=1e-7; .jtsswgd=1e-7; .njts=20.0; .njtssw=15; .njtsswg=4; .vtss=10; .vtsd=10; .vtssws=10; .vtsswd=10; .njtsd=15.0; .njtsswd=20; .njtsswgd=6; .tnjts=0.1; .tnjtsd=0.05; .vtsswgs=2; .vtsswgd=2; .xtss=0.02; .xtsd=0.02; .xtssws=0.02; .xtsswd=0.02; .xtsswgs=0.02; .xtsswgd=0.02;
-endparamset
-
 ground \0 ;
 // cmos inverter
 module not1 (.z(z),.a(a),.vss(vss),.vdd(vdd));
@@ -67,7 +37,7 @@ vsource #(.dc(2.0)) Vdd (.p(n01),.n(\0 ));
  700.E-12   0.07321    1.621      45.       
  800.E-12   0.074721   1.8653     45.       
  900.E-12   0.07491    1.8804     55.       
- 1.E-9      0.074872   1.8802     50.       
+ 1.E-9      0.074871   1.8802     50.       
  1.1E-9     0.074866   1.88       50.       
  1.2E-9     0.074835   1.88       51.       
  1.3E-9     0.074733   1.88       50.       
@@ -112,8 +82,8 @@ vsource #(.dc(2.0)) Vdd (.p(n01),.n(\0 ));
  5.2E-9     0.080321   0.049921   45.       
  5.3E-9     0.063277   0.81927    50.       
  5.4E-9     0.07429    1.7826     50.       
- 5.5E-9     0.074785   1.8761     50.       
- 5.6E-9     0.074663   1.8805     50.       
+ 5.5E-9     0.074784   1.8761     50.       
+ 5.6E-9     0.074662   1.8805     50.       
  5.7E-9     0.074654   1.88       50.       
  5.8E-9     0.074662   1.8799     50.       
  5.9E-9     0.074698   1.8799     50.       
@@ -133,7 +103,7 @@ vsource #(.dc(2.0)) Vdd (.p(n01),.n(\0 ));
  7.3E-9     1.9591     0.074903   50.       
  7.4E-9     1.5337     0.073999   45.       
  7.5E-9     0.17971    0.075949   40.       
- 7.6E-9     0.058055   0.33547    50.       
+ 7.6E-9     0.058055   0.33548    50.       
  7.7E-9     0.073128   1.6319     50.       
  7.8E-9     0.074934   1.8662     50.       
  7.9E-9     0.074773   1.8803     50.       
@@ -154,7 +124,7 @@ vsource #(.dc(2.0)) Vdd (.p(n01),.n(\0 ));
  9.4E-9     1.8798     0.074709   50.       
  9.5E-9     1.8827     0.074715   50.       
  9.6E-9     1.8822     0.074778   50.       
- 9.7E-9     1.8562     0.074335   50.       
+ 9.7E-9     1.8562     0.074336   50.       
  9.8E-9     0.46536    0.082284   40.       
  9.9E-9     0.058191   0.063844   45.       
  10.E-9     0.069778   1.3157     45.       

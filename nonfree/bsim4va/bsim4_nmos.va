@@ -1,0 +1,2 @@
+`include "bsim4.va"
+`include "modelcard.nmos.paramset"
