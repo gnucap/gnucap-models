@@ -6,3 +6,6 @@ install: $(PLUGINS_SO)
 	for i in ${PLUGINS_SO}; do \
 		cp $$i $(DESTDIR)$(INSTALL_DIR); \
 	done
+
+# for now.
+check: ${PLUGINS_SO}
