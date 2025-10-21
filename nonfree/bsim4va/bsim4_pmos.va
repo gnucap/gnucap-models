@@ -1,2 +1,3 @@
+`pragma modelgen nogen-module
 `include "bsim4.va"
 `include "modelcard.pmos.paramset"
