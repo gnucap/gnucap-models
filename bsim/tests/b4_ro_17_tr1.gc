@@ -34,7 +34,7 @@ not1 #() X16(.z(n18), .a(n17), .vss(\0 ), .vdd(n01));
 not1 #() X17(.z(n02), .a(n18), .vss(\0 ), .vdd(n01));
 capacitor #(.c(0.1p)) c1(n18, \0 );
 
-vsource #(.dc(2.0)) Vdd(n01, \0 );
+vsource #(.dc(vscale*2.0)) Vdd(n01, \0 );
 
 list
 print tran v(n02) v(n05) iter(0)
