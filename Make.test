@@ -27,7 +27,7 @@ prep: ${SYMLINKS}
 	-mkdir -p ${TARGETDIR}
 
 ${out_ckt}: ${TARGETDIR}/%.ckt.out: prep
-	-@${ENV} ${GNUCAP} ${GNUCAP_ARGS} -b ${testdir}/$*.ckt |tail -n +12 | \
+	-@${ENV} ${GNUCAP} --acs ${GNUCAP_ARGS} -b ${testdir}/$*.ckt |tail -n +12 | \
 		grep -v '^stashing\ as' | grep -v 'already\ installed' | grep -v ^make > $@
 
 ${out_gc}: ${TARGETDIR}/%.gc.out: prep
