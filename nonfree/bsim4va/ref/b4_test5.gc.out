@@ -1,3 +1,4 @@
+parameter real vscale = 1.0; 
 ground \0 ;
 vsource #(.dc(vd)) sd (.p(d),.n(\0 ));
 vsource #(.dc(vg)) sg (.p(g),.n(\0 ));

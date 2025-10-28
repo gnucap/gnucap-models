@@ -1,3 +1,4 @@
+parameter real vscale = 1.0; 
 // BUG: needs noincmode
 ground \0 ;
 capacitor #(.c(30f)) CQ (.p(Qnot),.n(\0 ));
@@ -19,8 +20,8 @@ P1 #(.l(0.2u),.w(3.6u)) M1 (.d(Anot),.g(A),.s(dd),.b(dd));
 N1 #(.l(0.2u),.w(1.8u)) M2 (.d(Anot),.g(A),.s(\0 ),.b(\0 ));
 P1 #(.l(0.2u),.w(3.6u)) M3 (.d(Bnot),.g(B),.s(dd),.b(dd));
 N1 #(.l(0.2u),.w(1.8u)) M4 (.d(Bnot),.g(B),.s(\0 ),.b(\0 ));
-vsource #(.dc(1.8)) vcc (.p(dd),.n(\0 ));
-vpulse #(.val0(0.0),.val1(1.8),.td(10n),.rise(0.1n),.fall(0.1n),.width(15n),.period(30n)) va (.p(A),.n(\0 ));
+vsource #(.dc(vscale*1.8)) vcc (.p(dd),.n(\0 ));
+vpulse #(.val0(0.0),.val1(vscale*1.8),.td(10n),.rise(0.1n),.fall(0.1n),.width(15n),.period(30n)) va (.p(A),.n(\0 ));
 vsource #(.dc(0.0)) vb (.p(B),.n(\0 ));
 #Time       v(A)       v(B)       v(out_l)   v(out_q)   iter(0)   
 open circuit: internal node 123
