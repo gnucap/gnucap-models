@@ -1,3 +1,4 @@
+parameter real vscale = 1.0; 
 ground \0 ;
 // cmos inverter
 module not1 (.z(z),.a(a),.vss(vss),.vdd(vdd));
@@ -25,7 +26,7 @@ not1 #() X15 (.z(n17),.a(n16),.vss(\0 ),.vdd(n01));
 not1 #() X16 (.z(n18),.a(n17),.vss(\0 ),.vdd(n01));
 not1 #() X17 (.z(n02),.a(n18),.vss(\0 ),.vdd(n01));
 capacitor #(.c(0.1p)) c1 (.p(n18),.n(\0 ));
-vsource #(.dc(2.0)) Vdd (.p(n01),.n(\0 ));
+vsource #(.dc(vscale*2.0)) Vdd (.p(n01),.n(\0 ));
 #Time       v(n02)     v(n05)     iter(0)   
  0.         0.         0.         0.        
  100.E-12   1.6812     0.55847    135.      

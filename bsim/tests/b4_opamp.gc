@@ -28,11 +28,11 @@ N1 #(.w(10u), .l(0.09u)) M2(.d(bias2), .g(in2), .s(cm),  .b(cm));
 resistor #(.r(195k)) Rbias(\0 , bias);
 capacitor #(.c(2p)) Cfb(bias2, vout);
 
+// TODO. .gain(?)
 vcvs #(.gain(-1.0), .offset(0.0)) Eid(in2, c, in1, c);
 vsine #(.mag(0.1) .dc(0.0)) Vid(in1, c);
-vsource #(.dc(-1.8)) Vss(vss, \0 );
-vsource #(.dc(+1.8)) Vdd(vdd, \0 );
-
+vsource #(.dc(-vscale*1.8)) Vss(vss, \0 );
+vsource #(.dc(vscale*1.8)) Vdd(vdd, \0 );
 
 list
 print dc v(in1) v(in2) v(vout)

@@ -1,3 +1,4 @@
+parameter real vscale = 1.0; 
 ground \0 ;
 // vsource #(.dc(0.0)) Vic(c, \0 );
 ground c;
@@ -11,10 +12,11 @@ N1 #(.l(0.09u),.w(10u)) M1 (.d(bias1),.g(in1),.s(cm),.b(cm));
 N1 #(.l(0.09u),.w(10u)) M2 (.d(bias2),.g(in2),.s(cm),.b(cm));
 resistor #(.r(195k)) Rbias (.p(\0 ),.n(bias));
 capacitor #(.c(2p)) Cfb (.p(bias2),.n(vout));
+// TODO. .gain(?)
 vcvs #(.gain(-1.0),.offset(0.0)) Eid (.p(in2),.n(c),.cp(in1),.cn(c));
 vsine #(.dc(0.0),.mag(0.1)) Vid (.p(in1),.n(c));
-vsource #(.dc(-1.8)) Vss (.p(vss),.n(\0 ));
-vsource #(.dc(+1.8)) Vdd (.p(vdd),.n(\0 ));
+vsource #(.dc(-vscale*1.8)) Vss (.p(vss),.n(\0 ));
+vsource #(.dc(vscale*1.8)) Vdd (.p(vdd),.n(\0 ));
 #             v(in1)       v(in2)       v(vout)     
 open circuit: internal node 62
 open circuit: internal node 62

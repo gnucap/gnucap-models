@@ -14,7 +14,8 @@ resistor #(.r(25k)) Rload(d, vdd);
 
 N1 #(.w(4u), .l(0.09u)) M1(.d(d), .g(g), .s(\0 ), .b(\0 ));
 
-vsource #(.dc(1.8)) Vdd(vdd, \0 );
+vsource #(.dc(vscale*1.8)) Vdd(vdd, \0 );
+// TODO
 vsine #(.mag(0.1) .dc(1.2)) Vin(in, \0 );
 
 list

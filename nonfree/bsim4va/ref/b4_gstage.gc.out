@@ -1,8 +1,10 @@
+parameter real vscale = 1.0; 
 ground \0 ;
 resistor #(.r(100k)) Rsource (.p(in),.n(g));
 resistor #(.r(25k)) Rload (.p(d),.n(vdd));
 N1 #(.l(0.09u),.w(4u)) M1 (.d(d),.g(g),.s(\0 ),.b(\0 ));
-vsource #(.dc(1.8)) Vdd (.p(vdd),.n(\0 ));
+vsource #(.dc(vscale*1.8)) Vdd (.p(vdd),.n(\0 ));
+// TODO
 vsine #(.dc(1.2),.mag(0.1)) Vin (.p(in),.n(\0 ));
 #            
  0.          
