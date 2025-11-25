@@ -1,0 +1,15 @@
+Gnucap Models, "nonfree" section
+
+Here we store model code that lacks the four freedoms. In most cases this
+means that we have no permission to distribute modified copies, for any
+purpose. The details can be a minefield and you should consult a lawyer or
+contact the respective authors if you wish to make serious use of the
+contents provided.
+
+The section name characterises the license situation of the models therein,
+not their technical quality or their usefulness. See [1] for why the former is
+considered to be of higher importance. The term "nonfree" was copied from the
+Debian project, which runs an archive with this name (actually, "non-free")
+serving a similar purpose.
+
+[1] https://www.gnu.org/philosophy/open-source-misses-the-point.html
