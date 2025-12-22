@@ -27,5 +27,3 @@ HDRS = \
 	resinit.h	\
 	resitf.h	\
 	wrapper.h
-
-

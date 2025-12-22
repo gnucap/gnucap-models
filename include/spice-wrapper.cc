@@ -636,7 +636,7 @@ int MODEL_SPICE::set_param_by_name(std::string Name, std::string Value)
 {
   if (OPT::case_insensitive) {
     notstd::to_lower(&Name);
-  }else{ untested();
+  }else{ itested();
   }
   _params.set(Name, Value);
   return Set_param_by_name(Name, to_string(_params[Name].e_val(1,scope()->params())));

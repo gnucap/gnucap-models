@@ -27,5 +27,3 @@ HDRS = \
 	vbicinit.h	\
 	vbicitf.h	\
 	wrapper.h
-
-

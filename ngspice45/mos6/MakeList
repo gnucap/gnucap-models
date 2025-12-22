@@ -24,4 +24,3 @@ HDRS = \
 	mos6init.h	\
 	mos6itf.h	\
 	wrapper.h
-

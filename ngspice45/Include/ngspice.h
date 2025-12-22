@@ -60,18 +60,6 @@
 #include <fcntl.h>
 #endif
 
-#ifdef HAVE_TERMIOS_H
-#include <termios.h>
-#else
-#  ifdef HAVE_SGTTY_H
-#  include <sgtty.h>
-#    else
-#    ifdef HAVE_TERMIO_H
-#      include <termio.h>
-#    endif
-#  endif
-#endif
-
 #ifdef HAVE_PWD_H
 #include <pwd.h>
 #endif
@@ -117,15 +105,17 @@
 #    include <sys/time.h>
 #    include <sys/resource.h>
 #  endif
-#else
-#  ifdef HAVE_TIMES
-#    include <sys/times.h>
-#    include <sys/param.h>
-#  else
-#    ifdef HAVE_FTIME
-#      include <sys/timeb.h>
-#    endif
-#  endif
+#endif
+
+#ifdef HAVE_TIMES
+#  include <sys/times.h>
+#  include <sys/param.h>
+#endif
+#ifdef HAVE_GETTIMEOFDAY
+#  include <sys/time.h>
+#endif
+#ifdef HAVE_FTIME
+#  include <sys/timeb.h>
 #endif
 
 #ifdef HAVE_UNISTD_H
@@ -194,11 +184,6 @@ extern double x_atanh(double);
 #define inline __inline
 #define popen _popen
 #define pclose _pclose
-
-// undo a #define bool _Bool in MS Visual Studio 2015
-#if defined(bool)
-#undef bool
-#endif
 
 // warning C4127: Bedingter Ausdruck ist konstant
 #pragma warning(disable: 4127)

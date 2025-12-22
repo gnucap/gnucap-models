@@ -27,5 +27,3 @@ HDRS = \
 	mesinit.h	\
 	mesitf.h	\
 	wrapper.h
-
-

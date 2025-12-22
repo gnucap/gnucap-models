@@ -1,12 +1,12 @@
 extern "C" {
-  #include "bsim4def.h"
+  #include "bsim4v7def.h"
   #define DEV_bsim4
-  #include "bsim4itf.h"
+  #include "bsim4v7itf.h"
 }
 
-#define info	 B4info
-#define INSTANCE BSIM4instance
-#define MODEL	 BSIM4model
+#define info	 BSIM4v7info
+#define INSTANCE BSIM4v7instance
+#define MODEL	 BSIM4v7model
 
 #define SPICE_LETTER "M"
 #define DEVICE_TYPE "bsim470|bsim4"
@@ -25,7 +25,6 @@ static std::string state_names[] = {"vbd",   "vbs",   "vgs",    "vds",  "vdbs", 
 #define IS_VALID {itested();							\
     assert(d);									\
     const COMMON_PARAMLIST* c = dynamic_cast<const COMMON_PARAMLIST*>(d->common());	\
-	 if(!c) return false; \
     assert(c);									\
     double l_in = c->_params["l"].e_val(OPT::defl, d->scope()->params());	\
     double w_in = c->_params["w"].e_val(OPT::defw, d->scope()->params());	\

@@ -22,7 +22,7 @@ CFILES = \
 	b1set.c		\
 	b1temp.c	\
 	b1trunc.c	\
-	bsim1init.c
+	bsim1init.c	\
 
 HDRS = \
 	bsim1def.h	\

@@ -79,7 +79,20 @@ DIOsetup(SMPmatrix *matrix, GENmodel *inModel, CKTcircuit *ckt, int *states)
             model->DIOtranTimeTemp2 = 0.0;
         }
         if(!model->DIOjunctionCapGiven) {
-            model->DIOjunctionCap = 0;
+            if (newcompat.ps || newcompat.lt) {
+                double cdiode = 0.;
+                /* to improve convergence (sometimes) */
+                if (cp_getvar("diode_cj0", CP_REAL, &cdiode, 0) && cdiode > 0) {
+                    model->DIOjunctionCap = cdiode;
+                    if (ft_ngdebug)
+                        fprintf(stderr, "Diode junction capacitance in model %s set to %e F\n", model->gen.GENmodName, cdiode);
+                }
+                else
+                    model->DIOjunctionCap = 0.0;
+            }
+            else {
+                model->DIOjunctionCap = 0.0;
+            }
         }
         if(!model->DIOjunctionSWCapGiven) {
             model->DIOjunctionSWCap = 0;
@@ -210,10 +223,12 @@ DIOsetup(SMPmatrix *matrix, GENmodel *inModel, CKTcircuit *ckt, int *states)
         if((!model->DIOresistGiven) || (model->DIOresist==0)) {
             if (newcompat.ps || newcompat.lt) {
                 double rsdiode = 0.;
-                if (cp_getvar("rsdiode", CP_REAL, &rsdiode, 0) && rsdiode > 0) {
-                    model->DIOconductance = 1./rsdiode; /* sometimes improves convergence */
+                /* to improve convergence (sometimes) */
+                if (cp_getvar("diode_rser", CP_REAL, &rsdiode, 0) && rsdiode > 0) {
+                    model->DIOconductance = 1./rsdiode;
+                    model->DIOresist = rsdiode;
                     if (ft_ngdebug)
-                        fprintf(stderr, "Diode series resistance in model %s set to 100 microOhm\n", model->gen.GENmodName);
+                        fprintf(stderr, "Diode series resistance in model %s set to %e Ohm\n", model->gen.GENmodName, rsdiode);
                 }
                 else
                     model->DIOconductance = 0.0;
@@ -281,18 +296,14 @@ DIOsetup(SMPmatrix *matrix, GENmodel *inModel, CKTcircuit *ckt, int *states)
                 here->DIOm = 1;
             }
 
-            here->DIOarea = here->DIOarea * here->DIOm;
-            here->DIOpj = here->DIOpj * here->DIOm;
             here->DIOcmetal = 0.0;
             here->DIOcpoly = 0.0;
             if (model->DIOlevel == 3) {
                 double wm, lm, wp, lp;
                 if((here->DIOwGiven) && (here->DIOlGiven))  {
-                    here->DIOarea = (here->DIOw+model->DIOmaskOffset) * (here->DIOl+model->DIOmaskOffset) * here->DIOm;
-                    here->DIOpj = (2 * (here->DIOw+model->DIOmaskOffset) + 2 * (here->DIOl+model->DIOmaskOffset)) * here->DIOm;
+                    here->DIOarea = (here->DIOw+model->DIOmaskOffset) * (here->DIOl+model->DIOmaskOffset) * here->DIOm * scale * scale;
+                    here->DIOpj = (2 * (here->DIOw+model->DIOmaskOffset) + 2 * (here->DIOl+model->DIOmaskOffset)) * here->DIOm * scale;
                 }
-                here->DIOarea = here->DIOarea * scale * scale;
-                here->DIOpj = here->DIOpj * scale;
                 if (here->DIOwidthMetalGiven)
                     wm = here->DIOwidthMetal;
                 else
@@ -316,10 +327,10 @@ DIOsetup(SMPmatrix *matrix, GENmodel *inModel, CKTcircuit *ckt, int *states)
                                   * (wp * scale + model->DIOpolyMaskOffset)
                                   * (lp * scale + model->DIOpolyMaskOffset);
             }
-            here->DIOforwardKneeCurrent = model->DIOforwardKneeCurrent * here->DIOarea;
-            here->DIOreverseKneeCurrent = model->DIOreverseKneeCurrent * here->DIOarea;
-            here->DIOjunctionCap = model->DIOjunctionCap * here->DIOarea;
-            here->DIOjunctionSWCap = model->DIOjunctionSWCap * here->DIOpj;
+            here->DIOforwardKneeCurrent = model->DIOforwardKneeCurrent * here->DIOarea * here->DIOm;
+            here->DIOreverseKneeCurrent = model->DIOreverseKneeCurrent * here->DIOarea * here->DIOm;
+            here->DIOjunctionCap = model->DIOjunctionCap * here->DIOarea * here->DIOm;
+            here->DIOjunctionSWCap = model->DIOjunctionSWCap * here->DIOpj * here->DIOm;
 
             here->DIOstate = *states;
             *states += DIOnumStates;

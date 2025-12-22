@@ -13,7 +13,6 @@ CFILES = \
 	b4getic.c	\
 	b4ld.c		\
 	b4mask.c	\
-	b4mdel.c	\
 	b4mpar.c	\
 	b4noi.c		\
 	b4par.c		\
@@ -30,4 +29,3 @@ HDRS = \
 	bsim4init.h	\
 	bsim4itf.h	\
 	wrapper.h
-

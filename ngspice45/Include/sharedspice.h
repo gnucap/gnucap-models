@@ -3,11 +3,20 @@
 /* Modified BSD license */
 
 /*
-Interface between a calling program (caller) and ngspice.dll (ngspice.so)
+Interface between a calling program (caller) and ngspice.dll (libngspice.so)
+
 **
 ngSpice_nospinit(void)
 Set variable no_spinit, if reading the initialization file 'spinit' is not wanted.
 To be called before ngSpice_Init()
+
+**
+ngSpice_nospiceinit(void)
+Set variable no_spiceinit, if reading the user defined initialization file 
+'.spiceinit' is not wanted.
+To be called before ngSpice_Init().
+Use with care, as this removes the last chance to send preparative commands
+before the netlist is loaded. Then use the the caller to send such commands.
 
 **
 ngSpice_Init(SendChar*, SendStat*, ControlledExit*,
@@ -97,6 +106,10 @@ during reading output vectors in the primary thread, while the simulation in the
 background thread is moving on.
 
 **
+int ngSpice_Reset(void)
+Reset ngspice as far as possible
+
+**
 Additional basics:
 No memory mallocing and freeing across the interface:
 Memory allocated in ngspice.dll has to be freed in ngspice.dll.
@@ -111,7 +124,7 @@ are of type bool if sharedspice.h is used externally.
 */
 
 #ifndef NGSPICE_PACKAGE_VERSION
-#define NGSPICE_PACKAGE_VERSION "43"
+#define NGSPICE_PACKAGE_VERSION "44"
 #endif
 /* we have NG_BOOL instead of BOOL */
 #ifndef HAS_NG_BOOL
@@ -154,15 +167,8 @@ struct ngcomplex {
 typedef struct ngcomplex ngcomplex_t;
 #endif
 
-/* NG_BOOL is the boolean variable at the ngspice interface.
-   When ompiling ngspice shared module, typedef to _BOOL, which is boolean in C,
-   when used externally, keep it to be of type bool,
-   as has been available in the past. */
-#ifndef SHARED_MODULE
+/* NG_BOOL is the boolean variable at the ngspice interface.*/
 typedef bool NG_BOOL;
-#else
-typedef _Bool NG_BOOL;
-#endif
 
 /* vector info obtained from any vector in ngspice.dll.
    Allows direct access to the ngspice internal vector structure,
@@ -448,6 +454,10 @@ NG_BOOL ngSpice_SetBkpt(double time);
 /* Set variable no_spinit, if reading 'spinit' is not wanted. */
 IMPEXP
 int ngSpice_nospinit(void);
+
+/* Set variable no_spiceinit, if reading '.spiceinit' is not wanted. */
+IMPEXP
+int ngSpice_nospiceinit(void);
 
 #ifdef __cplusplus
 }

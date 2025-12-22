@@ -1,7 +1,7 @@
 
 dio:
 - works pretty much like ngspice17
-- except noise & m looks broken, see dio.noise0m.gc
+- noise & m no longer looks broken, see dio.noise0m.gc
 - need to revisit SenCond, maybe TranSEN could do it?
 
 bjt:

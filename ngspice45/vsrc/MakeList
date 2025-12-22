@@ -24,5 +24,3 @@ HDRS = \
 	vsrcinit.h	\
 	vsrcitf.h	\
 	wrapper.h
-
-

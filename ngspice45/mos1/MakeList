@@ -34,5 +34,3 @@ HDRS = \
 	mos1init.h	\
 	mos1itf.h	\
 	wrapper.h
-
-

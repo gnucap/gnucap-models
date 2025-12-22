@@ -20,9 +20,10 @@ install: configure_stub
 GNUCAP = gnucap
 # TODO: load with wildcard.
 # BUG: depends on attach order.
-GNUCAP_ARGS = -a ./dio -a ./vbic -a ./bjt -a ./jfet -a ./bsim2 -a ./bsim1 -a ./mes \
-              -a ./mesa -a ./hfet1 -a ./hfet2 -a ./mos1 -a ./mos6 \
-              -a ./bsim3
+GNUCAP_ARGS = ${SUBDIRS:%=-a ./%}
+GNUCAP_ARGS = -a ./dio -a ./vbic -a ./bjt -a ./jfet -a ./mes \
+              -a ./mesa -a ./hfet1 -a ./hfet2 -a ./mos1 -a ./mos2 -a ./mos6 \
+              -a ./bsim1 -a ./bsim2 -a ./bsim3
 include ../Make.test
 
 configure_stub:

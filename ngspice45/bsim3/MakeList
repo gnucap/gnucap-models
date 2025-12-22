@@ -29,5 +29,3 @@ HDRS = \
 	bsim3init.h	\
 	bsim3itf.h	\
 	wrapper.h
-
-
