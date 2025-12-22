@@ -1723,15 +1723,24 @@ extern "C" {
   char *errMsg = NULL;
   char *errRtn = NULL;
 #if NGSPICE>=42
-  bool cp_getvar(char *, enum cp_types, void *, size_t){return false;} // from 42
+  bool cp_getvar(char * name, enum cp_types t, void * v, size_t /*def*/){
+    if(!name){untested();
+      return false;
+    }else if(!strcmp(name, "scale")){
+      assert(t == CP_REAL);
+      *((double*)v) = OPT::scale;
+      return true;
+    }else{
+      // incomplete();
+      return false;
+    }
+  }
   int CKTfndBranch(CKTcircuit *, IFuid){incomplete(); unreachable(); return 0;}
   void controlled_exit(int){unreachable();}
   void INPfreeTree(IFparseTree *){unreachable();}
   void wl_free(wordlist *){} // incomplete?
   void wl_append_word(wordlist **, wordlist **, char *){} // incomplete?
   char *dup_string(const char *str, size_t){return strdup(str);}
-#elif NGSPICE>=35
-  bool cp_getvar(char *, enum cp_types, void *, size_t){return false;} // from 35
 #elif NGSPICE>=31
   bool cp_getvar(char *, enum cp_types, void *, size_t){return false;} // from 31
 #elif NGSPICE>=22
