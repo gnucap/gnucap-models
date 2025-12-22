@@ -30,7 +30,7 @@ SO_EXTENSION = .so
 
 .SUFFIXES:
 .SUFFIXES: .o .cc .c
-.cc.o:; $(CXX) $(CCFLAGS) -c $<
+.cc.o:; $(CXX) $(CCFLAGS) ${CXXFLAGS} -c $<
 .c.o:; $(CC) $(CFLAGS) -c $<
 
 $(TARGET) : $(TARGET)$(SO_EXTENSION)

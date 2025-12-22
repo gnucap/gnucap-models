@@ -4,6 +4,6 @@ SUBDIRS = \
 	bsim \
 	jspice3-2.5 \
 	ngspice17 \
-	ngspice43 \
+	ngspice45 \
 	spice3f5
 
