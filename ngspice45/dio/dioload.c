@@ -451,7 +451,7 @@ next1:
                     if (ckt->CKTmode & MODEINITSMSIG){
                         *(ckt->CKTstate0 + here->DIOcapCurrent) = capd;
 
-                        if(1||SenCond){ // gnucap
+                        if(SenCond){
                             *(ckt->CKTstate0 + here->DIOcurrent) = cd;
                             *(ckt->CKTstate0 + here->DIOconduct) = gd;
                             *(ckt->CKTstate0 + here->DIOdIdio_dT) = dIdio_dT;
