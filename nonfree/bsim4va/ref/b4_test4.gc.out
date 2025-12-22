@@ -1,7 +1,7 @@
 module main (.d(d));
     output d;
     electrical d;
-    ground gnd;
+  ground gnd;
   parameter real vd = 0.;
   parameter real vg = 0.;
   vsource #(.dc(vd)) sd (d, gnd);
