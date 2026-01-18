@@ -20,7 +20,7 @@ GNUCAP_LOADS = -a mgsim
 #BUG: workaround excessive iterations in op
 GNUCAP_OPTIONS = --options\ vmin=0.0\ vmax=0.0
 
-TEST_PARAMSET_SELECT = interpreted
+TEST_PARAMSET_SELECT = compiled
 
 ifeq ($(TEST_PARAMSET_SELECT), compiled)
   GNUCAP_INCLUDES =

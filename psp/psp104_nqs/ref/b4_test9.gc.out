@@ -1,31 +1,3 @@
-paramset N1 PSPNQS104VA;
-  parameter real l=1.0u;
-  parameter real w=1.0u;
-  parameter integer nf=1;
-  parameter real ad=1.0e-12;
-  parameter real pd=1.0e-6;
-  parameter real as=1.0e-12;
-  parameter real ps=1.0e-6;
-  parameter real sa=0.0;
-  parameter real sb=0.0;
-  parameter real sd=0.0;
- .TYPE=1; .L=l; .W=w; .NF=nf; .AD=ad; .PD=pd; .AS=as; .PS=ps; .SA=sa; .SB=sb; .SD=sd;
-endparamset
-
-paramset P1 PSPNQS104VA;
-  parameter real l=1.0u;
-  parameter real w=1.0u;
-  parameter integer nf=1;
-  parameter real ad=1.0e-12;
-  parameter real pd=1.0e-6;
-  parameter real as=1.0e-12;
-  parameter real ps=1.0e-6;
-  parameter real sa=0.0;
-  parameter real sb=0.0;
-  parameter real sd=0.0;
- .TYPE=(- 1); .L=l; .W=w; .NF=nf; .AD=ad; .PD=pd; .AS=as; .PS=ps; .SA=sa; .SB=sb; .SD=sd;
-endparamset
-
 parameter real vscale = 0.66666666; 
 ground \0 ;
 vsource #(.dc(vd)) sd (.p(d),.n(\0 ));
@@ -160,7 +132,7 @@ P1 #(.l(0.09u),.w(10.0u)) M1 (.d(d),.g(g),.s(s),.b(b));
 -1.16      -0.3        0.         3.        
 -1.18      -0.3        0.         3.        
 -1.2       -0.3        0.         3.        
- 0.        -0.6        1.E-21     4.        
+ 0.        -0.6        5.E-21     4.        
 -0.02      -0.6        94.535E-6  4.        
 -0.04      -0.6        164.58E-6  4.        
 -0.06      -0.6        212.53E-6  4.        
@@ -221,7 +193,7 @@ P1 #(.l(0.09u),.w(10.0u)) M1 (.d(d),.g(g),.s(s),.b(b));
 -1.16      -0.6        355.08E-6  4.        
 -1.18      -0.6        355.57E-6  4.        
 -1.2       -0.6        356.05E-6  4.        
- 0.        -0.9       -347.E-21   5.        
+ 0.        -0.9       -87.E-21    5.        
 -0.02      -0.9        326.54E-6  4.        
 -0.04      -0.9        631.E-6    4.        
 -0.06      -0.9        909.19E-6  4.        
@@ -282,7 +254,7 @@ P1 #(.l(0.09u),.w(10.0u)) M1 (.d(d),.g(g),.s(s),.b(b));
 -1.16      -0.9        0.0032357  4.        
 -1.18      -0.9        0.0032418  4.        
 -1.2       -0.9        0.0032478  4.        
- 0.        -1.2       -21.86E-18  5.        
+ 0.        -1.2        15.96E-18  5.        
 -0.02      -1.2        483.85E-6  4.        
 -0.04      -1.2        951.61E-6  4.        
 -0.06      -1.2        0.0013991  4.        
@@ -347,4 +319,4 @@ Gnucap   System status
 iterations: op=0, dc=1144, tran=0, fourier=0, total=1144
 transient timesteps: accepted=0, rejected=0, total=0
 nodes: user=4, subckt=0, model=26, total=30
-dctran density=55.6%, ac density=55.6%
+dctran density=55.3%, ac density=55.3%

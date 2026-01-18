@@ -5,7 +5,7 @@ For now, we use the same test cases for the psp as for the Berkeley BSIM model
 
 ## Test variations
 
-$ make check TEST_PARAMSET_SELECT=compiled # (not yet implemented)
+$ make check TEST_PARAMSET_SELECT=compiled # (default)
 tests compiled paramsets, psp_{n,p}mos.so
 
 $ make check TEST_PARAMSET_SELECT=interpreted
