@@ -1,3 +1,8 @@
+# Makefile for Gnucap tests
+# (c) Felix Salfelder 2024
+#     Lukas Deutz 2026
+# GPLv3+
+
 srcdir = .
 ref = ${srcdir}/ref
 testdir = ${srcdir}/${TESTDIR}
@@ -9,14 +14,14 @@ DIFF_FLAGS = -rup
 glob_ckt = $(shell cd ${testdir}; ls *.ckt)
 glob_gc = $(shell cd ${testdir}; ls *.gc)
 
-TEST_PATTERNS = $(if $(strip $(TESTCASES)),$(TESTCASES:%=%%),%)
-CHECK_TARGETS = $(if $(strip $(TESTCASES)),$(TESTCASES:%=$(TARGETDIR)/%.diff),$(TARGETDIR)/.diff)
+test_patterns = $(if $(strip $(TESTCASES)),$(TESTCASES:%=%%),%)
+check_targets = $(if $(strip $(TESTCASES)),$(TESTCASES:%=$(TARGETDIR)/%.diff),$(TARGETDIR)/.diff)
 
-filt_ckt = $(filter ${TEST_PATTERNS}, ${glob_ckt})
-filt_gc = $(filter ${TEST_PATTERNS}, ${glob_gc})
+filt_ckt = $(filter ${test_patterns}, ${glob_ckt})
+filt_gc = $(filter ${test_patterns}, ${glob_gc})
 
-_filt_ckt = $(filter-out ${EXCLUDE:%=%%}, ${filt_ckt})
-_filt_gc = $(filter-out ${EXCLUDE:%=%%}, ${filt_gc})
+_filt_ckt = $(filter-out ${TESTEXCLUDE:%=%%}, ${filt_ckt})
+_filt_gc = $(filter-out ${TESTEXCLUDE:%=%%}, ${filt_gc})
 
 out_ckt = ${_filt_ckt:%=${TARGETDIR}/%.out}
 out_gc = ${_filt_gc:%=${TARGETDIR}/%.out}
@@ -39,12 +44,12 @@ ${out_gc}: ${TARGETDIR}/%.gc.out: prep
 		grep -v '^stashing\ as' | grep -v 'already\ installed' | grep -v ^make > $@
 
 # TODO: maybe cat the diff, so it can be logged?
-check: $(CHECK_TARGETS)
+check: $(check_targets)
 	@find ${TARGETDIR} -size 0 -delete;
 	@echo ==
 
 	@for f in $+; do \
-  	  if [ -s $$f ]; then \
+	  if [ -s $$f ]; then \
 		echo "test failures in $${f##*/}:"; \
 		ls -larS $${f%.diff}*.diff; \
 	  else \
@@ -62,7 +67,7 @@ ${diff}: ${TARGETDIR}/%.diff: ${TARGETDIR}/%.out
 	  echo FAIL: $*; \
 	fi
 
-define MAKE_CECK_DEPENDENCIES
+define make_diff_rule
 $(TARGETDIR)/$(1).diff: $$(filter $(TARGETDIR)/$(1)%, $(diff))
 	@rm -f $$@
 	@for i in $$^; do \
@@ -73,8 +78,8 @@ endef
 
 # TESTCASES empty (no prefixes)
 ifeq ($(strip $(TESTCASES)),)
-  $(eval $(call MAKE_CECK_DEPENDENCIES,))
+  $(eval $(call make_diff_rule,))
 # TESTCASES not empty (one or more prefixes)
 else
-  $(foreach p,$(TESTCASES),$(eval $(call MAKE_CECK_DEPENDENCIES,$(p))))
+  $(foreach p,$(TESTCASES),$(eval $(call make_diff_rule,$(p))))
 endif
