@@ -1,4 +1,3 @@
-
 srcdir = .
 ref = ${srcdir}/ref
 testdir = ${srcdir}/${TESTDIR}
@@ -10,14 +9,20 @@ DIFF_FLAGS = -rup
 glob_ckt = $(shell cd ${testdir}; ls *.ckt)
 glob_gc = $(shell cd ${testdir}; ls *.gc)
 
-filt_ckt = $(filter ${TESTCASES}%, ${glob_ckt})
-filt_gc = $(filter ${TESTCASES}%, ${glob_gc})
+TEST_PATTERNS = $(if $(strip $(TESTCASES)),$(TESTCASES:%=%%),%)
+CHECK_TARGETS = $(if $(strip $(TESTCASES)),$(TESTCASES:%=$(TARGETDIR)/%.diff),$(TARGETDIR)/.diff)
 
-out_ckt = ${filt_ckt:%=${TARGETDIR}/%.out}
-out_gc = ${filt_gc:%=${TARGETDIR}/%.out}
+filt_ckt = $(filter ${TEST_PATTERNS}, ${glob_ckt})
+filt_gc = $(filter ${TEST_PATTERNS}, ${glob_gc})
 
-diff_ckt = ${filt_ckt:%=${TARGETDIR}/%.diff}
-diff_gc = ${filt_gc:%=${TARGETDIR}/%.diff}
+_filt_ckt = $(filter-out ${EXCLUDE:%=%%}, ${filt_ckt})
+_filt_gc = $(filter-out ${EXCLUDE:%=%%}, ${filt_gc})
+
+out_ckt = ${_filt_ckt:%=${TARGETDIR}/%.out}
+out_gc = ${_filt_gc:%=${TARGETDIR}/%.out}
+
+diff_ckt = ${_filt_ckt:%=${TARGETDIR}/%.diff}
+diff_gc = ${_filt_gc:%=${TARGETDIR}/%.diff}
 
 diff = ${diff_ckt} ${diff_gc}
 
@@ -34,15 +39,18 @@ ${out_gc}: ${TARGETDIR}/%.gc.out: prep
 		grep -v '^stashing\ as' | grep -v 'already\ installed' | grep -v ^make > $@
 
 # TODO: maybe cat the diff, so it can be logged?
-check: ${TARGETDIR}/${TESTCASES}.diff
+check: $(CHECK_TARGETS)
 	@find ${TARGETDIR} -size 0 -delete;
 	@echo ==
-	@if [ -s ${TARGETDIR}/${TESTCASES}.diff ]; then \
-		echo test failures:; \
-		ls -larS ${TARGETDIR}/${TESTCASES}*.diff; \
-	else \
-		echo all ${TESTCASES} passed; \
-	fi
+
+	@for f in $+; do \
+  	  if [ -s $$f ]; then \
+		echo "test failures in $${f##*/}:"; \
+		ls -larS $${f%.diff}*.diff; \
+	  else \
+	    echo "all $${f##*/} passed"; \
+	  fi; \
+	done
 
 ${diff}: ${TARGETDIR}/%.diff: ${TARGETDIR}/%.out
 	@if [ ! -f ${ref}/$*.out ]; then \
@@ -54,5 +62,19 @@ ${diff}: ${TARGETDIR}/%.diff: ${TARGETDIR}/%.out
 	  echo FAIL: $*; \
 	fi
 
-${TARGETDIR}/${TESTCASES}.diff : ${diff}
-	@for i in $+; do echo $$i; cat $$i; done > $@
+define MAKE_CECK_DEPENDENCIES
+$(TARGETDIR)/$(1).diff: $$(filter $(TARGETDIR)/$(1)%, $(diff))
+	@rm -f $$@
+	@for i in $$^; do \
+	  [ -s "$$$$i" ] && (echo "--- $$$$i"; cat $$$$i) >> "$$@" || true; \
+	done; \
+	[ -s "$$@" ] || rm -f "$$@"
+endef
+
+# TESTCASES empty (no prefixes)
+ifeq ($(strip $(TESTCASES)),)
+  $(eval $(call MAKE_CECK_DEPENDENCIES,))
+# TESTCASES not empty (one or more prefixes)
+else
+  $(foreach p,$(TESTCASES),$(eval $(call MAKE_CECK_DEPENDENCIES,$(p))))
+endif
