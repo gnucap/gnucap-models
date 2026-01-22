@@ -1,3 +1,7 @@
+# Makefile for Gnucap tests
+# (c) Felix Salfelder 2024
+#     Lukas Deutz 2026
+# GPLv3+
 
 srcdir = .
 ref = ${srcdir}/ref
@@ -10,14 +14,20 @@ DIFF_FLAGS = -rup
 glob_ckt = $(shell cd ${testdir}; ls *.ckt)
 glob_gc = $(shell cd ${testdir}; ls *.gc)
 
-filt_ckt = $(filter ${TESTCASES}%, ${glob_ckt})
-filt_gc = $(filter ${TESTCASES}%, ${glob_gc})
+test_patterns = $(if $(strip $(TESTCASES)),$(TESTCASES:%=%%),%)
+check_targets = $(if $(strip $(TESTCASES)),$(TESTCASES:%=$(TARGETDIR)/%.diff),$(TARGETDIR)/.diff)
 
-out_ckt = ${filt_ckt:%=${TARGETDIR}/%.out}
-out_gc = ${filt_gc:%=${TARGETDIR}/%.out}
+filt_ckt = $(filter ${test_patterns}, ${glob_ckt})
+filt_gc = $(filter ${test_patterns}, ${glob_gc})
 
-diff_ckt = ${filt_ckt:%=${TARGETDIR}/%.diff}
-diff_gc = ${filt_gc:%=${TARGETDIR}/%.diff}
+_filt_ckt = $(filter-out ${TESTEXCLUDE:%=%%}, ${filt_ckt})
+_filt_gc = $(filter-out ${TESTEXCLUDE:%=%%}, ${filt_gc})
+
+out_ckt = ${_filt_ckt:%=${TARGETDIR}/%.out}
+out_gc = ${_filt_gc:%=${TARGETDIR}/%.out}
+
+diff_ckt = ${_filt_ckt:%=${TARGETDIR}/%.diff}
+diff_gc = ${_filt_gc:%=${TARGETDIR}/%.diff}
 
 diff = ${diff_ckt} ${diff_gc}
 
@@ -25,24 +35,30 @@ prep: ${SYMLINKS} ${TEST_PLUGINS}
 	# @[ ! -s "${TARGETDIR}" ]
 	-mkdir -p ${TARGETDIR}
 
+SHELL=/bin/bash
 ${out_ckt}: ${TARGETDIR}/%.ckt.out: prep
 	-@${ENV} ${GNUCAP} --acs ${GNUCAP_ARGS} -b ${testdir}/$*.ckt |tail -n +12 | \
-		grep -v '^stashing\ as' | grep -v 'already\ installed' | grep -v ^make > $@
+		grep -v '^stashing\ as' | grep -v 'already\ installed' | grep -v ^make > $@; \
+	err=$${PIPESTATUS[0]}; [ $$err == 0 ] || echo "error $$err" >> $@;
 
 ${out_gc}: ${TARGETDIR}/%.gc.out: prep
 	-@${ENV} ${GNUCAP} ${GNUCAP_ARGS} ${testdir}/$*.gc |tail -n +12 | \
-		grep -v '^stashing\ as' | grep -v 'already\ installed' | grep -v ^make > $@
+		grep -v '^stashing\ as' | grep -v 'already\ installed' | grep -v ^make > $@; \
+	err=$${PIPESTATUS[0]}; [ $$err == 0 ] || echo "error $$err" >> $@;
 
 # TODO: maybe cat the diff, so it can be logged?
-check: ${TARGETDIR}/${TESTCASES}.diff
+check: $(check_targets)
 	@find ${TARGETDIR} -size 0 -delete;
 	@echo ==
-	@if [ -s ${TARGETDIR}/${TESTCASES}.diff ]; then \
-		echo test failures:; \
-		ls -larS ${TARGETDIR}/${TESTCASES}*.diff; \
-	else \
-		echo all ${TESTCASES} passed; \
-	fi
+
+	@for f in $+; do \
+	  if [ -s $$f ]; then \
+		echo "test failures in $${f##*/}:"; \
+		ls -larS $${f%.diff}*.diff; \
+	  else \
+	    echo "all $${f##*/} passed"; \
+	  fi; \
+	done
 
 ${diff}: ${TARGETDIR}/%.diff: ${TARGETDIR}/%.out
 	@if [ ! -f ${ref}/$*.out ]; then \
@@ -54,5 +70,19 @@ ${diff}: ${TARGETDIR}/%.diff: ${TARGETDIR}/%.out
 	  echo FAIL: $*; \
 	fi
 
-${TARGETDIR}/${TESTCASES}.diff : ${diff}
-	@for i in $+; do echo $$i; cat $$i; done > $@
+define make_diff_rule
+$(TARGETDIR)/$(1).diff: $$(filter $(TARGETDIR)/$(1)%, $(diff))
+	@rm -f $$@
+	@for i in $$^; do \
+	  [ -s "$$$$i" ] && (echo "--- $$$$i"; cat $$$$i) >> "$$@" || true; \
+	done; \
+	[ -s "$$@" ] || rm -f "$$@"
+endef
+
+# TESTCASES empty (no prefixes)
+ifeq ($(strip $(TESTCASES)),)
+  $(eval $(call make_diff_rule,))
+# TESTCASES not empty (one or more prefixes)
+else
+  $(foreach p,$(TESTCASES),$(eval $(call make_diff_rule,$(p))))
+endif
