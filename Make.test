@@ -35,13 +35,16 @@ prep: ${SYMLINKS} ${TEST_PLUGINS}
 	# @[ ! -s "${TARGETDIR}" ]
 	-mkdir -p ${TARGETDIR}
 
+SHELL=/bin/bash
 ${out_ckt}: ${TARGETDIR}/%.ckt.out: prep
 	-@${ENV} ${GNUCAP} --acs ${GNUCAP_ARGS} -b ${testdir}/$*.ckt |tail -n +12 | \
-		grep -v '^stashing\ as' | grep -v 'already\ installed' | grep -v ^make > $@
+		grep -v '^stashing\ as' | grep -v 'already\ installed' | grep -v ^make > $@; \
+	err=$${PIPESTATUS[0]}; [ $$err == 0 ] || echo "error $$err" >> $@;
 
 ${out_gc}: ${TARGETDIR}/%.gc.out: prep
 	-@${ENV} ${GNUCAP} ${GNUCAP_ARGS} ${testdir}/$*.gc |tail -n +12 | \
-		grep -v '^stashing\ as' | grep -v 'already\ installed' | grep -v ^make > $@
+		grep -v '^stashing\ as' | grep -v 'already\ installed' | grep -v ^make > $@; \
+	err=$${PIPESTATUS[0]}; [ $$err == 0 ] || echo "error $$err" >> $@;
 
 # TODO: maybe cat the diff, so it can be logged?
 check: $(check_targets)
