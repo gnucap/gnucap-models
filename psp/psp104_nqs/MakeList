@@ -5,10 +5,11 @@ MGFLAGS = -I ../psp104
 
 PLUGINS_SO = ${TARGET:%=%.so}
 
-TESTDIR = NOTYET
-TESTCASES = b4_
+TESTDIR = ../../bsim/tests
+TESTCASES = b4_ psp_
 TESTEXCLUDE = \
 	b4_comprt \
+	b4_opamp \
 	b4_oneshot \
 	b4_test.ckt \
 	b4_test0.ckt \

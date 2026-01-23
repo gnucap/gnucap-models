@@ -1,11 +1,11 @@
-# psp104 tests
+# psp104_nqs tests
 
 For now, we use the same test cases for the psp as for the Berkeley BSIM model
 (see gnucap-models/bsim/tests/b4_*.gc).
 
 ## Test variations
 
-$ make check TEST_PARAMSET_SELECT=compiled # default
+$ make check TEST_PARAMSET_SELECT=compiled # (not yet implemented)
 tests compiled paramsets, psp_{n,p}mos.so
 
 $ make check TEST_PARAMSET_SELECT=interpreted
@@ -14,7 +14,7 @@ tests interpreted paramset based on generic model
 ## Ratings
 
 Each test result is rated according to is level of agreement with simulation
-results obtained with ngspice + osdi
+results obtained with ngspice + osdi.
 
 + Basic sanity check passed - result appears physically reasonable
 ++ Good qualitative match with ngspice results
@@ -51,3 +51,12 @@ b4_ro_17.gc +
 b4_ro_17_tr1.gc +
 b4_ro_17_tr01.gc ++
 ```
+
+### Notes
+
+- For given tests, numerical results are equivalent to psp104 model
+
+
+
+
+
