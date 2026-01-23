@@ -1,0 +1,13 @@
+This package contains the latest psp104 model (v104.0.1) sources from compact
+model coalition repository https://si2.org/cmc-standard-models/#cmcdownload
+which are split into psp104 and psp104_nqs directories.
+
+BUILD INSTRUCTIONS
+
+See top level README and INSTALL for up-to-date instructions.
+
+Install Gnucap
+Type "make"
+
+
+

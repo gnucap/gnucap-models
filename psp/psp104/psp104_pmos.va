@@ -1,0 +1,3 @@
+`pragma modelgen nogen-module
+`include "psp104.va"
+`include "psp104_pmos.paramset"

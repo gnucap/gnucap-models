@@ -1,0 +1,1 @@
+SUBDIRS = psp104 psp104_nqs
