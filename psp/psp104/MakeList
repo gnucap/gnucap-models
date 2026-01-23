@@ -4,7 +4,7 @@ TARGET = $(MODEL)
 
 PLUGINS_SO = ${TARGET:%=%.so}
 
-TESTDIR = NOTYET
+TESTDIR = ../../bsim/tests
 TESTCASES = b4_
 TESTEXCLUDE = \
 	b4_comprt \

@@ -1,0 +1,53 @@
+# psp104 tests
+
+For now, we use the same test cases for the psp as for the Berkeley BSIM model
+(see gnucap-models/bsim/tests/b4_*.gc).
+
+## Test variations
+
+$ make check TEST_PARAMSET_SELECT=compiled # (not yet implemented)
+tests compiled paramsets, psp_{n,p}mos.so
+
+$ make check TEST_PARAMSET_SELECT=interpreted
+tests interpreted paramset based on generic model
+
+## Ratings
+
+Each test result is rated according to is level of agreement with simulation
+results obtained with ngspice + osdi
+
++ Basic sanity check passed - result appears physically reasonable
+++ Good qualitative match with ngspice results
++++ Quantative match up to numerical tolerance with ngspice results
+
+### DC sweeps
+```
+b4_test1.gc  +++
+b4_test2.gc  +++
+b4_test3.gc  +++
+b4_test4.gc  +++
+b4_test5.gc  +++
+b4_test6.gc  +++
+b4_test7.gc  +++
+b4_test8.gc  +++
+b4_test9.gc  +++
+b4_test10.gc +++
+b4_test11.gc +++
+b4_test12.gc +++
+b4_test13.gc +++
+b4_test14.gc +++
+```
+### AC tests
+
+```
+b4_gstage.gc +++
+b4_opamp.gc
+```
+
+### Trans tests
+
+```
+b4_ro_17.gc +
+b4_ro_17_tr1.gc +
+b4_ro_17_tr01.gc ++
+```
