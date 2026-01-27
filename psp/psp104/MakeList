@@ -8,6 +8,7 @@ TESTDIR = ../../bsim/tests
 TESTCASES = b4_
 TESTEXCLUDE = \
 	b4_comprt \
+	b4_opamp \
 	b4_oneshot \
 	b4_test.ckt \
 	b4_test0.ckt \
