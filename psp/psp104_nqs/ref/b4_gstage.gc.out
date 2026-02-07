@@ -83,5 +83,5 @@ vsine #(.dc(1.2),.mag(0.1)) Vin (.p(in),.n(\0 ));
 Gnucap   System status
 iterations: op=0, dc=7, tran=0, fourier=0, total=78
 transient timesteps: accepted=0, rejected=0, total=0
-nodes: user=4, subckt=0, model=9, total=13
-dctran density=47.3%, ac density=47.3%
+nodes: user=4, subckt=0, model=27, total=31
+dctran density=52.7%, ac density=52.7%

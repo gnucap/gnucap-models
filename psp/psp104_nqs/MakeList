@@ -5,10 +5,11 @@ MGFLAGS = -I ../psp104
 
 PLUGINS_SO = ${TARGET:%=%.so}
 
-TESTDIR = NOTYET
-TESTCASES = b4_
+TESTDIR = ../../bsim/tests
+TESTCASES = b4_ psp_
 TESTEXCLUDE = \
 	b4_comprt \
+	b4_opamp \
 	b4_oneshot \
 	b4_test.ckt \
 	b4_test0.ckt \
@@ -19,7 +20,7 @@ GNUCAP_LOADS = -a mgsim
 #BUG: workaround excessive iterations in op
 GNUCAP_OPTIONS = --options\ vmin=0.0\ vmax=0.0
 
-TEST_PARAMSET_SELECT = interpreted
+TEST_PARAMSET_SELECT = compiled
 
 ifeq ($(TEST_PARAMSET_SELECT), compiled)
   GNUCAP_INCLUDES =
