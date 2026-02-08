@@ -1,9 +1,9 @@
 module main (.d(d));
     output d;
     electrical d;
-    ground gnd;
-    parameter real vd = 0.;
-    parameter real vg = 0.;
+  ground gnd;
+  parameter real vd = 0.;
+  parameter real vg = 0.;
   vsource #(.dc(vd)) sd (d, gnd);
   vsource #(.dc(vg)) sg (g, gnd);
   N1 #(.l(0.09u),.w(10.0u)) M1 (.d(d),.g(g),.s(gnd),.b(gnd));
