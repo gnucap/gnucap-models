@@ -1,4 +1,5 @@
 ** NMOSFET: Benchmarking Implementation of BSIM4.8.0 
+duplicate match n1 in m1
 #           i(vds)    
  0.         169.1E-12 
  0.02      -867.15E-9 
