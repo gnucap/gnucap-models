@@ -387,7 +387,7 @@ void MODEL_SPICE::init_ckt()
 {
   assert(ckt());
   ckt()->CKTtime = _sim->_time0;
- // ckt()->CKTtemp    = _sim->_temp_k;
+ // ckt()->CKTtemp    = _sim->_temp_k; // needs scope.
   ckt()->CKTnomTemp = OPT::tnom_c + CONSTCtoK;
   ckt()->CKTintegrateMethod = 0; // disable
   trace2("init_ckt", ckt()->CKTcurrentAnalysis, _sim->command_is_op());
@@ -429,11 +429,12 @@ void MODEL_SPICE::init_ckt()
   assert_ckt_initialized(ckt());
 }
 
-#define assert_ckt_up_to_date(ckt, common) {			\
+#define assert_ckt_up_to_date(ckt, common, scope) {		\
     assert_ckt_initialized(ckt);				\
     assert(common);						\
+    assert(scope);						\
     assert((ckt)->CKTtime == CKT_BASE::_sim->_time0);		\
-    assert((ckt)->CKTtemp == common->temp_k());			\
+    assert((ckt)->CKTtemp == common->temp_k(scope->params()));			\
   }
 
 void DEV_SPICE::update_ckt()const
@@ -444,14 +445,13 @@ void DEV_SPICE::update_ckt()const
   ckt()->CKTtime = _sim->_time0;
   ckt()->CKTdelta = NOT_VALID; // localized
   assert(common());
-  ckt()->CKTtemp = common()->temp_k();
   ckt()->CKTmode = 0;
   ckt()->CKTomega = _sim->_jomega.imag();
-  assert_ckt_up_to_date(ckt(), common());
+  assert_ckt_up_to_date(ckt(), common(), scope());
 }
 
-#define assert_ckt_localized(ckt, common) {			\
-    assert_ckt_up_to_date(ckt, common);				\
+#define assert_ckt_localized(ckt, common, scope) {		\
+    assert_ckt_up_to_date(ckt, common, scope);			\
     assert((ckt)->CKTstat);					\
     DEV_SPICE* d = reinterpret_cast<DEV_SPICE*>((ckt)->CKTstat);\
     assert(d);							\
@@ -476,7 +476,7 @@ void DEV_SPICE::update_ckt()const
 
 void DEV_SPICE::localize_ckt()const
 {
-  assert_ckt_up_to_date(ckt(), common());
+  assert_ckt_up_to_date(ckt(), common(), scope());
   ckt()->CKTstat = reinterpret_cast<STATistics*>(const_cast<DEV_SPICE*>(this));
   assert(OPT::_keep_time_steps <= 8);
   for (int ii=0; ii<8; ++ii) {
@@ -508,7 +508,7 @@ void DEV_SPICE::localize_ckt()const
   ckt()->CKTirhs = const_cast<double*>(_i1);
   ckt()->CKTmode = 0;
   ckt()->CKTtimePoints = const_cast<double*>(_time);
-  assert_ckt_localized(ckt(), common());
+  assert_ckt_localized(ckt(), common(), scope());
 }
 
 #define assert_model_raw() {				\
@@ -661,6 +661,12 @@ void MODEL_SPICE::precalc_first()
   }
 
   init_ckt();
+  CARD const* cp = component_proto();
+  auto p = prechecked_cast<COMPONENT const*>(cp);
+  assert(p);
+  assert(p->common());
+  ckt()->CKTtemp = p->common()->temp_k(scope()->params());
+
   if (info.DEVsetup) {
     assert_model_raw();
     // DEVsetup 0
@@ -1075,9 +1081,6 @@ void DEV_SPICE::expand()
   }
   assert_model_unlocalized();
   assert_instance();
-  for(int i=ext_nodes()+int_nodes(); i>net_nodes();){
-    n_(--i).allocate(2);
-  }
 }
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::precalc_last()
@@ -1089,6 +1092,7 @@ void DEV_SPICE::precalc_last()
 
   STORAGE::precalc_last();
   init_ckt();
+  ckt()->CKTtemp = common()->temp_k(scope()->params());
 
   // push down parameters into spice data
   COMMON_PARAMLIST* c = dynamic_cast<COMMON_PARAMLIST*>(mutable_common());
@@ -1494,7 +1498,7 @@ void DEV_SPICE::tr_accept()
 double DEV_SPICE::tr_probe_num(const std::string& x)const
 {
   localize_ckt();
-  assert_ckt_up_to_date(ckt(), common());
+  assert_ckt_up_to_date(ckt(), common(), scope());
   assert_instance();
 
   // all of the "states" in state array
@@ -1620,7 +1624,7 @@ void DEV_SPICE::do_ac()
 void DEV_SPICE::ac_load()
 {
   if (info.DEVacLoad) {
-    assert_ckt_up_to_date(ckt(), common());
+    assert_ckt_up_to_date(ckt(), common(), scope());
     
     int ihit[MATRIX_NODES+OFFSET];
     int jhit[MATRIX_NODES+OFFSET];
@@ -1981,7 +1985,7 @@ extern "C" {
   {
     DEV_SPICE* d = reinterpret_cast<DEV_SPICE*>(ckt->CKTstat);
     assert(d);
-    assert_ckt_localized(ckt, d->common());
+    assert_ckt_localized(ckt, d->common(), d->scope());
 
     std::valarray<FPOLY1> q(OPT::_keep_time_steps);
 
@@ -2001,7 +2005,7 @@ extern "C" {
   { //-- used by DEVload (not DC)
     DEV_SPICE* d = reinterpret_cast<DEV_SPICE*>(ckt->CKTstat);
     assert(d);
-    assert_ckt_localized(ckt, d->common());
+    assert_ckt_localized(ckt, d->common(), d->scope());
 
     METHOD method;
     if (ckt->CKTorder == 1) {
