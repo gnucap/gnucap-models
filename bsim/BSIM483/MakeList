@@ -10,7 +10,7 @@ HDRS = bsim4def.h  bsim4ext.h  bsim4itf.h wrapper.h
 SPICE_VERSION = SPICE_3f
 
 TESTDIR = ../tests
-TESTCASES = b4_
+TESTCASES = b4_ b4bin_
 
 GNUCAP_LOADS = -a mgsim -a ./${TARGET}.so
 GNUCAP_INCLUDES = --acs -i ../BSIM481/benchmark_test/modelcard.nmos -i ../BSIM481/benchmark_test/modelcard.pmos \
