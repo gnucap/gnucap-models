@@ -6,3 +6,8 @@ install: $(PLUGINS_SO)
 	for i in ${PLUGINS_SO}; do \
 		cp $$i $(DESTDIR)$(INSTALL_DIR); \
 	done
+
+clean:
+	-rm -f *.o $(PLUGINS_SO) $(PLUGINS_CC) ${CLEANFILES}
+
+.PHONY: clean

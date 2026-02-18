@@ -25,9 +25,6 @@ cc: ${PLUGINS_CC}
 %.so: %.o
 	${CXX} -shared ${GNUCAP_LDFLAGS} ${LDFLAGS} $< -o $@
 
-clean:
-	-rm -f *.o $(PLUGINS_SO) $(PLUGINS_CC)
-
 # TODO
 # install:
 
