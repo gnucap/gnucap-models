@@ -86,5 +86,5 @@ vsource #(.dc(vscale*1.8)) Vdd (.p(vdd),.n(\0 ));
 Gnucap   System status
 iterations: op=0, dc=59, tran=0, fourier=0, total=120
 transient timesteps: accepted=0, rejected=0, total=0
-nodes: user=10, subckt=0, model=209, total=219
-dctran density=13.2%, ac density=13.2%
+nodes: user=10, subckt=0, model=265, total=275
+dctran density=12.0%, ac density=12.0%

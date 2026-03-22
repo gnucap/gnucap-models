@@ -1,5 +1,5 @@
 
-MGFLAGS += -a mgopt/nonoise.so -I $(shell $(GNUCAP_CONF) --includedir)
+MGFLAGS += -I $(shell $(GNUCAP_CONF) --includedir)
 MODELGEN_VERILOG = gnucap-mg-vams
 GNUCAP_CONF = gnucap-conf
 GNUCAP_CPPFLAGS = $(shell $(GNUCAP_CONF) --cppflags) -DADD_VERSION -DPIC # (gets c++ preprocessor flags from gnucap coniguration)
