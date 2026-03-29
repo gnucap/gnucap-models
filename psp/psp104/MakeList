@@ -29,6 +29,9 @@ else ifeq ($(TEST_PARAMSET_SELECT), interpreted)
   GNUCAP_INCLUDES = -i $(MODEL)_nmos.paramset -i $(MODEL)_pmos.paramset
 endif
 
+CLEANFILES = $(MODEL)_nmos.so $(MODEL)_pmos.so \
+             $(MODEL)_nmos.cc $(MODEL)_pmos.cc
+
 GNUCAP_LOADS += ${TEST_PLUGINS:%=-a ./%}
 
 GNUCAP_INCLUDES += -i test_config.parameter

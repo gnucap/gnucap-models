@@ -196,5 +196,5 @@ endmodule // main
 Gnucap   System status
 iterations: op=0, dc=732, tran=0, fourier=0, total=732
 transient timesteps: accepted=0, rejected=0, total=0
-nodes: user=1, subckt=1, model=8, total=10
-dctran density=60.0%, ac density=60.0%
+nodes: user=1, subckt=1, model=15, total=17
+dctran density=40.1%, ac density=40.1%

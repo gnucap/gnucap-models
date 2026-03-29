@@ -1,10 +1,28 @@
-202405**
-========
+20260329-dev
+============
+* psp104 noise tests
+* test spice style binned model cards
+
+20251222-dev
+============
+* various psp, bsim, bsim4va devices
+* cross validated refs
+* compiled paramset examples
+* bump to ngspice45
+* exclude lists in tests set selection
+
+20250731-dev
+============
+* synchronize with Gnucap snapshot
+
+20250301-dev
+============
 * add ngspice42 devices, reuse -17 tests
 * collapse internal nodes (e.g. ngspice42/bjt)
 * support "wilson trick", e.g. bjt tf, ptf
 * noise in dio, document bugs
 * reject inherited device parameters
+* bump to ngspice43
 
 20240430-dev
 ============

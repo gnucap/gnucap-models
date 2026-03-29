@@ -468,5 +468,5 @@ N1 #(.l(0.09u),.w(10.0u)) M1 (.d(d),.g(g),.s(s),.b(b));
 Gnucap   System status
 iterations: op=0, dc=1822, tran=0, fourier=0, total=1822
 transient timesteps: accepted=0, rejected=0, total=0
-nodes: user=4, subckt=0, model=8, total=12
-dctran density=62.5%, ac density=62.5%
+nodes: user=4, subckt=0, model=15, total=19
+dctran density=44.9%, ac density=44.9%

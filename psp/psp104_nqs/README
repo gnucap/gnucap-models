@@ -52,6 +52,14 @@ b4_ro_17_tr1.gc +
 b4_ro_17_tr01.gc ++
 ```
 
+### Noise tests
+
+```
+psp_noise1.gc +++
+psp_noise2.gc +++
+psp_noise3.gc +++
+```
+
 ### Notes
 
 - For given tests, numerical results are equivalent to psp104 model
