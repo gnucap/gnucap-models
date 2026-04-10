@@ -5,8 +5,38 @@ MGFLAGS = -I ../psp103
 
 PLUGINS_SO = ${TARGET:%=%.so}
 
-TESTDIR = NOTYET
-TESTCASES = NOTYET
-TESTEXCLUDE =
+TESTDIR = ../../bsim/tests
+TESTCASES = b4_ psp_
+TESTEXCLUDE = \
+	b4_comprt \
+	b4_opamp \
+	b4_test.ckt \
+	b4_test0.ckt \
+	b4_test1.ckt \
+	b4_test2.ckt \
+	b4_oneshot_tr01.gc
 
+GNUCAP_LOADS = -a mgsim
+#BUG: workaround excessive iterations in op
+GNUCAP_OPTIONS = --options\ vmin=0.0\ vmax=0.0
 
+TEST_PARAMSET_SELECT = compiled
+
+ifeq ($(TEST_PARAMSET_SELECT), compiled)
+  TEST_PLUGINS = $(MODEL)_nmos.so $(MODEL)_pmos.so
+  TEST_INCLUDES =
+else ifeq ($(TEST_PARAMSET_SELECT), interpreted)
+  TEST_PLUGINS = $(MODEL).so
+  TEST_INCLUDES = $(MODEL)_nmos.paramset $(MODEL)_pmos.paramset
+endif
+
+CLEANFILES = $(MODEL)_nmos.so $(MODEL)_pmos.so \
+             $(MODEL)_nmos.cc $(MODEL)_pmos.cc
+
+TEST_INCLUDES += $(MODEL)_nmos.module $(MODEL)_pmos.module
+TEST_INCLUDES += test_config.parameter
+
+GNUCAP_LOADS += ${TEST_PLUGINS:%=-a ./%}
+GNUCAP_INCLUDES = ${TEST_INCLUDES:%=-i ./%}
+
+GNUCAP_ARGS =  ${GNUCAP_LOADS} ${GNUCAP_INCLUDES} ${GNUCAP_OPTIONS}
