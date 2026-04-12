@@ -1,0 +1,12 @@
+SECTION = psp/psp103_nqs
+MODEL = psp103_nqs
+TARGET = $(MODEL)
+MGFLAGS = -I ../psp103
+
+PLUGINS_SO = ${TARGET:%=%.so}
+
+TESTDIR = NOTYET
+TESTCASES = NOTYET
+TESTEXCLUDE =
+
+
