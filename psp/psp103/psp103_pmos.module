@@ -1,0 +1,26 @@
+// ******** psp103 pmos module ********
+// PSP103VA module uses capitalized port names, but tests expect lower case.
+// As a workaround, this module wraps the pmos paramset and exposes lower-case ports.
+// The module exposes ad/pd/... params because some tests set them explicitly.
+// PSP103 itself does not expose these parameters, so they are intentionally not
+// forwarded to the wrapped instance.
+// Lukas Deutz 2026
+
+module P1(d, g, s, b);
+    parameter real w=350.e-9;
+    parameter real l=280.e-9;
+    parameter integer nf=1;
+    parameter real ad=0.0;
+    parameter real pd=0.0;
+    parameter real as=0.0;
+    parameter real ps=0.0;
+    parameter real sa=0.0;
+    parameter real sb=0.0;
+    parameter real sd=0.0;
+    electrical d, g, s, b;
+
+    P1 #(.w(w), .l(l), .ng(nf)) M1(.D(d), .G(g), .S(s), .B(b));
+endmodule
+
+
+
