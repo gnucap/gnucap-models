@@ -1,0 +1,120 @@
+module N1 (.d(d),.g(g),.s(s),.b(b));
+  parameter real w=350.e-9;
+  parameter real l=340.e-9;
+  parameter integer nf=1;
+  parameter real ad=0.0;
+  parameter real pd=0.0;
+  parameter real as=0.0;
+  parameter real ps=0.0;
+  parameter real sa=0.0;
+  parameter real sb=0.0;
+  parameter real sd=0.0;
+      electrical d, g, s, b;
+  N1 #(.w(w),.l(l),.ng(nf)) M1 (.D(d),.G(g),.S(s),.B(b));
+endmodule // N1
+
+module P1 (.d(d),.g(g),.s(s),.b(b));
+  parameter real w=350.e-9;
+  parameter real l=280.e-9;
+  parameter integer nf=1;
+  parameter real ad=0.0;
+  parameter real pd=0.0;
+  parameter real as=0.0;
+  parameter real ps=0.0;
+  parameter real sa=0.0;
+  parameter real sb=0.0;
+  parameter real sd=0.0;
+      electrical d, g, s, b;
+  P1 #(.w(w),.l(l),.ng(nf)) M1 (.D(d),.G(g),.S(s),.B(b));
+endmodule // P1
+
+parameter real vscale = 0.333333333; 
+ground \0 ;
+// vsource #(.dc(0.0)) Vic(c, \0 );
+ground c;
+N1 #(.w(2u),.l(0.09u)) M6 (.d(vout),.g(bias),.s(vss),.b(vss));
+N1 #(.w(2u),.l(0.09u)) M7 (.d(vout),.g(bias2),.s(vdd),.b(out));
+P1 #(.w(2u),.l(0.09u)) M3 (.d(vdd),.g(bias1),.s(bias1),.b(vdd));
+P1 #(.w(2u),.l(0.09u)) M4 (.d(bias2),.g(bias1),.s(vdd),.b(vdd));
+N1 #(.w(2u),.l(0.09u)) M5 (.d(cm),.g(bias),.s(vss),.b(vss));
+N1 #(.w(2u),.l(0.09u)) Mbias (.d(bias),.g(bias),.s(vss),.b(vss));
+N1 #(.w(10u),.l(0.09u)) M1 (.d(bias1),.g(in1),.s(cm),.b(cm));
+N1 #(.w(10u),.l(0.09u)) M2 (.d(bias2),.g(in2),.s(cm),.b(cm));
+resistor #(.r(195k)) Rbias (.p(\0 ),.n(bias));
+capacitor #(.c(2p)) Cfb (.p(bias2),.n(vout));
+// High-value leak resistor on floating out node to stabilize dc convergence
+resistor #(.r(100G)) Rleak (.p(out),.n(\0 ));
+// TODO. .gain(?)
+vcvs #(.gain(-1.0),.offset(0.0)) Eid (.p(in2),.n(c),.cp(in1),.cn(c));
+vsine #(.dc(0.0),.mag(0.1)) Vid (.p(in1),.n(c));
+vsource #(.dc(-vscale*1.8)) Vss (.p(vss),.n(\0 ));
+vsource #(.dc(vscale*1.8)) Vdd (.p(vdd),.n(\0 ));
+#             v(in1)       v(in2)       v(vout)     
+ 0.           0.           0.           0.0733413   
+#Freq         vdb(vout)    iter(0)     
+ 100.        -2.644387     0.          
+ 125.8925    -2.644387     0.          
+ 158.4893    -2.644385     0.          
+ 199.5262    -2.644383     0.          
+ 251.1886    -2.644382     0.          
+ 316.2278    -2.644378     0.          
+ 398.1072    -2.644373     0.          
+ 501.1872    -2.644363     0.          
+ 630.9573    -2.644349     0.          
+ 794.3282    -2.644327     0.          
+ 1.E+3       -2.644293     0.          
+ 1.258925E+3 -2.644237     0.          
+ 1.584893E+3 -2.644148     0.          
+ 1.995262E+3 -2.64401      0.          
+ 2.511886E+3 -2.643792     0.          
+ 3.162278E+3 -2.643454     0.          
+ 3.981072E+3 -2.642929     0.          
+ 5.011872E+3 -2.642125     0.          
+ 6.309573E+3 -2.640926     0.          
+ 7.943282E+3 -2.639183     0.          
+ 10.E+3      -2.636761     0.          
+ 12.58925E+3 -2.633591     0.          
+ 15.84893E+3 -2.629757     0.          
+ 19.95262E+3 -2.625539     0.          
+ 25.11886E+3 -2.621371     0.          
+ 31.62278E+3 -2.617677     0.          
+ 39.81072E+3 -2.614752     0.          
+ 50.11872E+3 -2.612703     0.          
+ 63.09573E+3 -2.611528     0.          
+ 79.43282E+3 -2.611196     0.          
+ 100.E+3     -2.611747     0.          
+ 125.8925E+3 -2.613345     0.          
+ 158.4893E+3 -2.616358     0.          
+ 199.5262E+3 -2.621438     0.          
+ 251.1886E+3 -2.62967      0.          
+ 316.2278E+3 -2.642805     0.          
+ 398.1072E+3 -2.663595     0.          
+ 501.1872E+3 -2.696333     0.          
+ 630.9573E+3 -2.747598     0.          
+ 794.3282E+3 -2.827275     0.          
+ 1.E+6       -2.949746     0.          
+ 1.258925E+6 -3.134911     0.          
+ 1.584893E+6 -3.408186     0.          
+ 1.995262E+6 -3.797989     0.          
+ 2.511886E+6 -4.329113     0.          
+ 3.162278E+6 -5.012025     0.          
+ 3.981072E+6 -5.831704     0.          
+ 5.011872E+6 -6.74313      0.          
+ 6.309573E+6 -7.678039     0.          
+ 7.943282E+6 -8.561968     0.          
+ 10.E+6      -9.334075     0.          
+ 12.58925E+6 -9.960908     0.          
+ 15.84893E+6 -10.43868     0.          
+ 19.95262E+6 -10.78538     0.          
+ 25.11886E+6 -11.02931     0.          
+ 31.62278E+6 -11.19991     0.          
+ 39.81072E+6 -11.32315     0.          
+ 50.11872E+6 -11.42079     0.          
+ 63.09573E+6 -11.51158     0.          
+ 79.43282E+6 -11.61353     0.          
+ 100.E+6     -11.74654     0.          
+Gnucap   System status
+iterations: op=0, dc=13, tran=0, fourier=0, total=74
+transient timesteps: accepted=0, rejected=0, total=0
+nodes: user=10, subckt=0, model=121, total=131
+dctran density=14.2%, ac density=14.2%

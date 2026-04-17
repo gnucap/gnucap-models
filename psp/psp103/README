@@ -1,4 +1,4 @@
-# psp103_nqs tests
+# psp103 tests
 
 For now, we use the same test cases for the psp as for the Berkeley BSIM model
 (see gnucap-models/bsim/tests/b4_*.gc).
@@ -66,7 +66,3 @@ psp_noise1.gc +++
 psp_noise2.gc +++
 psp_noise3.gc +++
 ```
-
-### Notes
-
-- For given tests, numerical results are equivalent to psp103 model
