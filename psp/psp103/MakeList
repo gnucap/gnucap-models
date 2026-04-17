@@ -1,4 +1,4 @@
-SECTION = psp/psp103
+SECTION = psp
 MODEL = psp103
 TARGET = $(MODEL)
 

@@ -1,4 +1,4 @@
-SECTION = psp/psp104_nqs
+SECTION = psp
 MODEL = psp104_nqs
 TARGET = $(MODEL)
 MGFLAGS = -I ../psp104
