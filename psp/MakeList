@@ -1,1 +1,1 @@
-SUBDIRS = psp104 psp104_nqs
+SUBDIRS = psp104 psp104_nqs psp103 psp103_nqs

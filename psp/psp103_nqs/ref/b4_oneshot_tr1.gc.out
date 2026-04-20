@@ -1,0 +1,97 @@
+module N1 (.d(d),.g(g),.s(s),.b(b));
+  parameter real w=350.e-9;
+  parameter real l=340.e-9;
+  parameter integer nf=1;
+  parameter real ad=0.0;
+  parameter real pd=0.0;
+  parameter real as=0.0;
+  parameter real ps=0.0;
+  parameter real sa=0.0;
+  parameter real sb=0.0;
+  parameter real sd=0.0;
+      electrical d, g, s, b;
+  N1 #(.w(w),.l(l),.ng(nf)) M1 (.D(d),.G(g),.S(s),.B(b));
+endmodule // N1
+
+module P1 (.d(d),.g(g),.s(s),.b(b));
+  parameter real w=350.e-9;
+  parameter real l=280.e-9;
+  parameter integer nf=1;
+  parameter real ad=0.0;
+  parameter real pd=0.0;
+  parameter real as=0.0;
+  parameter real ps=0.0;
+  parameter real sa=0.0;
+  parameter real sb=0.0;
+  parameter real sd=0.0;
+      electrical d, g, s, b;
+  P1 #(.w(w),.l(l),.ng(nf)) M1 (.D(d),.G(g),.S(s),.B(b));
+endmodule // P1
+
+parameter real vscale = 0.333333333; 
+ground \0 ;
+P1 #(.l(0.2u),.w(3.6u)) Md1 (.d(out1),.g(in),.s(dd),.b(dd));
+N1 #(.l(0.2u),.w(1.8u)) Md2 (.d(out1),.g(in),.s(\0 ),.b(\0 ));
+P1 #(.l(0.2u),.w(3.6u)) Md3 (.d(A),.g(out1),.s(dd),.b(dd));
+N1 #(.l(0.2u),.w(1.8u)) Md4 (.d(A),.g(out1),.s(\0 ),.b(\0 ));
+capacitor #(.c(100f)) c_out1 (.p(out1),.n(\0 ));
+capacitor #(.c(100f)) c_A (.p(A),.n(\0 ));
+P1 #(.l(0.2u),.w(3.6u)) M1 (.d(Anot),.g(A),.s(dd),.b(dd));
+N1 #(.l(0.2u),.w(1.8u)) M2 (.d(Anot),.g(A),.s(\0 ),.b(\0 ));
+P1 #(.l(0.2u),.w(3.6u)) M3 (.d(Bnot),.g(in),.s(dd),.b(dd));
+N1 #(.l(0.2u),.w(1.8u)) M4 (.d(Bnot),.g(in),.s(\0 ),.b(\0 ));
+P1 #(.l(3.6u),.w(1.8u)) M5 (.d(AorBnot),.g(\0 ),.s(dd),.b(dd));
+N1 #(.l(0.2u),.w(1.8u)) M6 (.d(AorBnot),.g(in),.s(in_Anot_j),.b(\0 ));
+N1 #(.l(0.2u),.w(1.8u)) M7 (.d(in_Anot_j),.g(Anot),.s(\0 ),.b(\0 ));
+P1 #(.l(3.6u),.w(1.8u)) M8 (.d(Lnot),.g(\0 ),.s(dd),.b(dd));
+N1 #(.l(0.2u),.w(1.8u)) M9 (.d(Lnot),.g(Bnot),.s(bnot_a_j),.b(\0 ));
+N1 #(.l(0.2u),.w(1.8u)) M10 (.d(bnot_a_j),.g(A),.s(\0 ),.b(\0 ));
+P1 #(.l(3.6u),.w(3.6u)) M11 (.d(out),.g(\0 ),.s(dd),.b(dd));
+N1 #(.l(0.2u),.w(1.8u)) M12 (.d(out),.g(AorBnot),.s(aorb_lnot_j),.b(\0 ));
+N1 #(.l(0.2u),.w(1.8u)) M13 (.d(aorb_lnot_j),.g(Lnot),.s(\0 ),.b(\0 ));
+vsource #(.dc(vscale*1.8)) vcc (.p(dd),.n(\0 ));
+vpulse #(.val0(0.0),.val1(vscale*1.8),.td(1n),.rise(0.1n),.fall(0.1n),.width(0.8n),.period(5n)) vin (.p(in),.n(\0 ));
+#Time       v(in)      v(out)     iter(0)   
+did not converge
+ 0.         0.         0.011111   421.      
+ 50.E-12    0.         0.011112   36.       
+ 1.E-9      0.         0.011111   18.       
+ 1.101E-9   0.6        0.0085161  7.        
+ 1.235E-9   0.6       -0.0064071  9.        
+ 1.369E-9   0.6       -0.043718   8.        
+ 1.458E-9   0.6        0.0059489  6.        
+ 1.547E-9   0.6        0.090787   6.        
+ 1.9E-9     0.6        0.35172    7.        
+ 2.001E-9   243.2E-12  0.35998    7.        
+ 2.003E-9   271.4E-12  0.36074    13.       
+ 2.004E-9   160.2E-12  0.36117    4.        
+ 2.005E-9   313.2E-12  0.36152    4.        
+ 2.006E-9   114.3E-12  0.36193    4.        
+ 2.041E-9   279.2E-12  0.37319    6.        
+ 2.165E-9  -33.44E-12  0.40056    7.        
+ 2.549E-9   65.02E-12  0.44653    8.        
+ 3.24E-9   -46.65E-12  0.49305    6.        
+ 4.16E-9    64.01E-12  0.48162    7.        
+ 6.E-9     -63.03E-12  0.027036   7.        
+ 6.101E-9   0.6        0.014118   7.        
+ 6.368E-9   0.6       -0.021263   9.        
+ 6.501E-9   0.6        0.096962   7.        
+ 6.634E-9   0.6        0.21955    8.        
+ 6.723E-9   0.6        0.28811    6.        
+ 6.9E-9     0.6        0.36918    7.        
+ 7.001E-9   353.8E-12  0.37341    7.        
+ 7.003E-9   133.5E-12  0.37403    12.       
+ 7.004E-9   278.1E-12  0.37433    4.        
+ 7.005E-9   181.7E-12  0.37463    4.        
+ 7.006E-9   228.6E-12  0.37492    4.        
+ 7.048E-9   156.2E-12  0.38561    6.        
+ 7.183E-9   55.66E-12  0.41014    8.        
+ 7.653E-9  -33.2E-12   0.45862    8.        
+ 8.24E-9    55.8E-12   0.49566    5.        
+ 9.12E-9   -40.7E-12   0.49146    7.        
+ 10.E-9     44.28E-12  0.29199    8.        
+Gnucap   System status
+iterations: op=0, dc=0, tran=708, fourier=0, total=747
+transient timesteps: accepted=37, rejected=3, total=40
+nodes: user=12, subckt=0, model=563, total=575
+dctran density=6.7%, ac density=6.7%

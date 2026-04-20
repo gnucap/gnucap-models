@@ -1,0 +1,4 @@
+// requires gnucap-modelgen-verilog >= 20260112
+`pragma modelgen nogen-module
+`include "psp103_nqs.va"
+`include "psp103_nqs_pmos.paramset"

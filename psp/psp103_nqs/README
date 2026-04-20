@@ -1,0 +1,72 @@
+# psp103_nqs tests
+
+For now, we use the same test cases for the psp as for the Berkeley BSIM model
+(see gnucap-models/bsim/tests/b4_*.gc).
+
+## Test variations
+
+$ make check TEST_PARAMSET_SELECT=compiled # default
+tests compiled paramsets, psp_{n,p}mos.so
+
+$ make check TEST_PARAMSET_SELECT=interpreted
+tests interpreted paramset based on generic model
+
+## Ratings
+
+Each test result is rated according to its level of agreement with simulation
+results obtained with ngspice + osdi
+
++ Basic sanity check passed - result appears physically reasonable
+++? Qualitative agreement; discrepancies caused by initial conditions, bifurcation, model issues, etc.
+++! Becomes +++ when enforcing smaller time steps in transient
++++ Quantitative match up to numerical tolerance with ngspice results
+
+### DC sweeps
+```
+b4_test1.gc  +++
+b4_test2.gc  +++
+b4_test3.gc  +++
+b4_test4.gc  +++
+b4_test5.gc  +++
+b4_test6.gc  +++
+b4_test7.gc  +++
+b4_test8.gc  +++
+b4_test9.gc  +++
+b4_test10.gc +++
+b4_test11.gc +++
+b4_test12.gc +++
+b4_test13.gc +++
+b4_test14.gc +++
+```
+### AC tests
+
+```
+b4_gstage.gc +++
+psp_opamp.gc +++
+```
+
+### Trans tests
+
+b4_ro_17* is sensitive to initial conditions. Setting solver options
+vmin=0.0 vmax=0.0 (see MakeList) prevents open-circuit warnings and improves
+convergence.
+
+```
+b4_oneshot.gc ++!
+b4_oneshot_tr1.gc ++!
+b4_ro_17.gc ++?
+b4_ro_17_tr1.gc ++?
+b4_ro_17_tr01.gc ++?
+```
+
+### Noise tests
+
+```
+psp_noise1.gc +++
+psp_noise2.gc +++
+psp_noise3.gc +++
+```
+
+### Notes
+
+- For given tests, numerical results are equivalent to psp103 model

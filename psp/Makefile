@@ -2,18 +2,16 @@
 include MakeList
 
 all: ${SUBDIRS:%=%-all}
+install: ${SUBDIRS:%=%-install}
 
 ${SUBDIRS:%=%-all}: %-all:
-	$(MAKE) -C $*
+	$(MAKE) -C $* all
+${SUBDIRS:%=%-install}: %-install:
+	$(MAKE) -C $* install
 
 clean:
 	for dir in $(SUBDIRS); do \
 	$(MAKE) -C $$dir clean; \
-	done
-
-install:
-	for dir in $(SUBDIRS); do \
-	$(MAKE) -C $$dir install; \
 	done
 
 # only check most recent versions
