@@ -1,11 +1,12 @@
-parameter real vscale = 0.66666666; 
+parameter real vscale = 0.66666666;
+//* One-shot trigger (tran) adopted from BSIM481/benchmark_test/gstage.b4
 ground \0 ;
-resistor #(.r(100k)) Rsource (.p(in),.n(g));
-resistor #(.r(25k)) Rload (.p(d),.n(vdd));
-N1 #(.l(0.09u),.w(4u)) M1 (.d(d),.g(g),.s(\0 ),.b(\0 ));
-vsource #(.dc(vscale*1.8)) Vdd (.p(vdd),.n(\0 ));
+resistor #(.r(100k)) Rsource (in, g);
+resistor #(.r(25k)) Rload (d, vdd);
+N1 #(.w(4u),.l(0.09u)) M1 (.d(d),.g(g),.s(\0 ),.b(\0 ));
+vsource #(.dc(vscale*1.8)) Vdd (vdd, \0 );
 // TODO
-vsine #(.dc(1.2),.mag(0.1)) Vin (.p(in),.n(\0 ));
+vsine #(.mag(0.1),.dc(1.2)) Vin (in, \0 );
 #            
  0.          
 #Freq         vdb(d)       iter(0)     

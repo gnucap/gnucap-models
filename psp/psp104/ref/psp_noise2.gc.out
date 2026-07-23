@@ -1,11 +1,12 @@
-parameter real vscale = 0.66666666; 
+parameter real vscale = 0.66666666;
+//* MOSFET noise test
 ground gnd;
 N1 #(.l(0.09u),.w(10.0u)) M1 (.d(out),.g(g),.s(gnd),.b(gnd));
-resistor #(.r(10k),.noisy(1.0)) RD (.p(vdd),.n(out));
-vsource #(.dc(1.2)) Vdd (.p(vdd),.n(gnd));
-vsource #(.dc(0.6)) Vg (.p(g),.n(gnd));
+resistor #(.r(10k),.noisy(1.0)) RD (vdd, out);
+vsource #(.dc(1.2)) Vdd (vdd, gnd);
+vsource #(.dc(0.6)) Vg (g, gnd);
 // Total noise power at the drain node
-meas_noise #() n_out (.p(out));
+noise_probe #() n_out (out);
 #              
  0.            
 #Freq           npwr(n_out)   

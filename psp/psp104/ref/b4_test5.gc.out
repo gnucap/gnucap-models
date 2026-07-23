@@ -1,9 +1,10 @@
-parameter real vscale = 0.66666666; 
+parameter real vscale = 0.66666666;
+//* NMOS Id-Vg with Vb
 ground \0 ;
-vsource #(.dc(vd)) sd (.p(d),.n(\0 ));
-vsource #(.dc(vg)) sg (.p(g),.n(\0 ));
-vsource #(.dc(vs)) sb (.p(s),.n(\0 ));
-vsource #(.dc(vb)) sb (.p(b),.n(\0 ));
+vsource #(.dc(vd)) sd (d, \0 );
+vsource #(.dc(vg)) sg (g, \0 );
+vsource #(.dc(vs)) sb (s, \0 );
+vsource #(.dc(vb)) sb (b, \0 );
 parameter vd = 0.1;
 parameter vg = 0.0;
 parameter vs = 0.0;
