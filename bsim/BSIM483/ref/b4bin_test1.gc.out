@@ -1,3 +1,9 @@
+module tb (.d(d),.g(g),.s(s),.b(b));
+  ground \0 ;
+  BINTEST #(.l(1),.w(1),.nf(5)) M1 (.d(d),.g(g),.s(s),.b(b));
+  BINTEST #(.l(6),.w(1),.nf(5)) M2 (.d(d),.g(g),.s(s),.b(b));
+endmodule // tb
+
 tb #() t (d, g, s, b);
 #           id(t.M1)   id(t.M2)   iter(0)   
  0.         0.         0.         5.        

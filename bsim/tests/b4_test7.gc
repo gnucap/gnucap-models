@@ -1,6 +1,5 @@
 * NMOS Id-Vg with Vb @ 100C
 
-* Enable Verilog mode
 verilog
 
 option temp=100.0

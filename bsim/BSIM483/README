@@ -1,13 +1,15 @@
 ## BSIM4 Tests
 
-The tests files `bsim/test/b4_*.gc` are ported from on the official BSIM4 release from UC Berkeley group, available at https://www.bsim.berkeley.edu/models/bsim4/. 
+The tests files `bsim/test/b4_*.gc` are adopted from on the official BSIM4
+release from UC Berkeley group, available at [1]. The syntax has been changed
+to Verilog-like and they need porting to Verilog.
 
 Since the latest version BSIM4 version (4.8.3) does not include official benchmarks, we use test cases and reference data from the previous release (4.8.1), available here: https://www.bsim.berkeley.edu/BSIM4/BSIM4_4.8.1_20170215.tar.gz.
 
 The official Berkley testbench includes static DC, AC and Transient test cases. To run all tests, execute
-```
-make check
-```
+
+$ make check
+
 within the `bsim/BSIM483` directory. Simulation results are automatically diffed against the reference output files located in `bsim/BSIM483/ref` directory.  
 
 ## Ratings
@@ -63,7 +65,7 @@ b4_ro_17_tr1.gc ++
 
 - The ring oscillator benchmark `BSIM481/ro_17.b4` assigns model parameters twice, which is a bug. While most transistors share the same parameters in the benchmark share, some differ. In `b4_ro_17.gc`, we use identical parameters for all transitors, which yields a qualitatively similar oscillatory output, which is the main objective. Oscillations are initiated using a resistor leakage current instead of the alternating initial voltage values used in the benchmark. This causes a phase shift between gncuap and benchmark, but the oscillation frequency matches correctly.
 
-
+[1] https://www.bsim.berkeley.edu/models/bsim4/
 
 
 

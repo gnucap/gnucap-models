@@ -6,7 +6,6 @@ delete P1
 .MODEL BINTEST NMOS   LEVEL = 14 Lmin=1 Lmax=5 Wmin=0.6 Wmax=20 VTH0=0.4
 .MODEL BINTEST.1 NMOS LEVEL = 14 Lmin=5 Lmax=9 Wmin=0.6 Wmax=20 VTH0=0.5
 
-* Enable Verilog mode
 verilog
 
 module tb(d,g,s,b);

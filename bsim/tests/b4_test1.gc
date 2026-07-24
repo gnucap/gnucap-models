@@ -3,7 +3,6 @@
 * nmos/pmos transistor model and modelcards are loaded dynamically,
 * which allows us to run tests with different model versions or models
 
-* Enable Verilog mode
 verilog
 
 ground \0 ;

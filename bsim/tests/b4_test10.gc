@@ -1,6 +1,5 @@
 * PMOS Id-Vd @ 100C
 
-* Enable Verilog mode
 verilog
 
 option temp= 100.0
