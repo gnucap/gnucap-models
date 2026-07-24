@@ -34,9 +34,8 @@ CLEANFILES = $(MODEL)_nmos.so $(MODEL)_pmos.so \
              $(MODEL)_nmos.cc $(MODEL)_pmos.cc
 
 TEST_INCLUDES += $(MODEL)_nmos.module $(MODEL)_pmos.module
-TEST_INCLUDES += test_config.parameter
 
 GNUCAP_LOADS += ${TEST_PLUGINS:%=-a ./%}
-GNUCAP_INCLUDES = ${TEST_INCLUDES:%=-i ./%}
+GNUCAP_INCLUDES = ${TEST_INCLUDES:%=-i ./%} --verilog -i test_config.parameter
 
 GNUCAP_ARGS =  ${GNUCAP_LOADS} ${GNUCAP_INCLUDES} ${GNUCAP_OPTIONS}

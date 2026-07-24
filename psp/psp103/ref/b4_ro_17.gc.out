@@ -9,7 +9,10 @@ module N1 (.d(d),.g(g),.s(s),.b(b));
   parameter real sa=0.0;
   parameter real sb=0.0;
   parameter real sd=0.0;
-      electrical d, g, s, b;
+  electrical d;
+  electrical g;
+  electrical s;
+  electrical b;
   N1 #(.w(w),.l(l),.ng(nf)) M1 (.D(d),.G(g),.S(s),.B(b));
 endmodule // N1
 
@@ -24,11 +27,16 @@ module P1 (.d(d),.g(g),.s(s),.b(b));
   parameter real sa=0.0;
   parameter real sb=0.0;
   parameter real sd=0.0;
-      electrical d, g, s, b;
+  electrical d;
+  electrical g;
+  electrical s;
+  electrical b;
   P1 #(.w(w),.l(l),.ng(nf)) M1 (.D(d),.G(g),.S(s),.B(b));
 endmodule // P1
 
-parameter real vscale = 0.333333333; 
+parameter real vscale = 0.333333333;
+//* 17-stage CMOS ring oscillator (tran) adopted from BSIM481/benchmark/ro_17.b4
+//* Enable verilog mode
 ground \0 ;
 // cmos inverter
 module not1 (.z(z),.a(a),.vss(vss),.vdd(vdd));
@@ -37,7 +45,7 @@ module not1 (.z(z),.a(a),.vss(vss),.vdd(vdd));
 endmodule // not1
 
 // 17-stage ring oscillator
-resistor #(.r(1G)) rkick (.p(n02),.n(\0 ));
+resistor #(.r(1G)) rkick (n02, \0 );
 not1 #() X01 (.z(n03),.a(n02),.vss(\0 ),.vdd(n01));
 not1 #() X02 (.z(n04),.a(n03),.vss(\0 ),.vdd(n01));
 not1 #() X03 (.z(n05),.a(n04),.vss(\0 ),.vdd(n01));
@@ -55,8 +63,8 @@ not1 #() X14 (.z(n16),.a(n15),.vss(\0 ),.vdd(n01));
 not1 #() X15 (.z(n17),.a(n16),.vss(\0 ),.vdd(n01));
 not1 #() X16 (.z(n18),.a(n17),.vss(\0 ),.vdd(n01));
 not1 #() X17 (.z(n02),.a(n18),.vss(\0 ),.vdd(n01));
-capacitor #(.c(0.1p)) c1 (.p(n18),.n(\0 ));
-vsource #(.dc(vscale*2.0)) Vdd (.p(n01),.n(\0 ));
+capacitor #(.c(0.1p)) c1 (n18, \0 );
+vsource #(.dc(vscale*2.0)) Vdd (n01, \0 );
 #Time       v(n02)     v(n05)     iter(0)   
  0.         0.         0.         0.        
  100.E-12   0.50815    0.3774     8.        

@@ -9,7 +9,10 @@ module N1 (.d(d),.g(g),.s(s),.b(b));
   parameter real sa=0.0;
   parameter real sb=0.0;
   parameter real sd=0.0;
-      electrical d, g, s, b;
+  electrical d;
+  electrical g;
+  electrical s;
+  electrical b;
   N1 #(.w(w),.l(l),.ng(nf)) M1 (.D(d),.G(g),.S(s),.B(b));
 endmodule // N1
 
@@ -24,11 +27,15 @@ module P1 (.d(d),.g(g),.s(s),.b(b));
   parameter real sa=0.0;
   parameter real sb=0.0;
   parameter real sd=0.0;
-      electrical d, g, s, b;
+  electrical d;
+  electrical g;
+  electrical s;
+  electrical b;
   P1 #(.w(w),.l(l),.ng(nf)) M1 (.D(d),.G(g),.S(s),.B(b));
 endmodule // P1
 
-parameter real vscale = 0.333333333; 
+parameter real vscale = 0.333333333;
+//* Operational amplifier (ac) adopted from BSIM481/benchmark_test/opamp.b4
 ground \0 ;
 // vsource #(.dc(0.0)) Vic(c, \0 );
 ground c;
@@ -40,15 +47,15 @@ N1 #(.w(2u),.l(0.09u)) M5 (.d(cm),.g(bias),.s(vss),.b(vss));
 N1 #(.w(2u),.l(0.09u)) Mbias (.d(bias),.g(bias),.s(vss),.b(vss));
 N1 #(.w(10u),.l(0.09u)) M1 (.d(bias1),.g(in1),.s(cm),.b(cm));
 N1 #(.w(10u),.l(0.09u)) M2 (.d(bias2),.g(in2),.s(cm),.b(cm));
-resistor #(.r(195k)) Rbias (.p(\0 ),.n(bias));
-capacitor #(.c(2p)) Cfb (.p(bias2),.n(vout));
+resistor #(.r(195k)) Rbias (\0 , bias);
+capacitor #(.c(2p)) Cfb (bias2, vout);
 // High-value leak resistor on floating out node to stabilize dc convergence
-resistor #(.r(100G)) Rleak (.p(out),.n(\0 ));
+resistor #(.r(100G)) Rleak (out, \0 );
 // TODO. .gain(?)
-vcvs #(.gain(-1.0),.offset(0.0)) Eid (.p(in2),.n(c),.cp(in1),.cn(c));
-vsine #(.dc(0.0),.mag(0.1)) Vid (.p(in1),.n(c));
-vsource #(.dc(-vscale*1.8)) Vss (.p(vss),.n(\0 ));
-vsource #(.dc(vscale*1.8)) Vdd (.p(vdd),.n(\0 ));
+vcvs #(.gain(-1.0),.offset(0.0)) Eid (in2, c, in1, c);
+vsine #(.mag(0.1),.dc(0.0)) Vid (in1, c);
+vsource #(.dc(-vscale*1.8)) Vss (vss, \0 );
+vsource #(.dc(vscale*1.8)) Vdd (vdd, \0 );
 #             v(in1)       v(in2)       v(vout)     
  0.           0.           0.           0.0733413   
 #Freq         vdb(vout)    iter(0)     
