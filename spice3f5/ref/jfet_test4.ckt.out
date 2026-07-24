@@ -1,3 +1,4 @@
 #jfet test circuit 
+.param foo=2 
 .model asd njf ( cgs=1f cgd=1f)
 .model psd pjf ( cgs=1f cgd=1f)
