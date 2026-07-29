@@ -14,5 +14,5 @@ TESTCASES = b4_ b4bin_
 
 GNUCAP_LOADS = -a mgsim -a ./${TARGET}.so
 GNUCAP_INCLUDES = --acs -i ../BSIM481/benchmark_test/modelcard.nmos -i ../BSIM481/benchmark_test/modelcard.pmos \
-	-i ../BSIM483/test_config.parameter
+	--verilog -i ../BSIM483/test_config.parameter --acs
 GNUCAP_ARGS = ${GNUCAP_LOADS} ${GNUCAP_INCLUDES}

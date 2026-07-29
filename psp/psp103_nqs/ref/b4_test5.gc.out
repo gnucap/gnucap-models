@@ -9,7 +9,10 @@ module N1 (.d(d),.g(g),.s(s),.b(b));
   parameter real sa=0.0;
   parameter real sb=0.0;
   parameter real sd=0.0;
-      electrical d, g, s, b;
+  electrical d;
+  electrical g;
+  electrical s;
+  electrical b;
   N1 #(.w(w),.l(l),.ng(nf)) M1 (.D(d),.G(g),.S(s),.B(b));
 endmodule // N1
 
@@ -24,16 +27,20 @@ module P1 (.d(d),.g(g),.s(s),.b(b));
   parameter real sa=0.0;
   parameter real sb=0.0;
   parameter real sd=0.0;
-      electrical d, g, s, b;
+  electrical d;
+  electrical g;
+  electrical s;
+  electrical b;
   P1 #(.w(w),.l(l),.ng(nf)) M1 (.D(d),.G(g),.S(s),.B(b));
 endmodule // P1
 
-parameter real vscale = 0.333333333; 
+parameter real vscale = 0.333333333;
+//* NMOS Id-Vg with Vb
 ground \0 ;
-vsource #(.dc(vd)) sd (.p(d),.n(\0 ));
-vsource #(.dc(vg)) sg (.p(g),.n(\0 ));
-vsource #(.dc(vs)) sb (.p(s),.n(\0 ));
-vsource #(.dc(vb)) sb (.p(b),.n(\0 ));
+vsource #(.dc(vd)) sd (d, \0 );
+vsource #(.dc(vg)) sg (g, \0 );
+vsource #(.dc(vs)) sb (s, \0 );
+vsource #(.dc(vb)) sb (b, \0 );
 parameter vd = 0.1;
 parameter vg = 0.0;
 parameter vs = 0.0;

@@ -1,6 +1,5 @@
 * NMOS Id-Vg
 
-* Enable Verilog mode
 verilog
 
 module main(d);

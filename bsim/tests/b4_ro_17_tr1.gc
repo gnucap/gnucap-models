@@ -1,4 +1,4 @@
-* 17-stage CMOS ring oscillator (tran) ported from BSIM481/benchmark_test/ro_17.b4
+* 17-stage CMOS ring oscillator (tran) adopted from BSIM481/benchmark_test/ro_17.b4
 
 * Enable verilog mode
 verilog

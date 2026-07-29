@@ -1,8 +1,6 @@
-* One-shot trigger (tran) ported from BSIM481/benchmark_test/gstage.b4
+* One-shot trigger (tran) adopted from BSIM481/benchmark_test/gstage.b4
 
 load vams/vsine.so
-
-* Enable verilog mode
 verilog
 
 options numdgt=7

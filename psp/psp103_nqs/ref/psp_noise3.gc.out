@@ -9,7 +9,10 @@ module N1 (.d(d),.g(g),.s(s),.b(b));
   parameter real sa=0.0;
   parameter real sb=0.0;
   parameter real sd=0.0;
-      electrical d, g, s, b;
+  electrical d;
+  electrical g;
+  electrical s;
+  electrical b;
   N1 #(.w(w),.l(l),.ng(nf)) M1 (.D(d),.G(g),.S(s),.B(b));
 endmodule // N1
 
@@ -24,18 +27,22 @@ module P1 (.d(d),.g(g),.s(s),.b(b));
   parameter real sa=0.0;
   parameter real sb=0.0;
   parameter real sd=0.0;
-      electrical d, g, s, b;
+  electrical d;
+  electrical g;
+  electrical s;
+  electrical b;
   P1 #(.w(w),.l(l),.ng(nf)) M1 (.D(d),.G(g),.S(s),.B(b));
 endmodule // P1
 
-parameter real vscale = 0.333333333; 
+parameter real vscale = 0.333333333;
+//* MOSFET noise test
 ground gnd;
 N1 #(.l(0.09u),.w(10.0u)) M1 (.d(out),.g(g),.s(gnd),.b(gnd));
-resistor #(.r(10k),.noisy(1.0)) RD (.p(vdd),.n(out));
-vsource #(.dc(1.2)) Vdd (.p(vdd),.n(gnd));
-vsource #(.dc(0.6)) Vg (.p(g),.n(gnd));
+resistor #(.r(10k),.noisy(1.0)) RD (vdd, out);
+vsource #(.dc(1.2)) Vdd (vdd, gnd);
+vsource #(.dc(0.6)) Vg (g, gnd);
 // Total noise power at the drain node
-meas_noise #() n_out (.p(out));
+noise_probe #() n_out (out);
 #              
  0.            
 #Freq           npwr(n_out)   

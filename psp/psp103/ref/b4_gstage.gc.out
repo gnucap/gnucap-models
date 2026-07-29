@@ -9,7 +9,10 @@ module N1 (.d(d),.g(g),.s(s),.b(b));
   parameter real sa=0.0;
   parameter real sb=0.0;
   parameter real sd=0.0;
-      electrical d, g, s, b;
+  electrical d;
+  electrical g;
+  electrical s;
+  electrical b;
   N1 #(.w(w),.l(l),.ng(nf)) M1 (.D(d),.G(g),.S(s),.B(b));
 endmodule // N1
 
@@ -24,18 +27,22 @@ module P1 (.d(d),.g(g),.s(s),.b(b));
   parameter real sa=0.0;
   parameter real sb=0.0;
   parameter real sd=0.0;
-      electrical d, g, s, b;
+  electrical d;
+  electrical g;
+  electrical s;
+  electrical b;
   P1 #(.w(w),.l(l),.ng(nf)) M1 (.D(d),.G(g),.S(s),.B(b));
 endmodule // P1
 
-parameter real vscale = 0.333333333; 
+parameter real vscale = 0.333333333;
+//* One-shot trigger (tran) adopted from BSIM481/benchmark_test/gstage.b4
 ground \0 ;
-resistor #(.r(100k)) Rsource (.p(in),.n(g));
-resistor #(.r(25k)) Rload (.p(d),.n(vdd));
+resistor #(.r(100k)) Rsource (in, g);
+resistor #(.r(25k)) Rload (d, vdd);
 N1 #(.w(4u),.l(0.09u)) M1 (.d(d),.g(g),.s(\0 ),.b(\0 ));
-vsource #(.dc(vscale*1.8)) Vdd (.p(vdd),.n(\0 ));
+vsource #(.dc(vscale*1.8)) Vdd (vdd, \0 );
 // TODO
-vsine #(.dc(1.2),.mag(0.1)) Vin (.p(in),.n(\0 ));
+vsine #(.mag(0.1),.dc(1.2)) Vin (in, \0 );
 #            
  0.          
 #Freq         vdb(d)       iter(0)     

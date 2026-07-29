@@ -1,6 +1,5 @@
 * PMOS Id-Vg
 
-* Enable Verilog mode
 verilog
 
 ground \0 ;

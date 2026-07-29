@@ -1,6 +1,5 @@
 * NMOS Id-Vd @ -55C
 
-* Enable Verilog mode
 verilog
 
 option temp=-55.0

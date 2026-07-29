@@ -1,6 +1,5 @@
 * NMOS Id-Vg with Vb
 
-* Enable Verilog mode
 verilog
 
 ground \0 ;

@@ -1,9 +1,8 @@
-* Operational amplifier (ac) ported from BSIM481/benchmark_test/opamp.b4
+* Operational amplifier (ac) adopted from BSIM481/benchmark_test/opamp.b4
 
 load vams/vsine.so
 load vams/vcvs.so
 
-* Enable verilog mode
 verilog
 
 options numdgt=7

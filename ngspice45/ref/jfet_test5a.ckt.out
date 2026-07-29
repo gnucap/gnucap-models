@@ -1,6 +1,10 @@
 #jfet test circuit 
+.param foo=1 
+.param cap=2f 
 .model asd njf ( cgs=cap cgd=cap)
 .model psd pjf ( cgs=cap cgd=cap)
+.param foo=1 
+.param cap=2f 
 .model asd njf ( cgs=cap cgd=cap)
 .model psd pjf ( cgs=cap cgd=cap)
 j1 ( 2 1 0 )  asd  area=foo

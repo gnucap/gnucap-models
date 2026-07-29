@@ -1,3 +1,8 @@
+20260729-dev
+============
+* psp103
+* mostly synchronise
+
 20260329-dev
 ============
 * psp104 noise tests
@@ -10,6 +15,7 @@
 * compiled paramset examples
 * bump to ngspice45
 * exclude lists in tests set selection
+* bump ngspice to 45
 
 20250731-dev
 ============

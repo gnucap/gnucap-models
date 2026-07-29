@@ -1,8 +1,6 @@
 * One-Bit Comparator (tran)
 
 load vams/vpulse.so
-
-// Enable verilog mode
 verilog
 
 // BUG: needs noincmode
