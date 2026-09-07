@@ -95,7 +95,7 @@ extern "C" {
   #define TAIL_SIZE 1
 #endif
 #if !defined(IS_VALID)
-#define IS_VALID {return MODEL_CARD::is_valid(d);}
+#define IS_VALID { untested();return MODEL_CARD::is_valid(d);}
 #endif
 /*--------------------------------------------------------------------------*/
 extern SPICEdev info;
@@ -211,8 +211,6 @@ private:
     INSTANCE _inst;
     char _inst_space;
   };
-  std::string _modelname;
-  const MODEL_SPICE* _model;
   const SPICE_MODEL_DATA* _spice_model;
   mutable node_t _nodes[MATRIX_NODES];
   node_t* _n;
@@ -260,9 +258,9 @@ protected: // override virtual
   TIME_PAIR tr_review()override;
   void    tr_accept()override;
   void	  tr_unload()override;
-  double  tr_involts()const override	{unreachable();return NOT_VALID;}
+  double  tr_involts()const override	{ untested();unreachable();return NOT_VALID;}
   //double tr_input()const override	//ELEMENT
-  double  tr_involts_limited()const override {unreachable();return NOT_VALID;}
+  double  tr_involts_limited()const override { untested();unreachable();return NOT_VALID;}
   //double tr_input_limited()const //ELEMENT
   double  tr_amps()const override	{itested();return NOT_VALID;}
   double  tr_probe_num(const std::string&)const override;
@@ -272,13 +270,13 @@ protected: // override virtual
   void    ac_begin()override;
   void	  do_ac()override;
   void	  ac_load()override;
-  COMPLEX ac_involts()const override	{unreachable();return NOT_VALID;}
-  COMPLEX ac_amps()const override	{unreachable();return NOT_VALID;}
+  COMPLEX ac_involts()const override	{ untested();unreachable();return NOT_VALID;}
+  COMPLEX ac_amps()const override	{ untested();unreachable();return NOT_VALID;}
   XPROBE  ac_probe_ext(const std::string&)const override {itested(); return XPROBE(NOT_VALID, mtNONE);}
   int	  tail_size()const override	{return TAIL_SIZE;}
 public:	// type
-  void set_dev_type(const std::string& nt)override;
-  std::string dev_type()const override {return _modelname;}
+  // void set_dev_type(const std::string& nt)override; // COMPONENT
+  std::string dev_type()const override {assert(common()); return common()->modelname();}
 public:	// ports
   // bool port_exists(int i)const //COMPONENT
   node_t& n_(int i)const override{
@@ -293,10 +291,10 @@ public:	// ports
   //int  set_port_by_name(std::string& name, std::string& value);
   //void set_port_by_index(int index, std::string& value);
 private: // parameters
-  //bool Param_exists(int i)const; // {return Param_name(i) != "";}
+  //bool Param_exists(int i)const; // { untested();return Param_name(i) != "";}
   //bool Param_is_printable(int)const;
   //std::string Param_name(int)const;
-  //std::string Param_name(int i, int j)const {return STORAGE::Param_name(i, j);}
+  //std::string Param_name(int i, int j)const { untested();return STORAGE::Param_name(i, j);}
   //std::string Param_value(int)const; 
   int  set_param_by_name(std::string Name, std::string Value)override;
   int  Set_param_by_name(std::string Name, std::string Value);
@@ -311,7 +309,7 @@ private:
 #if NGSPICE>=28
   int* spice_nodes()const	{return GENnode(&_spice_instance);}
 #else
-  int* spice_nodes()const	{return &(_spice_instance.GENnode1);}
+  int* spice_nodes()const	{ untested();return &(_spice_instance.GENnode1);}
 #endif
 };
 /*--------------------------------------------------------------------------*/
@@ -491,7 +489,7 @@ void DEV_SPICE::localize_ckt()const
 
   //ckt()->CKTag[0] = tr_c_to_g(1, ckt()->CKTag[0]);
   // defer fixing this -- GEAR not here
-  if (_dt == 0) {
+  if (_dt == 0) { untested();
     ckt()->CKTag[1] = ckt()->CKTag[0] = 0;
     ckt()->CKTorder = 1;
   }else if (_time[1] != 0 && _method_a == mTRAP) {
@@ -517,7 +515,7 @@ void DEV_SPICE::localize_ckt()const
     assert(_spice_model._gen.GENinstances == NULL);	\
   }
 #define assert_model_unlocalized() {		\
-    assert(_model->_spice_model._gen.GENinstances == NULL);\
+    assert(m->_spice_model._gen.GENinstances == NULL);\
     assert(_spice_model);			\
     assert(_spice_model->_gen.GENmodType == 0);	\
     assert(_spice_model->_gen.GENnextModel == NULL);	\
@@ -699,7 +697,7 @@ bool MODEL_SPICE::param_is_printable(int i)const
   assert(i < MODEL_SPICE::param_count());
   if (i < int(_params.size())) {
     return _params.is_printable(i);
-  }else{
+  }else{ untested();
     return MODEL_CARD::param_is_printable(i-_params.size());
   }
 }
@@ -709,7 +707,7 @@ std::string MODEL_SPICE::param_name(int i)const
   assert(i < MODEL_SPICE::param_count());
   if (i < int(_params.size())) {
     return _params.name(i);
-  }else{
+  }else{ untested();
     return MODEL_CARD::param_name(i-_params.size());
   }
 }
@@ -731,7 +729,7 @@ std::string MODEL_SPICE::param_value(int i)const
   assert(i < MODEL_SPICE::param_count());
   if (i < int(_params.size())) {
     return _params.value(i);
-  }else{
+  }else{ untested();
     return MODEL_CARD::param_value(i-_params.size());
   }
 }
@@ -750,9 +748,7 @@ DEV_SPICE::DEV_SPICE(COMMON_COMPONENT* c)
 #else
    _inst(),
 #endif
-   _modelname(""),
-   _model(NULL),
-   _spice_model(NULL),
+   _spice_model(nullptr),
    _nodes(),
    _n(_nodes),
    _matrix(),
@@ -760,7 +756,7 @@ DEV_SPICE::DEV_SPICE(COMMON_COMPONENT* c)
    _i0(),
    _i1(),
    _v1(),
-   _states_1(NULL),
+   _states_1(nullptr),
    _num_states(0),
    _maxEqNum(0)
 {
@@ -795,8 +791,6 @@ DEV_SPICE::DEV_SPICE(COMMON_COMPONENT* c)
 DEV_SPICE::DEV_SPICE(const DEV_SPICE& p)
   :STORAGE(p),
    _inst(p._inst),
-   _modelname(p._modelname),
-   _model(p._model),
    _spice_model(p._spice_model),
    _nodes(),
    _n(_nodes),
@@ -861,11 +855,6 @@ DEV_SPICE::~DEV_SPICE()
   }
 }
 /*--------------------------------------------------------------------------*/
-void DEV_SPICE::set_dev_type(const std::string& new_type)
-{
-  _modelname = new_type;
-}
-/*--------------------------------------------------------------------------*/
 int DEV_SPICE::Set_param_by_name(std::string Name, std::string new_value)
 {
   assert_instance();
@@ -891,12 +880,12 @@ int DEV_SPICE::set_param_by_name(std::string Name, std::string Value)
     notstd::to_lower(&Name);
   }else{
   }
-  if(Name[0]=='$'){
+  if(Name[0]=='$'){ untested();
     return COMPONENT::set_param_by_name(Name, Value);
   }else{
     try{
       COMPONENT::set_param_by_name(Name, Value);
-      COMMON_PARAMLIST* c = dynamic_cast<COMMON_PARAMLIST*>(mutable_common());
+      COMMON_PARAMLIST* c = prechecked_cast<COMMON_PARAMLIST*>(mutable_common());
       assert(c);
       return Set_param_by_name(Name, to_string(c->_params[Name].e_val(1,scope()->params())));
     }catch(Exception_No_Match const& e){
@@ -950,7 +939,7 @@ void DEV_SPICE::expand()
       for (int ii = net_nodes(); ii < max_nodes(); ++ii) {itested();
 	node[ii] = ii+OFFSET;
       }
-    }else if (UNCONNECTED_NODES == uFLOAT) {
+    }else if (UNCONNECTED_NODES == uFLOAT) { untested();
       for (int ii = net_nodes(); ii < max_nodes(); ++ii) {untested();
 	node[ii] = SPICE_UNCONNECTED_NODE;
       }
@@ -966,16 +955,19 @@ void DEV_SPICE::expand()
     }
   }
 
+  attach_model();
+  auto c = prechecked_cast<COMMON_PARAMLIST const*>(common());
+  assert(c);
+  auto m = prechecked_cast<MODEL_SPICE const*>(c->model());
   { //------- attach model, set up matrix pointers
-    _model = dynamic_cast<const MODEL_SPICE*>(find_model(_modelname));
-    if (!_model) {
-      throw Exception_Model_Type_Mismatch(long_label(), _modelname, DEVICE_TYPE);
+    if (!m) {
+      throw Exception_Model_Type_Mismatch(long_label(), c->modelname(), DEVICE_TYPE);
     }else{
       SMPmatrix* matrix = reinterpret_cast<SMPmatrix*>(_matrix);
       _num_states = 0;
 
-      _spice_instance.GENmodPtr = &(_model->_spice_model._gen);
-      _spice_model = &(_model->_spice_model);
+      _spice_instance.GENmodPtr = &(m->_spice_model._gen);
+      _spice_model = &(m->_spice_model);
       SPICE_MODEL_DATA spice_model_copy(*_spice_model);
       spice_model_copy._gen.GENinstances = &_spice_instance;
       //-------------
@@ -1086,7 +1078,6 @@ void DEV_SPICE::expand()
 void DEV_SPICE::precalc_last()
 {
 //   assert(_maxEqNum == ckt()->CKTmaxEqNum); not in 3f5 dio
-  assert(_model);
   assert_instance();
   assert(info.DEVsetup);
 
@@ -1095,14 +1086,15 @@ void DEV_SPICE::precalc_last()
   ckt()->CKTtemp = common()->temp_k(scope()->params());
 
   // push down parameters into spice data
-  COMMON_PARAMLIST* c = dynamic_cast<COMMON_PARAMLIST*>(mutable_common());
+  COMMON_PARAMLIST* c = prechecked_cast<COMMON_PARAMLIST*>(mutable_common());
   assert(c);
+
   PARAM_LIST& params = c->_params;
   for (int i=0; i<params.size(); ++i) {
     if (params[i].has_hard_value()) {
       try {
 	Set_param_by_name(params.name(i), to_string(params[i].e_val(1,scope()->params())));
-      }catch (Exception_No_Match&) {
+      }catch (Exception_No_Match&) { untested();
 	error(bTRACE, long_label() + ": bad parameter: " + params.name(i) + ", ignoring\n");
       }
     }else{
@@ -1141,11 +1133,15 @@ void DEV_SPICE::precalc_last()
     }
   }
   
+  c = prechecked_cast<COMMON_PARAMLIST*>(mutable_common());
+  assert(c);
+  auto m = prechecked_cast<MODEL_SPICE const*>(c->model());
+  assert(m);
   {
     SMPmatrix* matrix = reinterpret_cast<SMPmatrix*>(_matrix);
     int num_states_garbage = 0;
 
-    assert(_spice_model == &(_model->_spice_model));
+    assert(_spice_model == &(m->_spice_model));
     // assert(_maxEqNum == ckt()->CKTmaxEqNum);
     SPICE_MODEL_DATA spice_model_copy(*_spice_model);
     spice_model_copy._gen.GENinstances = &_spice_instance;
@@ -1167,6 +1163,10 @@ void DEV_SPICE::precalc_last()
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::internal_precalc()
 {
+  auto c = prechecked_cast<COMMON_PARAMLIST const*>(common());
+  assert(c);
+  auto m = prechecked_cast<MODEL_SPICE const*>(c->model());
+  assert(m);
   update_ckt();
 
   if (info.DEVtemperature) {
@@ -1256,6 +1256,10 @@ bool DEV_SPICE::tr_needs_eval()const
 /*--------------------------------------------------------------------------*/
 bool DEV_SPICE::do_tr()
 {
+  auto c = prechecked_cast<COMMON_PARAMLIST const*>(common());
+  assert(c);
+  auto m = prechecked_cast<MODEL_SPICE const*>(c->model());
+  assert(m);
   assert_instance();
   assert(info.DEVload);
   assert(_num_states >= 0);
@@ -1306,7 +1310,7 @@ bool DEV_SPICE::do_tr()
     }else{unreachable();
       ckt()->CKTmode = 0;
     }
-    if (_sim->uic_now()) {
+    if (_sim->uic_now()) { untested();
       ckt()->CKTmode |= MODEINITFIX;
       ckt()->CKTmode |= MODEUIC;
     }else if (_sim->is_initial_step()) {
@@ -1442,6 +1446,10 @@ void DEV_SPICE::tr_unload()
 /*--------------------------------------------------------------------------*/
 TIME_PAIR DEV_SPICE::tr_review()
 {
+  auto c = prechecked_cast<COMMON_PARAMLIST const*>(common());
+  assert(c);
+  auto m = prechecked_cast<MODEL_SPICE const*>(c->model());
+  assert(m);
   // not calling STORAGE::tr_review();
 
   if (info.DEVtrunc) {
@@ -1459,8 +1467,12 @@ TIME_PAIR DEV_SPICE::tr_review()
     info.DEVtrunc(&(_spice_model->_gen), ckt(), &timestep);
     //-----
     
-    _time_by._error_estimate = tr_review_check_and_convert(timestep);
-    _time_by._event = NEVER;
+    _time_by.reset();
+    if(tr_review_check(timestep)){
+    }else{
+      _time_by.set_nok();
+    }
+    _time_by.min_dt_estimate(timestep);
 
     _spice_model->_gen.GENinstances = NULL;
     assert_model_unlocalized();
@@ -1472,6 +1484,10 @@ TIME_PAIR DEV_SPICE::tr_review()
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::tr_accept()
 {
+  auto c = prechecked_cast<COMMON_PARAMLIST const*>(common());
+  assert(c);
+  auto m = prechecked_cast<MODEL_SPICE const*>(c->model());
+  assert(m);
   assert_model_unlocalized();
   _spice_model->_gen.GENinstances = &_spice_instance;
   assert_model_localized();
@@ -1575,6 +1591,10 @@ void DEV_SPICE::ac_begin()
 /*--------------------------------------------------------------------------*/
 void DEV_SPICE::do_ac()
 {
+  auto c = prechecked_cast<COMMON_PARAMLIST const*>(common());
+  assert(c);
+  auto m = prechecked_cast<MODEL_SPICE const*>(c->model());
+  assert(m);
   if (info.DEVacLoad || info.DEVpzLoad) {
     assert_instance();
     assert(_num_states >= 0);
@@ -1665,6 +1685,10 @@ void DEV_SPICE::ac_load()
 /*--------------------------------------------------------------------------*/
 double DEV_SPICE::noise_num(const std::string& x)const
 {
+  auto c = prechecked_cast<COMMON_PARAMLIST const*>(common());
+  assert(c);
+  auto m = prechecked_cast<MODEL_SPICE const*>(c->model());
+  assert(m);
   if(x!=""){ untested();
     // does spice have named noise sources?
     return 0;
@@ -1714,7 +1738,7 @@ double DEV_SPICE::noise_num(const std::string& x)const
     trace2("DEV_SPICE::noise_num", mfactor(), pwr);
     return mfactor()*pwr;
 #else
-  }else{
+  }else{ untested();
     return 0.;
 #endif
   }
@@ -1748,7 +1772,7 @@ extern "C" {
 #elif NGSPICE>=31
   bool cp_getvar(char *, enum cp_types, void *, size_t){return false;} // from 31
 #elif NGSPICE>=22
-  bool cp_getvar(char *, enum cp_types, void *){return false;}
+  bool cp_getvar(char *, enum cp_types, void *){ untested();return false;}
 #else
   // nspice17 doesn't have it.
 #endif
@@ -1762,7 +1786,7 @@ extern "C" {
   }
   void *trealloc(const void *, size_t){unreachable();return NULL;}
 	  // string .c reachable?
-  char *tvprintf(const char *, va_list){
+  char *tvprintf(const char *, va_list){ untested();
 	  static char x=0;
 	  return &x;
   }
@@ -1773,7 +1797,7 @@ extern "C" {
 #else
   char* tmalloc(int size) {itested(); return static_cast<char*>(calloc(size,1));}
   char* trealloc(char*, int) {untested();incomplete(); return NULL;} //DEVnoise
-  void txfree(char *ptr) {
+  void txfree(char *ptr) { untested();
     if (ptr) {itested();
       free(ptr);
     }else{untested();
@@ -1873,7 +1897,7 @@ extern "C" {
     static struct mesg {
       const char *string;
       long flag;
-    } msgs[] = {
+    } msgs[] = { //
       { "Warning", ERR_WARNING } ,
       { "Fatal error", ERR_FATAL } ,
       { "Panic", ERR_PANIC } ,
@@ -1924,7 +1948,7 @@ extern "C" {
   }
     
 #if NGSPICE>=22
-  int CKTinst2Node(CKTcircuit *, void *, int , CKTnode **, IFuid *){unreachable(); return 0;}
+  int CKTinst2Node(CKTcircuit *, void *, int , CKTnode **, IFuid *){ untested();unreachable(); return 0;}
 #elif NGSPICE>=17
   int CKTinst2Node(void*, void*, int, CKTnode**, IFuid*)
   {untested();incomplete();
