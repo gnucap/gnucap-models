@@ -1,0 +1,29 @@
+verilog
+// MOSFET noise test
+
+load vams/resistor.so
+option numdgt=9;
+
+module noise_test();
+  ground gnd;
+  N1 #(.l(0.09u), .w(10.0u)) M1(.d(out), .g(g), .s(gnd), .b(gnd));
+  resistor #(.r(10k), .noisy(1.0)) RD(vdd, out);
+
+  vsource #(.dc(1.2)) Vdd(vdd, gnd);
+  vsource #(.dc(0.6)) Vg(g, gnd);
+
+  noise_probe n_total(out);
+  noise_probe #(.name("flicker")) n_flicker(out);
+endmodule
+
+noise_test t();
+
+list
+print ac npwr(t.n_*)
+op -40
+ac dec 10 1 1e8 basic
+op 27
+ac dec 10 1 1e8 basic
+op 125
+ac dec 10 1 1e8 basic
+status notime
