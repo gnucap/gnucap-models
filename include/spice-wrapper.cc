@@ -1965,7 +1965,7 @@ extern "C" {
     NULL,
     NULL,
     NULL,
-    NULL 
+    NULL
   };
 #else
   static IFfrontEnd fe = { //
@@ -1983,13 +1983,17 @@ extern "C" {
 #endif
     NULL, //int ((*OUTpBeginPlot)());	/* start pointwise output plot */ noisean.c only
     NULL, //int ((*OUTpData)());	/* data for pointwise plot */ noisean.c only
+#if NGSPICE<46
     NULL, //int ((*OUTwBeginPlot)());	/* start windowed output plot */ not used
     NULL, //int ((*OUTwReference)());	/* independent vector for windowed plot */ not used
     NULL, //int ((*OUTwData)());	/* data for windowed plot */ not used
     NULL, //int ((*OUTwEnd)());		/* signal end of windows */ not used
+#endif
     NULL, //int ((*OUTendPlot)());	/* end of plot */ not used
+#if NGSPICE<46
     NULL, //int ((*OUTbeginDomain)());	/* start nested domain */ not used
     NULL, //int ((*OUTendDomain)());	/* end nested domain */ not used
+#endif
     NULL  //int ((*OUTattributes)());	/* specify output attributes of node */ noisean.c only
   };
 #endif
