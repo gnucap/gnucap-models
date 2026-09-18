@@ -1,7 +1,7 @@
 /**********
 Copyright 1990 Regents of the University of California.  All rights reserved.
 Author: 1985 Thomas L. Quarles
-Modified by Paolo Nenzi 2003 and Dietmar Warning 2012
+Modified by Paolo Nenzi 2003, Dietmar Warning 2012 and Arpad Buermen 2025
 **********/
 
 #include "ngspice/ngspice.h"
@@ -52,9 +52,10 @@ IFparm DIOmPTable[] = { /* model parameters */
  IOP( "jsw", DIO_MOD_JSW,  IF_REAL, "Sidewall Saturation current"),
  IOPR( "isw", DIO_MOD_JSW,  IF_REAL, "Sidewall Saturation current"),
 
- IOPU( "tnom",DIO_MOD_TNOM,IF_REAL, "Parameter measurement temperature"),
+ IOPXU( "tnom",DIO_MOD_TNOM,IF_REAL, "Parameter measurement temperature"),
  IOPUR("tref",DIO_MOD_TNOM,IF_REAL, "Parameter measurement temperature"),
  IOP( "rs",  DIO_MOD_RS,  IF_REAL, "Ohmic resistance"),
+ IOPX( "rsw",  DIO_MOD_RSW,  IF_REAL, "Ohmic resistance sidewall"),
  IOP( "trs", DIO_MOD_TRS, IF_REAL, "Ohmic resistance 1st order temp. coeff."),
  IOPR( "trs1", DIO_MOD_TRS, IF_REAL, "Ohmic resistance 1st order temp. coeff."),
  IOP( "trs2", DIO_MOD_TRS2, IF_REAL, "Ohmic resistance 2nd order temp. coeff."),
@@ -80,6 +81,7 @@ IFparm DIOmPTable[] = { /* model parameters */
  IOP( "ikf",  DIO_MOD_IKF,   IF_REAL, "Forward Knee current"),
  IOPR( "ik",  DIO_MOD_IKF,   IF_REAL, "Forward Knee current"),
  IOP( "ikr",  DIO_MOD_IKR,   IF_REAL, "Reverse Knee current"),
+ IOP( "ikp",  DIO_MOD_IKP,   IF_REAL, "Forward Sw Knee current"),
  IOP( "nbv",  DIO_MOD_NBV,   IF_REAL, "Breakdown Emission Coefficient"),
  IOPR( "nz",  DIO_MOD_NBV,   IF_REAL, "Breakdown Emission Coefficient"),
  IOP("area",  DIO_MOD_AREA,  IF_REAL, "Area factor"),
@@ -120,17 +122,18 @@ IFparm DIOmPTable[] = { /* model parameters */
  OPU( "cond", DIO_MOD_COND,IF_REAL, "Ohmic conductance"),
  IOP( "isr",  DIO_MOD_ISR,  IF_REAL, "Recombination saturation current"),
  IOP( "nr",   DIO_MOD_NR,   IF_REAL, "Recombination current emission coefficient"),
+ IOP( "vp",   DIO_MOD_VP,   IF_REAL, "Soft reverse recovery parameter"),
 
  /* SOA parameters */
- IOP( "fv_max",   DIO_MOD_FV_MAX,  IF_REAL, "maximum voltage in forward direction"),
- IOP( "bv_max",   DIO_MOD_BV_MAX,  IF_REAL, "maximum voltage in reverse direction"),
- IOP( "id_max",   DIO_MOD_ID_MAX,  IF_REAL, "maximum current"),
- IOP( "te_max",   DIO_MOD_TE_MAX,  IF_REAL, "temperature"),
- IOP( "pd_max",   DIO_MOD_PD_MAX,  IF_REAL, "maximum power dissipation"),
+ IOPX( "fv_max",   DIO_MOD_FV_MAX,  IF_REAL, "maximum voltage in forward direction"),
+ IOPX( "bv_max",   DIO_MOD_BV_MAX,  IF_REAL, "maximum voltage in reverse direction"),
+ IOPX( "id_max",   DIO_MOD_ID_MAX,  IF_REAL, "maximum current"),
+ IOPX( "te_max",   DIO_MOD_TE_MAX,  IF_REAL, "temperature"),
+ IOPX( "pd_max",   DIO_MOD_PD_MAX,  IF_REAL, "maximum power dissipation"),
 
 /* self heating */
- IOP("rth0",  DIO_MOD_RTH0,  IF_REAL, "Self-heating thermal resistance"),
- IOP("cth0",  DIO_MOD_CTH0,  IF_REAL, "Self-heating thermal capacitance"),
+ IOPX("rth0",  DIO_MOD_RTH0,  IF_REAL, "Self-heating thermal resistance"),
+ IOPX("cth0",  DIO_MOD_CTH0,  IF_REAL, "Self-heating thermal capacitance"),
 /* scaled parasitic capacitances level 3 model */
  IOP( "lm",  DIO_MOD_LM,  IF_REAL, "Length of metal capacitor (level=3)"),
  IOP( "lp",  DIO_MOD_LP,  IF_REAL, "Length of polysilicon capacitor (level=3)"),

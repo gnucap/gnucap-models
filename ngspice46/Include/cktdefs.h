@@ -123,8 +123,8 @@ struct CKTcircuit {
                                    (imag) */
     double *CKTirhsOld;         /* previous rhs value (imaginary)*/
     double *CKTirhsSpare;       /* spare rhs value (imaginary)*/
-#ifdef PREDICTOR
     double *CKTpred;            /* predicted solution vector */
+#ifdef PREDICTOR
     double *CKTsols[8];         /* previous 8 solutions */
 #endif /* PREDICTOR */
 
@@ -161,8 +161,7 @@ struct CKTcircuit {
 
     /* This define should be somewhere else ??? */
 #define NODENAME(ckt,nodenum) CKTnodName(ckt,nodenum)
-    int CKTnumStates;           /* Number of sates effectively valid
-                                   ??? */
+    int CKTnumStates;           /* Number of states summed up over all device instances */
     long CKTmode;               /* Mode of operation of the circuit
                                    ??? */
 
@@ -206,22 +205,21 @@ struct CKTcircuit {
     int CKTtranMaxIter;         /* iteration limit for each timepoint
                                    for tran*/
     /* (itl4) */
-    int CKTbreakSize;           /* ??? */
-    int CKTbreak;               /* ??? */
-    double CKTsaveDelta;        /* ??? */
-    double CKTminBreak;         /* ??? */
-    double *CKTbreaks;          /* List of breakpoints ??? */
+    int CKTbreakSize;           /* number of breakpoints in table *CKTbreaks */
+    int CKTbreak;               /* if 1, a breakpoint may be set (only used in isrcacct.c) */
+    double CKTsaveDelta;        /* previous delta, before breakpoints set a new delta */
+    double CKTminBreak;         /* minimum time difference between breakpoints */
+    double *CKTbreaks;          /* List of breakpoints as an array of doubles */
     double CKTabstol;           /* --- */
     double CKTpivotAbsTol;      /* --- */
     double CKTpivotRelTol;      /* --- */
     double CKTreltol;           /* --- */
     double CKTchgtol;           /* --- */
     double CKTvoltTol;          /* --- */
-    /* What is this define for  ? */
-#ifdef NEWTRUNC
-    double CKTlteReltol;
-    double CKTlteAbstol;
-#endif /* NEWTRUNC */
+    double CKTlteReltol;        /* relative error in voltage based truncation error estimation */
+    double CKTlteAbstol;        /* absolute error in voltage based truncation error estimation */
+    double CKTlteTrtol;         /* scaling time step in voltage based truncation error estimation */
+    int CKTnewtrunc;            /* enable lte (local truncation error) based on voltages */
     double CKTgmin;             /* .options GMIN */
     double CKTgshunt;           /* .options RSHUNT */
     double CKTcshunt;           /* .options CSHUNT */

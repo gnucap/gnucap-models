@@ -48,6 +48,18 @@ DIOask (CKTcircuit *ckt, GENinstance *inst, int which, IFvalue *value,
         case DIO_M:
             value->rValue = here->DIOm;
             return(OK);
+        case DIO_LM:
+            value->rValue = here->DIOlengthMetal;
+            return(OK);
+        case DIO_LP:
+            value->rValue = here->DIOlengthPoly;
+            return(OK);
+        case DIO_WM:
+            value->rValue = here->DIOwidthMetal;
+            return(OK);
+        case DIO_WP:
+            value->rValue = here->DIOwidthPoly;
+            return(OK);
         case DIO_THERMAL:
             value->iValue = here->DIOthermal;
             return(OK);
@@ -63,12 +75,18 @@ DIOask (CKTcircuit *ckt, GENinstance *inst, int which, IFvalue *value,
             return(OK);
         case DIO_CURRENT:
             value->rValue = *(ckt->CKTstate0+here->DIOcurrent);
+            if ((here->DIOqpNode > 0) && (here->DIOtTransitTime!=0))
+                value->rValue += here->DIOqpGain * *(ckt->CKTstate0 + here->DIOcqcsr);
             return(OK);
         case DIO_CAP: 
             value->rValue = here->DIOcap;
+            if ((here->DIOqpNode > 0) && (here->DIOtTransitTime!=0))
+                value->rValue += here->DIOtTransitTime * *(ckt->CKTstate0+here->DIOconduct);
             return(OK);
         case DIO_CHARGE: 
             value->rValue = *(ckt->CKTstate0+here->DIOcapCharge);
+            if ((here->DIOqpNode > 0) && (here->DIOtTransitTime!=0))
+                value->rValue += here->DIOqpGain * *(ckt->CKTstate0 + here->DIOsrcapCharge);
             return(OK);
         case DIO_CAPCUR:
             value->rValue = *(ckt->CKTstate0+here->DIOcapCurrent);

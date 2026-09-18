@@ -1,5 +1,5 @@
 
-SECTION = ngspice45
+SECTION = ngspice46
 
 SUBDIRS = \
 bjt bsim1 bsim2 bsim3 bsim3soi_dd \

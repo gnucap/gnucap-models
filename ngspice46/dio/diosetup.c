@@ -2,7 +2,7 @@
 Copyright 1990 Regents of the University of California.  All rights reserved.
 Author: 1985 Thomas L. Quarles
 Modified: 2000 AlansFixes
-Modified by Paolo Nenzi 2003 and Dietmar Warning 2012
+Modified by Paolo Nenzi 2003, Dietmar Warning 2012 and Arpad Buermen 2025
 **********/
 
 /* load the diode structure with those pointers needed later
@@ -35,6 +35,10 @@ DIOsetup(SMPmatrix *matrix, GENmodel *inModel, CKTcircuit *ckt, int *states)
 
         if(!model->DIOlevelGiven) {
             model->DIOlevel = 1;
+        } else if (model->DIOlevel == 2) {
+            SPfrontEnd->IFerrorf(ERR_FATAL,
+                "%s: Diode model level 2 is not supported.", model->DIOmodName);
+            return(E_BADPARM);
         }
         if(!model->DIOemissionCoeffGiven) {
             model->DIOemissionCoeff = 1;
@@ -114,6 +118,13 @@ DIOsetup(SMPmatrix *matrix, GENmodel *inModel, CKTcircuit *ckt, int *states)
             if (model->DIOreverseKneeCurrent < ckt->CKTepsmin) {
                 model->DIOreverseKneeCurrentGiven = FALSE;
                 fprintf(stderr, "Warning: %s: IKR too small - model effect disabled!\n",
+                model->DIOmodName);
+            }
+        }
+        if(model->DIOforwardSWKneeCurrentGiven) {
+            if (model->DIOforwardSWKneeCurrent < ckt->CKTepsmin) {
+                model->DIOforwardSWKneeCurrentGiven = FALSE;
+                fprintf(stderr, "Warning: %s: IKP too small - model effect disabled!\n",
                 model->DIOmodName);
             }
         }
@@ -211,6 +222,9 @@ DIOsetup(SMPmatrix *matrix, GENmodel *inModel, CKTcircuit *ckt, int *states)
         if(!model->DIOrecSatCurGiven) {
             model->DIOrecSatCur = 1e-14;
         }
+        if (!model->DIOsoftRevRecParamGiven) {
+            model->DIOsoftRevRecParam = 0.0;
+        }
 
         /* set lower limit of saturation current */
         if (model->DIOsatCur < ckt->CKTepsmin)
@@ -238,6 +252,24 @@ DIOsetup(SMPmatrix *matrix, GENmodel *inModel, CKTcircuit *ckt, int *states)
         } else {
             model->DIOconductance = 1/model->DIOresist;
         }
+        if((!model->DIOresistSWGiven) || (model->DIOresistSW==0)) {
+            if (newcompat.ps || newcompat.lt) {
+                double rsdiode = 0.;
+                /* to improve convergence (sometimes) */
+                if (cp_getvar("diode_rser", CP_REAL, &rsdiode, 0) && rsdiode > 0) {
+                    model->DIOconductanceSW = 1./rsdiode;
+                    model->DIOresistSW = rsdiode;
+                    if (ft_ngdebug)
+                        fprintf(stderr, "Diode sidewall series resistance in model %s set to %e Ohm\n", model->gen.GENmodName, rsdiode);
+                }
+                else
+                    model->DIOconductanceSW = 0.0;
+            }
+            else
+                model->DIOconductanceSW = 0.0;
+        } else {
+            model->DIOconductanceSW = 1/model->DIOresistSW;
+        }
 
         if (!model->DIOrth0Given) {
             model->DIOrth0 = 0;
@@ -259,10 +291,10 @@ DIOsetup(SMPmatrix *matrix, GENmodel *inModel, CKTcircuit *ckt, int *states)
             model->DIOwidthPoly = 0.0;
         }
         if(!model->DIOmetalOxideThickGiven) {
-            model->DIOmetalOxideThick = 1e-06; /* m */
+            model->DIOmetalOxideThick = 1e4; /* 10k Angstrom */
         }
         if(!model->DIOpolyOxideThickGiven) {
-            model->DIOpolyOxideThick = 1e-06; /* m */
+            model->DIOpolyOxideThick = 1e4; /* 10k Angstrom */
         }
         if(!model->DIOmetalMaskOffsetGiven) {
             model->DIOmetalMaskOffset = 0.0;
@@ -331,6 +363,7 @@ DIOsetup(SMPmatrix *matrix, GENmodel *inModel, CKTcircuit *ckt, int *states)
             }
             here->DIOforwardKneeCurrent = model->DIOforwardKneeCurrent * here->DIOarea * here->DIOm;
             here->DIOreverseKneeCurrent = model->DIOreverseKneeCurrent * here->DIOarea * here->DIOm;
+            here->DIOforwardSWKneeCurrent = model->DIOforwardSWKneeCurrent * here->DIOpj * here->DIOm;
             here->DIOjunctionCap = model->DIOjunctionCap * here->DIOarea * here->DIOm;
             here->DIOjunctionSWCap = model->DIOjunctionSWCap * here->DIOpj * here->DIOm;
 
@@ -346,21 +379,55 @@ DIOsetup(SMPmatrix *matrix, GENmodel *inModel, CKTcircuit *ckt, int *states)
 
             } else if(here->DIOposPrimeNode == 0) {
 
-               CKTnode *tmpNode;
-               IFuid tmpName;
+                CKTnode *tmpNode;
+                IFuid tmpName;
 
                 error = CKTmkVolt(ckt,&tmp,here->DIOname,"internal");
                 if(error) return(error);
                 here->DIOposPrimeNode = tmp->number;
                 if (ckt->CKTcopyNodesets) {
-                  if (CKTinst2Node(ckt,here,1,&tmpNode,&tmpName)==OK) {
-                     if (tmpNode->nsGiven) {
-                       tmp->nodeset=tmpNode->nodeset;
-                       tmp->nsGiven=tmpNode->nsGiven;
-                     }
-                  }
+                    if (CKTinst2Node(ckt,here,1,&tmpNode,&tmpName)==OK) {
+                        if (tmpNode->nsGiven) {
+                            tmp->nodeset=tmpNode->nodeset;
+                            tmp->nsGiven=tmpNode->nsGiven;
+                        }
+                    }
                 }
             }
+
+            if(!model->DIOresistSWGiven) {
+
+                here->DIOposSwPrimeNode = here->DIOposPrimeNode;
+
+            } else if(here->DIOposSwPrimeNode == 0) {
+
+                CKTnode *tmpNode;
+                IFuid tmpName;
+
+                error = CKTmkVolt(ckt,&tmp,here->DIOname,"internal_sw");
+                if(error) return(error);
+                here->DIOposSwPrimeNode = tmp->number;
+                if (ckt->CKTcopyNodesets) {
+                    if (CKTinst2Node(ckt,here,1,&tmpNode,&tmpName)==OK) {
+                        if (tmpNode->nsGiven) {
+                            tmp->nodeset=tmpNode->nodeset;
+                            tmp->nsGiven=tmpNode->nsGiven;
+                        }
+                    }
+                }
+            }
+
+            /* rev-rec */
+            if (model->DIOsoftRevRecParamGiven && model->DIOsoftRevRecParam!=0 && model->DIOtransitTime!=0) {
+                if(here->DIOqpNode == 0) {
+                    error = CKTmkVolt(ckt, &tmp, here->DIOname, "qp");
+                    if(error) return(error);
+                    here->DIOqpNode = tmp->number;
+                }
+            } else {
+                here->DIOqpNode = 0;
+            }
+
 
             int selfheat = ((here->DIOtempNode > 0) && (here->DIOthermal) && (model->DIOrth0Given));
 
@@ -377,6 +444,14 @@ do { if((here->ptr = SMPmakeElt(matrix, here->first, here->second)) == NULL){\
             TSTALLOC(DIOposPosPtr,DIOposNode,DIOposNode);
             TSTALLOC(DIOnegNegPtr,DIOnegNode,DIOnegNode);
             TSTALLOC(DIOposPrimePosPrimePtr,DIOposPrimeNode,DIOposPrimeNode);
+            if(model->DIOresistSWGiven) {
+                /* separate sidewall */
+                TSTALLOC(DIOposPosSwPrimePtr,DIOposNode,DIOposSwPrimeNode);
+                TSTALLOC(DIOnegPosSwPrimePtr,DIOnegNode,DIOposSwPrimeNode);
+                TSTALLOC(DIOposSwPrimePosPtr,DIOposSwPrimeNode,DIOposNode);
+                TSTALLOC(DIOposSwPrimeNegPtr,DIOposSwPrimeNode,DIOnegNode);
+                TSTALLOC(DIOposSwPrimePosSwPrimePtr,DIOposSwPrimeNode,DIOposSwPrimeNode);
+            }
 
             if (selfheat) {
                 TSTALLOC(DIOtempPosPtr,      DIOtempNode,     DIOposNode);
@@ -386,8 +461,21 @@ do { if((here->ptr = SMPmakeElt(matrix, here->first, here->second)) == NULL){\
                 TSTALLOC(DIOposTempPtr,      DIOposNode,      DIOtempNode);
                 TSTALLOC(DIOposPrimeTempPtr, DIOposPrimeNode, DIOtempNode);
                 TSTALLOC(DIOnegTempPtr,      DIOnegNode,      DIOtempNode);
+                if(model->DIOresistSWGiven) {
+                    /* separate sidewall */
+                    TSTALLOC(DIOtempPosSwPrimePtr, DIOtempNode, DIOposSwPrimeNode);
+                    TSTALLOC(DIOposSwPrimeTempPtr, DIOposSwPrimeNode, DIOtempNode);
+                }
             }
-
+            
+            /* rev-rec */
+            if (model->DIOsoftRevRecParamGiven && model->DIOsoftRevRecParam!=0 && model->DIOtransitTime!=0) {
+                TSTALLOC(DIOqpQpPtr      , DIOqpNode, DIOqpNode);
+                TSTALLOC(DIOqpPosPrimePtr, DIOqpNode, DIOposPrimeNode);
+                TSTALLOC(DIOqpNegPtr     , DIOqpNode, DIOnegNode);
+                TSTALLOC(DIOposPrimeQpPtr, DIOposPrimeNode, DIOqpNode);
+                TSTALLOC(DIOnegQpPtr,      DIOnegNode, DIOqpNode);
+            }
         }
     }
     return(OK);
@@ -411,7 +499,21 @@ DIOunsetup(
             if (here->DIOposPrimeNode > 0
               && here->DIOposPrimeNode != here->DIOposNode)
                 CKTdltNNum(ckt, here->DIOposPrimeNode);
-            here->DIOposPrimeNode = 0;
+                here->DIOposPrimeNode = 0;
+
+            if(model->DIOresistSWGiven) {
+                /* separate sidewall */
+                if (here->DIOposSwPrimeNode > 0
+                  && here->DIOposSwPrimeNode != here->DIOposNode)
+                    CKTdltNNum(ckt, here->DIOposSwPrimeNode);
+                here->DIOposSwPrimeNode = 0;
+            }
+
+            /* rev-rec */
+            if (here->DIOqpNode > 0)
+                CKTdltNNum(ckt, here->DIOqpNode);
+                here->DIOqpNode = 0;
+
         }
     }
     return OK;

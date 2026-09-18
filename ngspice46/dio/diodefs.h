@@ -1,7 +1,7 @@
 /**********
 Copyright 1990 Regents of the University of California.  All rights reserved.
 Author: 1985 Thomas L. Quarles
-Modified by Paolo Nenzi 2003 and Dietmar Warning 2012
+Modified by Paolo Nenzi 2003, Dietmar Warning 2012 and Arpad Buermen 2025
 **********/
 #ifndef DIO
 #define DIO
@@ -20,6 +20,9 @@ enum {
     DIORSNOIZ = 0,
     DIOIDNOIZ,
     DIOFLNOIZ,
+    DIORSSWNOIZ,
+    DIOIDSWNOIZ,
+    DIOFLSWNOIZ,
     DIOTOTNOIZ,
     /* finally, the number of noise sources */
     DIONSRCS
@@ -40,6 +43,8 @@ typedef struct sDIOinstance {
     const int DIOnegNode;     /* number of negative node of diode */
     const int DIOtempNode;    /* number of the temperature node of the diode */
     int DIOposPrimeNode;      /* number of positive prime node of diode */
+    int DIOposSwPrimeNode;    /* number of positive prime node of diode sidewall */
+    int DIOqpNode;            /* number of soft recovery charge node */
 
     double *DIOposPosPrimePtr;      /* pointer to sparse matrix at
                                      * (positive,positive prime) */
@@ -55,6 +60,17 @@ typedef struct sDIOinstance {
                              * (negative,negative) */
     double *DIOposPrimePosPrimePtr; /* pointer to sparse matrix at
                                      * (positive prime,positive prime) */
+    /* separate sidewall */
+    double *DIOposPosSwPrimePtr;  /* pointer to sparse matrix at
+                                   * (positive,positive prime sidewall) */
+    double *DIOnegPosSwPrimePtr;  /* pointer to sparse matrix at
+                                   * (negative,positive prime sidewall) */
+    double *DIOposSwPrimePosPtr;  /* pointer to sparse matrix at
+                                   * (positive prime sidewall,positive) */
+    double *DIOposSwPrimeNegPtr;  /* pointer to sparse matrix at
+                                   * (positive prime sidewall,negative) */
+    double *DIOposSwPrimePosSwPrimePtr; /* pointer to sparse matrix at
+                            * (positive prime sidewall,positive prime sidewall) */
 
     /* self heating */
     double *DIOtempPosPtr;
@@ -64,8 +80,22 @@ typedef struct sDIOinstance {
     double *DIOposTempPtr;
     double *DIOposPrimeTempPtr;
     double *DIOnegTempPtr;
+    /* separate sidewall */
+    double *DIOtempPosSwPrimePtr;
+    double *DIOposSwPrimeTempPtr;
+
+    /* rev-rec */
+    double *DIOqpQpPtr;
+    double *DIOqpPosPrimePtr;
+    double *DIOqpNegPtr;
+    double *DIOposPrimeQpPtr;
+    double *DIOnegQpPtr;
 
     double DIOcap;   /* stores the diode capacitance */
+    double DIOcapSW; /* stores the diode Sw capacitance */
+
+    /* rev-rec */
+    double DIOqpGain;/* converts iterated diffcharge current */
 
     double *DIOsens; /* stores the perturbed values of geq and ceq in ac
                          sensitivity analyis */
@@ -114,6 +144,8 @@ typedef struct sDIOinstance {
     double DIOtGradingCoeff; /* temperature adjusted grading coefficient (MJ) */
     double DIOtConductance;    /* temperature adjusted series conductance */
     double DIOtConductance_dT; /* temperature adjusted series conductance temperature derivative */
+    double DIOtConductanceSW;    /* temperature adjusted sw series conductance */
+    double DIOtConductanceSW_dT; /* temperature adjusted sw series conductance temperature derivative */
 
     double DIOtDepCap;       /* temperature adjusted transition point in */
                              /* the curve matching (Fc * Vj ) */
@@ -129,6 +161,7 @@ typedef struct sDIOinstance {
     double DIOtTunSatSWCur_dT; /* sidewall tunneling saturation current temperature derivative */
 
     double DIOtVcrit;   /* temperature adjusted V crit */
+    double DIOtVcritSW; /* temperature adjusted V crit sidewall*/
     double DIOtF1;      /* temperature adjusted f1 */
     double DIOtBrkdwnV; /* temperature adjusted breakdown voltage */
 
@@ -139,17 +172,21 @@ typedef struct sDIOinstance {
 
     double DIOforwardKneeCurrent; /* Forward Knee current */
     double DIOreverseKneeCurrent; /* Reverse Knee current */
+    double DIOforwardSWKneeCurrent; /* Forward Sw Knee current */
     double DIOjunctionCap;        /* geometry adjusted junction capacitance */
     double DIOjunctionSWCap;      /* geometry adjusted junction sidewall capacitance */
     double DIOtRecSatCur;         /* temperature adjusted recombination saturation current */
     double DIOtRecSatCur_dT;      /* temperature adjusted recombination saturation current */
 
     double DIOdIth_dVrs;
+    double DIOdIth_dVrssw;
     double DIOdIth_dVdio;
     double DIOdIth_dT;
     double DIOgcTt;
     double DIOdIrs_dT;
+    double DIOdIrssw_dT;
     double DIOdIdio_dT;
+    double DIOdIdioSW_dT;
 
     double DIOcmetal; /* parasitic metal overlap capacitance */
     double DIOcpoly;  /* parasitic polysilicon overlap capacitance */
@@ -194,16 +231,28 @@ typedef struct sDIOinstance {
     BindElement *DIOposPosBinding ;
     BindElement *DIOnegNegBinding ;
     BindElement *DIOposPrimePosPrimeBinding ;
+    /* separate sidewall */
+    BindElement *DIOposPosSwPrimeBinding ;
+    BindElement *DIOnegPosSwPrimeBinding ;
+    BindElement *DIOposSwPrimePosBinding ;
+    BindElement *DIOposSwPrimeNegBinding ;
+    BindElement *DIOposSwPrimePosSwPrimeBinding ;
     /* self heating */
     BindElement *DIOtempPosBinding;
     BindElement *DIOtempPosPrimeBinding;
-    BindElement *DIOtempNegBinding; 
+    BindElement *DIOtempNegBinding;
     BindElement *DIOtempTempBinding;
     BindElement *DIOposTempBinding;
     BindElement *DIOposPrimeTempBinding;
     BindElement *DIOnegTempBinding;
     BindElement *DIOtempPosSwPrimeBinding;
     BindElement *DIOposSwPrimeTempBinding;
+    /* rev-rec */
+    BindElement *DIOqpQpBinding;
+    BindElement *DIOqpPosPrimeBinding;
+    BindElement *DIOqpNegBinding;
+    BindElement *DIOposPrimeQpBinding;
+    BindElement *DIOnegQpBinding;
 #endif
 
 } DIOinstance ;
@@ -212,24 +261,36 @@ typedef struct sDIOinstance {
 #define DIOsenCeq DIOsens + 3 /* stores the perturbed values of ceq */
 #define DIOdphidp DIOsens + 6
 
-
 #define DIOvoltage DIOstate
 #define DIOcurrent DIOstate+1
 #define DIOconduct DIOstate+2
-#define DIOcapCharge DIOstate+3
-#define DIOcapCurrent DIOstate+4
+#define DIOvoltageSW DIOstate+3
+#define DIOcurrentSW DIOstate+4
+#define DIOconductSW DIOstate+5
+#define DIOcapCharge DIOstate+6
+#define DIOcapCurrent DIOstate+7
+#define DIOcapChargeSW DIOstate+8
+#define DIOcapCurrentSW DIOstate+9
 
-#define DIOqth DIOstate+5     /* thermal capacitor charge */
-#define DIOcqth DIOstate+6    /* thermal capacitor current */
+#define DIOqth DIOstate+10       /* thermal capacitor charge */
+#define DIOcqth DIOstate+11      /* thermal capacitor current */
+#define DIOdeltemp DIOstate+12   /* thermal voltage over rth0 */
+#define DIOdIdio_dT DIOstate+13
+#define DIOdIdioSW_dT DIOstate+14
+/* rev-rec */
+#define DIOsrcapCharge DIOstate+15
+#define DIOsrcapCurrent DIOstate+16
+#define DIOqp DIOstate+17
+#define DIOresCurrent DIOstate+18
+#define DIOresConduct DIOstate+19
+#define DIOcqcsr DIOstate+20
+#define DIOgqcsr DIOstate+21
 
-#define DIOdeltemp DIOstate+7 /* thermal voltage over rth0 */
-#define DIOdIdio_dT DIOstate+8
+#define DIOnumStates 22
 
-#define DIOnumStates 9
-
-#define DIOsensxp DIOstate+9    /* charge sensitivities and their derivatives.
-                                 * +10 for the derivatives - pointer to the
-                                 * beginning of the array */
+#define DIOsensxp DIOstate+22    /* charge sensitivities and their derivatives.
+                                  * +23 for the derivatives - pointer to the
+                                  * beginning of the array */
 
 #define DIOnumSenStates 2
 
@@ -252,6 +313,7 @@ typedef struct sDIOmodel {       /* model structure for a diode */
     unsigned DIOresistGiven : 1;
     unsigned DIOresistTemp1Given : 1;
     unsigned DIOresistTemp2Given : 1;
+    unsigned DIOresistSWGiven : 1;
     unsigned DIOemissionCoeffGiven : 1;
     unsigned DIOswEmissionCoeffGiven : 1;
     unsigned DIObrkdEmissionCoeffGiven : 1;
@@ -268,6 +330,7 @@ typedef struct sDIOmodel {       /* model structure for a diode */
     unsigned DIOgradingSWCoeffGiven : 1;
     unsigned DIOforwardKneeCurrentGiven : 1;
     unsigned DIOreverseKneeCurrentGiven : 1;
+    unsigned DIOforwardSWKneeCurrentGiven : 1;
 
     unsigned DIOtlevGiven : 1;
     unsigned DIOtlevcGiven : 1;
@@ -302,6 +365,7 @@ typedef struct sDIOmodel {       /* model structure for a diode */
     unsigned DIOte_maxGiven : 1;
     unsigned DIOrecSatCurGiven : 1;
     unsigned DIOrecEmissionCoeffGiven : 1;
+    unsigned DIOsoftRevRecParamGiven : 1;
 
     unsigned DIOrth0Given :1;
     unsigned DIOcth0Given :1;
@@ -324,6 +388,8 @@ typedef struct sDIOmodel {       /* model structure for a diode */
     double DIOresistTemp1;        /* series resistance 1st order temp. coeff. */
     double DIOresistTemp2;        /* series resistance 2nd order temp. coeff. */
     double DIOconductance;        /* conductance corresponding to ohmic R */
+    double DIOresistSW;           /* ohmic series resistance sidewall */
+    double DIOconductanceSW;      /* conductance corresponding to ohmic R */
     double DIOemissionCoeff;      /* emission coefficient (N) */
     double DIOswEmissionCoeff;    /* Sidewall emission coefficient (NS) */
     double DIObrkdEmissionCoeff;  /* Breakdown emission coefficient (NBV) */
@@ -340,6 +406,7 @@ typedef struct sDIOmodel {       /* model structure for a diode */
     double DIOgradingSWCoeff;     /* Sidewall grading coefficient (mjsw) */
     double DIOforwardKneeCurrent; /* Forward Knee current (IKF) */
     double DIOreverseKneeCurrent; /* Reverse Knee current (IKR) */
+    double DIOforwardSWKneeCurrent; /* Forward Sw Knee current (IKP) */
 
     int    DIOtlev; /* Diode temperature equation selector */
     int    DIOtlevc; /* Diode temperature equation selector */
@@ -375,6 +442,7 @@ typedef struct sDIOmodel {       /* model structure for a diode */
     double DIOte_max; /* maximum temperature */
     double DIOrecSatCur; /* Recombination saturation current */
     double DIOrecEmissionCoeff; /* Recombination emission coefficient */
+    double DIOsoftRevRecParam; /* Soft reverse recovery parameter */
 
     double DIOrth0;
     double DIOcth0;
@@ -428,6 +496,7 @@ enum {
     DIO_MOD_LEVEL = 100,
     DIO_MOD_IS,
     DIO_MOD_RS,
+    DIO_MOD_RSW,
     DIO_MOD_N,
     DIO_MOD_TT,
     DIO_MOD_CJO,
@@ -451,6 +520,7 @@ enum {
     DIO_MOD_MJSW,
     DIO_MOD_IKF,
     DIO_MOD_IKR,
+    DIO_MOD_IKP,
     DIO_MOD_FCS,
     DIO_MOD_TTT1,
     DIO_MOD_TTT2,
@@ -481,6 +551,7 @@ enum {
     DIO_MOD_PD_MAX,
     DIO_MOD_ISR,
     DIO_MOD_NR,
+    DIO_MOD_VP,
     DIO_MOD_RTH0,
     DIO_MOD_CTH0,
 

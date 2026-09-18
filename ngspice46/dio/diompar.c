@@ -1,7 +1,7 @@
 /**********
 Copyright 1990 Regents of the University of California.  All rights reserved.
 Author: 1985 Thomas L. Quarles
-Modified by Paolo Nenzi 2003 and Dietmar Warning 2012
+Modified by Paolo Nenzi 2003, Dietmar Warning 2012 and Arpad Buermen 2025
 **********/
 /*
  */
@@ -39,6 +39,10 @@ DIOmParam(int param, IFvalue *value, GENmodel *inModel)
         case DIO_MOD_RS:
             model->DIOresist = value->rValue;
             model->DIOresistGiven = TRUE;
+            break;
+        case DIO_MOD_RSW:
+            model->DIOresistSW = value->rValue;
+            model->DIOresistSWGiven = TRUE;
             break;
         case DIO_MOD_TRS:
             model->DIOresistTemp1 = value->rValue;
@@ -107,6 +111,10 @@ DIOmParam(int param, IFvalue *value, GENmodel *inModel)
         case DIO_MOD_IKR:
             model->DIOreverseKneeCurrent = value->rValue;
             model->DIOreverseKneeCurrentGiven = TRUE;
+            break;
+        case DIO_MOD_IKP:
+            model->DIOforwardSWKneeCurrent = value->rValue;
+            model->DIOforwardSWKneeCurrentGiven = TRUE;
             break;
         case DIO_MOD_NBV:
             model->DIObrkdEmissionCoeff = value->rValue;
@@ -237,6 +245,10 @@ DIOmParam(int param, IFvalue *value, GENmodel *inModel)
             model->DIOrecEmissionCoeff = value->rValue;
             model->DIOrecEmissionCoeffGiven = TRUE;
             break;
+        case DIO_MOD_VP:
+            model->DIOsoftRevRecParam = value->rValue;
+            model->DIOsoftRevRecParamGiven = TRUE;
+            break;
         case  DIO_MOD_RTH0:
             model->DIOrth0 = value->rValue;
             model->DIOrth0Given = TRUE;
@@ -263,11 +275,11 @@ DIOmParam(int param, IFvalue *value, GENmodel *inModel)
             model->DIOwidthPolyGiven = TRUE;
             break;
         case DIO_MOD_XOM:
-            model->DIOmetalOxideThick = value->rValue * 1e-10; /* m */
+            model->DIOmetalOxideThick = value->rValue * 1e-10; /* Angstrom -> m */
             model->DIOmetalOxideThickGiven = TRUE;
             break;
         case DIO_MOD_XOI:
-            model->DIOpolyOxideThick = value->rValue * 1e-10; /* m */
+            model->DIOpolyOxideThick = value->rValue * 1e-10; /* Angstrom -> m */
             model->DIOpolyOxideThickGiven = TRUE;
             break;
         case DIO_MOD_XM:

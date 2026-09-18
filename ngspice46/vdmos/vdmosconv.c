@@ -32,7 +32,7 @@ VDMOSconvTest(GENmodel *inModel, CKTcircuit *ckt)
                 here = VDMOSnextInstance(here)) {
         
             vgs = model->VDMOStype * ( 
-                *(ckt->CKTrhs+here->VDMOSgNode) -
+                *(ckt->CKTrhs+here->VDMOSgNodePrime) -
                 *(ckt->CKTrhs+here->VDMOSsNodePrime));
             vds = model->VDMOStype * ( 
                 *(ckt->CKTrhs+here->VDMOSdNodePrime) -
@@ -82,8 +82,9 @@ VDMOSconvTest(GENmodel *inModel, CKTcircuit *ckt)
              *   initialization 
              */
 
-            vd = *(ckt->CKTrhsOld+here->VDIOposPrimeNode)-
-                    *(ckt->CKTrhsOld + here->VDMOSdNode);
+            vd = model->VDMOStype * (
+                 *(ckt->CKTrhsOld+here->VDIOposPrimeNode)-
+                    *(ckt->CKTrhsOld + here->VDMOSdNode));
 
             delvd=vd- *(ckt->CKTstate0 + here->VDIOvoltage);
 
