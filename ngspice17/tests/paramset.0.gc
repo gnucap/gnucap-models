@@ -1,0 +1,15 @@
+
+load mgsim
+
+spice
+
+.model sp_diode d
+
+.verilog
+
+paramset diode sp_diode
+endparamset
+
+diode dio1(a, b);
+
+op

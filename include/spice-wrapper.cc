@@ -95,7 +95,7 @@ extern "C" {
   #define TAIL_SIZE 1
 #endif
 #if !defined(IS_VALID)
-#define IS_VALID { untested();return MODEL_CARD::is_valid(d);}
+#define IS_VALID {return MODEL_CARD::is_valid(d);}
 #endif
 /*--------------------------------------------------------------------------*/
 extern SPICEdev info;
@@ -309,7 +309,7 @@ private:
 #if NGSPICE>=28
   int* spice_nodes()const	{return GENnode(&_spice_instance);}
 #else
-  int* spice_nodes()const	{ untested();return &(_spice_instance.GENnode1);}
+  int* spice_nodes()const	{return &(_spice_instance.GENnode1);}
 #endif
 };
 /*--------------------------------------------------------------------------*/
@@ -1797,7 +1797,7 @@ extern "C" {
 #else
   char* tmalloc(int size) {itested(); return static_cast<char*>(calloc(size,1));}
   char* trealloc(char*, int) {untested();incomplete(); return NULL;} //DEVnoise
-  void txfree(char *ptr) { untested();
+  void txfree(char *ptr) {
     if (ptr) {itested();
       free(ptr);
     }else{untested();
