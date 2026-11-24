@@ -1,6 +1,6 @@
 module main (.d(d));
-    output d;
-    electrical d;
+  output d;
+  electrical d;
   ground gnd;
   parameter real vd = 0.;
   parameter real vg = 0.;

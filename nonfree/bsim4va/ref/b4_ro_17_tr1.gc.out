@@ -1,4 +1,3 @@
-parameter real vscale = 1.0; 
 ground \0 ;
 // cmos inverter
 module not1 (.z(z),.a(a),.vss(vss),.vdd(vdd));
@@ -7,7 +6,7 @@ module not1 (.z(z),.a(a),.vss(vss),.vdd(vdd));
 endmodule // not1
 
 // 17-stage ring oscillator
-resistor #(.r(1G)) rkick (.p(n02),.n(\0 ));
+resistor #(.r(1G)) rkick (n02, \0 );
 not1 #() X01 (.z(n03),.a(n02),.vss(\0 ),.vdd(n01));
 not1 #() X02 (.z(n04),.a(n03),.vss(\0 ),.vdd(n01));
 not1 #() X03 (.z(n05),.a(n04),.vss(\0 ),.vdd(n01));
@@ -25,8 +24,8 @@ not1 #() X14 (.z(n16),.a(n15),.vss(\0 ),.vdd(n01));
 not1 #() X15 (.z(n17),.a(n16),.vss(\0 ),.vdd(n01));
 not1 #() X16 (.z(n18),.a(n17),.vss(\0 ),.vdd(n01));
 not1 #() X17 (.z(n02),.a(n18),.vss(\0 ),.vdd(n01));
-capacitor #(.c(0.1p)) c1 (.p(n18),.n(\0 ));
-vsource #(.dc(vscale*2.0)) Vdd (.p(n01),.n(\0 ));
+capacitor #(.c(0.1p)) c1 (n18, \0 );
+vsource #(.dc(vscale*2.0)) Vdd (n01, \0 );
 #Time       v(n02)     v(n05)     iter(0)   
  0.         0.         0.         0.        
  50.E-12    1.0576     0.83594    31.       
@@ -53,7 +52,7 @@ vsource #(.dc(vscale*2.0)) Vdd (.p(n01),.n(\0 ));
  1.622E-9   1.8827     0.037974   10.       
  1.701E-9   1.8793     0.063724   9.        
  1.78E-9    1.88       0.065203   9.        
- 1.859E-9   1.88       0.078889   10.       
+ 1.859E-9   1.88       0.07889    10.       
  1.938E-9   1.8799     0.073221   9.        
  2.017E-9   1.88       0.075439   11.       
  2.096E-9   1.8799     0.074436   9.        
